@@ -1,0 +1,20 @@
+{
+  "name": "gymassistant.front",
+  "description": "",
+  "version": "0.0.1",
+  "homepage": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "angular-loader": "1.2.x",
+    "angular-mocks": "~1.2.x",
+    "html5-boilerplate": "~4.3.0",
+    "angular": "~1.2.24",
+    "bootstrap": "~3.2.0",
+    "modernizr": "~2.8.3",
+    "angular-i18n": "~1.2.25",
+    "angular-resource": "~1.2.26"
+  }
+}
