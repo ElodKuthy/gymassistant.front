@@ -58,14 +58,35 @@
 
             schedule.rows.forEach(function (row) {
                 row.classes.forEach(function (cell) {
-                    cell.barText = cell.current + ' / ' + cell.max;
-                    cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
-                    cell.isFull = cell.current >= cell.max;
+                    calculateCellProperties(cell, false);
                 });
             });
 
             vm.schedule = schedule;
         }
+
+        vm.add = add;
+
+        function add (cell) {
+            cell.current++;
+            calculateCellProperties(cell, true);
+        }
+
+        vm.remove = remove;
+
+        function remove (cell) {
+            cell.current--;
+            calculateCellProperties(cell, false);
+
+        }
+
+        function calculateCellProperties(cell, signedUp) {
+            cell.barText = cell.current + ' / ' + cell.max;
+            cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
+            cell.isFull = (cell.current >= cell.max);
+            cell.signedUp = signedUp;
+        }
+
     }
 
 })();
