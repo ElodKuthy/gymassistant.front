@@ -16,10 +16,16 @@
       <tr>
         <td data-ng-bind="row.time"></td>
         <td data-ng-repeat="cell in row.classes">
-          <div data-ng-bind="cell.name"></div>
-          <div class="trainer" data-ng-bind="cell.trainer"></div>
-          <div data-ng-show="cell.current" class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"data-ng-bind="cell.current ? cell.current + ' / ' + cell.max : ''"></div>
+          <div data-ng-hide="!cell.current">
+            <div data-ng-bind="cell.name"></div>
+            <div class="trainer" data-ng-bind="cell.trainer"></div>
+            <div data-ng-show="cell.current" class="progress">
+              <div class="progress-bar" role="progressbar" data-ng-style="cell.barStyle" data-ng-bind="cell.barText"></div>
+            </div>
+            <button type="button" class="btn btn-sm btn-success pull-right" data-ng-disabled="cell.isFull"
+                    tooltip-placement="top" tooltip="Jelentkezem">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
           </div>
         </td>
       </tr>

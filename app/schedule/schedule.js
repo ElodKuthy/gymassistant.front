@@ -3,7 +3,7 @@
 (function () {
 
     angular
-        .module('gymassistant.front.schedule', ['ngRoute'])
+        .module('gymassistant.front.schedule', ['ngRoute', 'ui.bootstrap'])
         .config(ScheduleConfig)
         .factory('scheduleService', ScheduleService)
         .controller('ScheduleCtrl', ScheduleController);
@@ -54,7 +54,17 @@
         scheduleService.getSchedule().then(success);
 
         function success (result) {
-            vm.schedule = result;
+            var schedule = result;
+
+            schedule.rows.forEach(function (row) {
+                row.classes.forEach(function (cell) {
+                    cell.barText = cell.current + ' / ' + cell.max;
+                    cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
+                    cell.isFull = cell.current >= cell.max;
+                });
+            });
+
+            vm.schedule = schedule;
         }
     }
 
