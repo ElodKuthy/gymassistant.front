@@ -2,9 +2,22 @@
 
 (function () {
 
-    var express    = require('express');
-    var app        = express();
+    var express = require('express');
+    var app = express();
     var bodyParser = require('body-parser');
+    var crypto = require('crypto');
+
+    var users = {
+        'admin@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA==',
+        'coach@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA==',
+        'client@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA=='
+    };
+
+    var roles = {
+        'admin@gmail.com': ['admin', 'coach', 'client'],
+        'coach@gmail.com': ['coach', 'client'],
+        'client@gmail.com': ['client']
+    };
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
@@ -15,9 +28,35 @@
 
     router.use(function(req, res, next) {
 
-        console.log(req.originalUrl);
+        console.log(req.method + ' ' + req.originalUrl);
+        authenticate(req);
+        console.log(req.authenticated ? ('Authenticated as ' + req.authenticatedAs) : ('Not authenticated'));
+
         next();
     });
+
+    function authenticate(req) {
+
+        req.authenticated = false;
+        var authorizationHeader = req.headers['authorization'];
+
+        if (!authorizationHeader)
+            return;
+
+        var base64 = authorizationHeader.replace('Basic ', '');
+        base64 = new Buffer(base64, 'base64');
+        var userNameAndPassword = base64.toString('utf8');
+        userNameAndPassword = userNameAndPassword.split(':');
+        var userName = userNameAndPassword[0];
+        var password = userNameAndPassword[1];
+        var sha512 = crypto.createHash('sha512');
+        sha512.update(password, 'utf8');
+        var hash = sha512.digest(password);
+        if (users[userName] == hash.toString('base64')) {
+            req.authenticated = true;
+            req.authenticatedAs = userName;
+        }
+    }
 
     router.route('/schedule')
 
