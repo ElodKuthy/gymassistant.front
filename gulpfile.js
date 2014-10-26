@@ -31,7 +31,8 @@ gulp.task('client', function () {
       livereload: true,
       directoryListing: false,
       open: true,
-      fallback: 'index.html'
+      fallback: 'index.html',
+      proxies: [{source: '/api', target: 'http://localhost:9000/api' }]
     }));
 });
 
