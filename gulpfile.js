@@ -2,7 +2,7 @@ var gulp = require('gulp'),
   jshint = require('gulp-jshint'),
   less = require('gulp-less'),
   webserver = require('gulp-webserver'),
-  prism = require('connect-prism');
+  nodemon = require('gulp-nodemon');
 
 gulp.task('html', function () {
   return gulp.src('./app/**/*.html');
@@ -24,29 +24,24 @@ gulp.task('watch', function () {
   gulp.watch(['./app/less/*.less'], ['less']);
 });
 
-gulp.task('prism:mock', function () {
-  prism.create({
-      name: 'serve',
-      mode: 'mock' || 'proxy',
-      context: '/api',
-      host: 'localhost',
-      port: 9000,
-      delay: 'auto',
-      hashFullRequest: true
-    });
-});
 
-gulp.task('webserver', function () {
+gulp.task('client', function () {
   return gulp.src('app')
     .pipe(webserver({
       livereload: true,
       directoryListing: false,
       open: true,
-      middlewares: [ prism.middleware ],
       fallback: 'index.html'
     }));
 });
 
+gulp.task('canned_server', function () {
+  nodemon({ script: './canned_server/server.js', ext: 'js', ignore: ['./app/**'] })
+      .on('restart', function () {
+        console.log('Canned server restarted')
+      })
+});
+
 gulp.task('default', ['run']);
 
-gulp.task('run', ['webserver', 'prism:mock', 'watch']);
+gulp.task('run', ['client', 'canned_server', 'watch']);
