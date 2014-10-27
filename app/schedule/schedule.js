@@ -18,9 +18,9 @@
         });
     }
 
-    ScheduleService.$inject = ['$http', '$q'];
+    ScheduleService.$inject = ['$http', '$q', '$window'];
 
-    function ScheduleService($http, $q) {
+    function ScheduleService($http, $q, $window) {
 
         return {
             getSchedule: getSchedule
@@ -31,7 +31,11 @@
 
             var deferred = $q.defer();
 
-            $http.get('/api/schedule').then(success, error);
+            var authorization = $window.sessionStorage['authorization'];
+            $http.get('/api/schedule', {
+                headers: { 'Authorization': authorization }
+            }).then(success, error);
+
 
             function success(result) {
                 deferred.resolve(result.data);
@@ -58,7 +62,7 @@
 
             schedule.rows.forEach(function (row) {
                 row.classes.forEach(function (cell) {
-                    calculateCellProperties(cell, false);
+                    calculateCellProperties(cell, cell.signedUp);
                 });
             });
 

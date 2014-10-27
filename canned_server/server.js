@@ -50,23 +50,28 @@
     function authenticate(req) {
 
         req.authenticated = false;
+        req.authenticatedAs = null;
         var authorizationHeader = req.headers['authorization'];
 
-        if (!authorizationHeader)
-            return;
+        try {
 
-        var base64 = authorizationHeader.replace('Basic ', '');
-        base64 = new Buffer(base64, 'base64');
-        var userNameAndPassword = base64.toString('utf8');
-        userNameAndPassword = userNameAndPassword.split(':');
-        var userName = userNameAndPassword[0];
-        var password = userNameAndPassword[1];
-        var sha512 = crypto.createHash('sha512');
-        sha512.update(password, 'utf8');
-        var hash = sha512.digest(password);
-        if (passwords[userName] == hash.toString('base64')) {
-            req.authenticated = true;
-            req.authenticatedAs = userName;
+            var base64 = authorizationHeader.replace('Basic ', '');
+            base64 = new Buffer(base64, 'base64');
+            var userNameAndPassword = base64.toString('utf8');
+            userNameAndPassword = userNameAndPassword.split(':');
+            var userName = userNameAndPassword[0];
+            var password = userNameAndPassword[1];
+            var sha512 = crypto.createHash('sha512');
+            sha512.update(password, 'utf8');
+            var hash = sha512.digest(password);
+            if (passwords[userName] == hash.toString('base64')) {
+                req.authenticated = true;
+                req.authenticatedAs = userName;
+            }
+
+        } catch (error) {
+            req.authenticated = false;
+            req.authenticatedAs = null;
         }
     }
 
@@ -138,6 +143,14 @@
                 ]
 
             };
+
+            if (req.authenticatedAs == 'client@gmail.com') {
+                schedule.rows[2].classes[4].signedUp = true;
+                schedule.rows[3].classes[1].signedUp = true;
+                schedule.rows[3].classes[3].signedUp = true;
+                schedule.rows[4].classes[1].signedUp = true;
+                schedule.rows[4].classes[3].signedUp = true;
+            }
 
             res.json(schedule);
         });

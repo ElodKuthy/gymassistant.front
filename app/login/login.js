@@ -13,33 +13,51 @@
     function LoginConfig ($routeProvider)
     {
         $routeProvider.when('/login', {
-            templateUrl: 'login/login.html',
-            controllerAs: 'vm',
-            controller: 'LoginCtrl'
+            templateUrl: 'login/login.html'
         });
     }
 
-    LoginController.$inject = ['authenticationService'];
+    LoginController.$inject = ['$location', '$route', 'authenticationService'];
 
-    function LoginController (authenticationService) {
+    function LoginController ($location, $route, authenticationService) {
         var vm = this;
 
-        vm.userInfo = null;
+        authenticationService.getUserInfo().then(function (result) {
+            vm.userInfo = result;
+        });
+
         vm.login = login;
+        vm.logout = logout;
+
+        vm.doLogin = doLogin;
         vm.cancel = cancel;
 
-        function login() {
+        function doLogin() {
             authenticationService.login(vm.userName, vm.password)
                 .then(function (result) {
+                    vm.password = "";
                     vm.userInfo = result;
+                    $location.path(vm.beforeLogin);
                 }, function (error) {
-                    vm.errorMessage = 'Hiba';
+                    vm.errorMessage = error;
                 });
         }
 
         function cancel() {
             vm.userName = "";
             vm.password = "";
+        }
+
+        function login() {
+            vm.beforeLogin = $location.path();
+            $location.path('/login');
+        }
+
+        function logout() {
+            authenticationService.logout().then(function(){
+                vm.userInfo = null;
+                $route.reload();
+            });
         }
     }
 
@@ -48,32 +66,33 @@
     function AuthenticationService($http, $q, $window) {
 
         var userInfo;
+        var initialized = false;
 
         function login(userName, password) {
+            var authorization = 'Basic ' + window.btoa(userName + ':' + password);
+
+            return authorize(authorization);
+        }
+
+        function authorize(authorization) {
             var deferred = $q.defer();
-            /*var authorization = 'Basic ' + window.btoa(userName + ':' + password);
 
             $http.get('/api/login', {
                 headers: { 'Authorization': authorization }
-            }).
-                then(function (result) {
-                    userInfo = {
-                        authorization: authorization,
-                        userName: result.data.userName
-                    };
-                    $window.sessionStorage['userInfo'] = JSON.stringify(userInfo);
-                    deferred.resolve(userInfo);
-                }, function (error) {
-                    deferred.reject(error);
-                });*/
+            }).then(success, error);
 
-            userInfo = {
-                userName: userName,
-                password: password
-            };
-            $window.sessionStorage['userInfo'] = JSON.stringify(userInfo);
+            function success(result) {
+                userInfo = {
+                    userName: result.data.userName
+                };
 
-            deferred.resolve(userInfo);
+                $window.sessionStorage['authorization'] = authorization;
+                deferred.resolve(userInfo);
+            }
+
+            function error(result) {
+                deferred.reject(result);
+            }
 
             return deferred.promise;
         }
@@ -81,35 +100,35 @@
         function logout() {
             var deferred = $q.defer();
 
-            /*$http({
-             method: 'POST',
-             url: '/api/logout',
-             headers: {
-             'access_token': userInfo.accessToken
-             }
-             }).then(function (result) {*/
-            userInfo = null;
-            $window.sessionStorage['userInfo'] = null;
+            userInfo = {};
+            $window.sessionStorage['authorization'] = null;
             deferred.resolve('');
-            /*}, function (error) {
-             deferred.reject(error);
-             });*/
 
             return deferred.promise;
         }
 
         function getUserInfo() {
-            return userInfo;
-        }
+
+            return authorize($window.sessionStorage['authorization']);
+         }
 
         function isLoggedIn() {
             return userInfo ? true : false;
         }
 
         function init() {
-            if ($window.sessionStorage['userInfo']) {
-                userInfo = JSON.parse($window.sessionStorage['userInfo']);
+            var deferred = $q.defer();
+
+            if (!initialized && $window.sessionStorage['authorization']) {
+                initialized = true;
+                authorize($window.sessionStorage['authorization']).then(function() {
+                    deferred.resolve(userInfo);
+                });
+            } else {
+                deferred.resolve(userInfo);
             }
+
+            return deferred.promise;
         }
 
         init();
