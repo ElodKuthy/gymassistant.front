@@ -7,17 +7,29 @@
     var bodyParser = require('body-parser');
     var crypto = require('crypto');
 
-    var users = {
+    var passwords = {
         'admin@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA==',
         'coach@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA==',
         'client@gmail.com': 'e9Yx9JihUi6gXfI5/gzGNHsEtE+LiTNIM+oD/1dUlMbU727uGiJbCsWgtdSp6Q3FNkdrn94AZ3UgqTU6XsxLtA=='
     };
 
-    var roles = {
-        'admin@gmail.com': ['admin', 'coach', 'client'],
-        'coach@gmail.com': ['coach', 'client'],
-        'client@gmail.com': ['client']
-    };
+    var users =  {
+            'admin@gmail.com': {
+                userName: 'admin',
+                roles: ['admin', 'coach', 'client']
+            },
+
+            'coach@gmail.com': {
+                userName: 'coach',
+                roles: ['coach', 'client']
+            },
+
+            'client@gmail.com': {
+                userName: 'client',
+                roles: ['client']
+            }
+        };
+
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
@@ -52,11 +64,29 @@
         var sha512 = crypto.createHash('sha512');
         sha512.update(password, 'utf8');
         var hash = sha512.digest(password);
-        if (users[userName] == hash.toString('base64')) {
+        if (passwords[userName] == hash.toString('base64')) {
             req.authenticated = true;
             req.authenticatedAs = userName;
         }
     }
+
+    router.route('/login')
+
+        .get(function(req, res) {
+
+            if (req.authenticated) {
+
+                var userInfo = {
+                    userName : users[req.authenticatedAs].userName
+                };
+
+                res.json(userInfo);
+
+            } else {
+                res.sendStatus(401);
+            }
+
+    });
 
     router.route('/schedule')
 
