@@ -79,18 +79,21 @@
 
         .get(function(req, res) {
 
+            var result = {};
+
             if (req.authenticated) {
 
-                var userInfo = {
+                result.userInfo = {
                     userName : users[req.authenticatedAs].userName
                 };
 
-                res.json(userInfo);
-
             } else {
-                res.sendStatus(401);
+                result.error = {
+                    message : "Hibás felhasználónév vagy jelszó"
+                };
             }
 
+            res.json(result);
     });
 
     router.route('/schedule')

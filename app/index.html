@@ -15,13 +15,13 @@
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.css">
         <link rel="stylesheet" type="text/css" href="/app.css">
-        <link rel="stylesheet" type="text/css" href="/login/login.css">
+        <link rel="stylesheet" type="text/css" href="/authentication/login.css">
         <!-- endbuild -->
 
         <base href="/">
     </head>
 
-    <body data-ng-controller="LoginCtrl as vm">
+    <body data-ng-controller="MainCtrl as vm">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -38,12 +38,12 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-left">
-               <li><p class="navbar-text hidden-xs" data-ng-bind='vm.userInfo.userName ? "Üdv " + vm.userInfo.userName + "!" : "Üdv, kérlek lépj be!"'></p></li>
+               <li><p class="navbar-text hidden-xs" data-ng-bind='vm.welcomeText'></p></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/orarend">Órarend</a></li>
-                <li><a data-ng-hide="vm.userInfo.userName" data-ng-click="vm.login()">Belépés</a></li>
-                <li><a data-ng-show="vm.userInfo.userName" data-ng-click="vm.logout()">Kilépés</a></li>
+                <li><a href="" data-ng-show="vm.showLoginButton" data-ng-click="vm.login()">Belépés</a></li>
+                <li><a href="" data-ng-show="vm.showLogoutButton" data-ng-click="vm.logout()">Kilépés</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
       </div>
@@ -72,7 +72,8 @@
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-resource/angular-resource.js"></script>
     <script src="/app.js"></script>
-    <script src="/login/login.js"></script>
+    <script src="/authentication/authentication.js"></script>
+    <script src="/authentication/login.js"></script>
     <script src="/schedule/schedule.js"></script>
 
     <!-- endbuild -->

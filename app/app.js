@@ -5,10 +5,11 @@
     angular
         .module('gymassistant.front', [
             'ngRoute',
-            'gymassistant.front.login',
+            'gymassistant.front.authentication',
             'gymassistant.front.schedule'
         ])
-        .config(AppConfig);
+        .config(AppConfig)
+        .controller('MainCtrl', MainController);
 
     AppConfig.$inject = ['$routeProvider', '$locationProvider'];
 
@@ -20,5 +21,41 @@
           otherwise({redirectTo: '/'});
       $locationProvider.html5Mode(true);
     }
+
+    MainController.inject = ['$rootScope', '$location', 'authenticationService'];
+
+    function MainController($rootScope, $location, authenticationService) {
+
+        var vm = this;
+
+        update(null);
+        checkUserInfo();
+
+        vm.login = login;
+        vm.logout = logout;
+
+        $rootScope.$on('authenticationChanged', checkUserInfo);
+
+        function login() {
+            $location.path("/login");
+        }
+
+        function logout() {
+            authenticationService.logout();
+            $rootScope.$broadcast('authenticationChanged');
+        }
+
+        function checkUserInfo() {
+            authenticationService.getUserInfo().then(update);
+        }
+
+        function update(userInfo) {
+            vm.welcomeText = userInfo ? "Üdv " + userInfo.userName + "!" : "Üdv, kérlek lépj be!";
+            vm.showLoginButton = userInfo ? false : true;
+            vm.showLogoutButton = userInfo ? true : false;
+        }
+
+    }
+
 })();
 

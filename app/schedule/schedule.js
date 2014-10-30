@@ -3,7 +3,7 @@
 (function () {
 
     angular
-        .module('gymassistant.front.schedule', ['ngRoute', 'ui.bootstrap'])
+        .module('gymassistant.front.schedule', [])
         .config(ScheduleConfig)
         .factory('scheduleService', ScheduleService)
         .controller('ScheduleCtrl', ScheduleController);
@@ -49,31 +49,45 @@
         }
     }
 
-    ScheduleController.$inject = ['scheduleService'];
+    ScheduleController.$inject = ['$rootScope', '$location', 'authenticationService', 'scheduleService'];
 
-    function ScheduleController (scheduleService) {
+    function ScheduleController ($rootScope, $location, authenticationService, scheduleService) {
 
         var vm = this;
 
-        scheduleService.getSchedule().then(success);
+        function fetchSchedule() {
+            scheduleService.getSchedule().then(success);
 
-        function success (result) {
-            var schedule = result;
+            function success(result) {
+                var schedule = result;
 
-            schedule.rows.forEach(function (row) {
-                row.classes.forEach(function (cell) {
-                    calculateCellProperties(cell, cell.signedUp);
+                schedule.rows.forEach(function (row) {
+                    row.classes.forEach(function (cell) {
+                        calculateCellProperties(cell, cell.signedUp);
+                    });
                 });
-            });
 
-            vm.schedule = schedule;
+                vm.schedule = schedule;
+            }
         }
+
+        $rootScope.$on('authenticationChanged', fetchSchedule);
+
+        fetchSchedule();
 
         vm.add = add;
 
         function add (cell) {
-            cell.current++;
-            calculateCellProperties(cell, true);
+            authenticationService.getUserInfo().then(success);
+
+            function success (userInfo) {
+                if (userInfo) {
+                    cell.current++;
+                    calculateCellProperties(cell, true);
+                } else {
+                    $location.path('/login');
+                }
+            }
         }
 
         vm.remove = remove;

@@ -45,9 +45,9 @@
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         <input  type="password" class="form-control" name="password" placeholder="Jelszó" data-ng-model="vm.password" >
                     </div>
-                    <span class="help-block" data-ng-bind="vm.errorMessage"></span>
+                    <span class="help-block" data-ng-bind="vm.error.message"></span>
 
-                    <button class="btn btn-lg btn-primary btn-block" data-ng-click="vm.doLogin()">Belépés</button>
+                    <button class="btn btn-lg btn-primary btn-block" data-ng-click="vm.login()">Belépés</button>
                 </form>
             </div>
         </div>
