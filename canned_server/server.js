@@ -30,6 +30,22 @@
             }
         };
 
+    var clientNames = [
+        'Sterling Archer',
+        'Lana Kane',
+        'Malory Archer',
+        'Cyril Figgis',
+        'Cheryl Tunt',
+        'Pamela Poovey',
+        'Ray Gillette',
+        'Algernop Krieger',
+        'Woodhouse',
+        'Ron Cadillac',
+        'Katya Kazanova',
+        'Burt Reynolds'
+];
+
+
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
@@ -153,6 +169,14 @@
                 schedule.rows[3].classes[3].signedUp = true;
                 schedule.rows[4].classes[1].signedUp = true;
                 schedule.rows[4].classes[3].signedUp = true;
+            }
+
+            if (req.authenticated && users[req.authenticatedAs].roles.indexOf('coach') > -1) {
+                schedule.rows.forEach(function(row){
+                   row.classes.forEach(function(cell) {
+                     cell.participants = clientNames.slice(0, cell.current);
+                   });
+                });
             }
 
             res.json(schedule);
