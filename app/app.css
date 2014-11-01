@@ -5,3 +5,20 @@ body {
 #scheduleTable div.trainer {
   text-align: right;
 }
+
+.progress-bar {
+  background-image: linear-gradient(to bottom, grey 0%, black 100%);
+}
+
+.badge {
+  background-image: linear-gradient(to bottom, grey 0%, black 100%);
+  cursor: pointer;
+}
+
+.input-group-addon > span.glyphicon-plus {
+  cursor: pointer;
+}
+
+.selected {
+  background-image: linear-gradient(to bottom, lavender 0%, lightgray 100%);
+}

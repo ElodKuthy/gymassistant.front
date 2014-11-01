@@ -5,8 +5,7 @@
     angular
         .module('gymassistant.front', [
             'ngRoute',
-            'ngAnimate',
-            'mgcrea.ngStrap',
+            'ui.bootstrap',
             'gymassistant.front.authentication',
             'gymassistant.front.schedule'
         ])

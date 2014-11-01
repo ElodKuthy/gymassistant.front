@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row">
 		<div class="table-responsive">
-    <table id="scheduleTable" class="table table-bordered">
+    <table id="scheduleTable" class="table table-bordered table-responsive">
       <thead>
         <tr>
           <th></th>
@@ -15,20 +15,15 @@
       <tbody data-ng-repeat="row in vm.schedule.rows">
       <tr>
         <td data-ng-bind="row.time"></td>
-        <td data-ng-repeat="cell in row.classes">
-          <div data-ng-hide="!cell.current">
+        <td data-ng-repeat="cell in row.classes" ng-class="{selected: cell.signedUp}">
+          <div data-ng-hide="!cell.current" >
             <div data-ng-bind="cell.name"></div>
             <div class="trainer" data-ng-bind="cell.trainer"></div>
-            <div data-ng-show="cell.current" class="progress">
-              <div class="progress-bar" role="progressbar" data-ng-style="cell.barStyle" data-ng-bind="cell.barText"></div>
-            </div>
+            <progressbar max="cell.max" value="cell.current">{{cell.barText}}</progressbar>
             <div>
-              <span data-ng-show="vm.showParticipantList" data-placement="right" data-content="{{cell.participantList}}" data-trigger="hover" data-html="true" bs-popover>
-                <span class="glyphicon glyphicon-list" style="font-size:1.8em;"></span>
-              </span>
-              <span data-ng-show="cell.signedUp">
-                <span class="glyphicon glyphicon-check" style="font-size:1.8em;"></span>
-              </span>
+              <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="vm.showParticipantList" ng-click="vm.showParticipants(cell)">
+                <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
+              </button>
               <span class="btn-group pull-right">
                 <button type="button" class="btn btn-sm btn-default" data-ng-disabled="!cell.signedUp"
                         data-ng-click="vm.remove(cell)">

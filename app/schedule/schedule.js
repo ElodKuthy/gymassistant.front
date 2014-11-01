@@ -6,7 +6,8 @@
         .module('gymassistant.front.schedule', [])
         .config(ScheduleConfig)
         .factory('scheduleService', ScheduleService)
-        .controller('ScheduleCtrl', ScheduleController);
+        .controller('ScheduleCtrl', ScheduleController)
+        .controller('ParticipantsModalCtrl', ParticipantsModalController);
 
     ScheduleConfig.$inject = ['$routeProvider'];
 
@@ -49,9 +50,9 @@
         }
     }
 
-    ScheduleController.$inject = ['$rootScope', '$location', 'authenticationService', 'scheduleService'];
+    ScheduleController.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService'];
 
-    function ScheduleController ($rootScope, $location, authenticationService, scheduleService) {
+    function ScheduleController ($rootScope, $location, $modal, authenticationService, scheduleService) {
 
         var vm = this;
 
@@ -118,15 +119,59 @@
             cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
             cell.isFull = (cell.current >= cell.max);
             cell.signedUp = signedUp;
-            if (cell.participants) {
-                cell.participantList = ['<ul class="list-group">'];
-                cell.participants.forEach(function(participant) {
-                    cell.participantList.push('<li class="list-group-item">');
-                    cell.participantList.push(participant);
-                    cell.participantList.push("</li>");
-                });
-                cell.participantList.push("</ul>");
-                cell.participantList = cell.participantList.join("");
+        }
+
+        vm.showParticipants = showParticipants;
+
+        function showParticipants(cell) {
+
+            var participants = cell.participants;
+
+            var modalInstance = $modal.open({
+                templateUrl: 'schedule/participants.html',
+                controller: 'ParticipantsModalCtrl',
+                controllerAs: 'vm',
+                size: 'sm',
+                resolve: {
+                    participants: function () {
+                        return participants;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (result) {
+                cell.participants = result;
+                cell.current = participants.length - 1;
+                calculateCellProperties(cell, cell.participants.indexOf(vm.userName) > -1);
+            });
+        }
+    }
+
+    ParticipantsModalController.$inject = ['$modalInstance', 'participants'];
+
+    function ParticipantsModalController($modalInstance, participants) {
+
+        var vm = this;
+        vm.newParticipant = '';
+
+        vm.participants = participants.slice(0);
+
+        vm.ok = function () {
+            $modalInstance.close(vm.participants);
+        };
+
+        vm.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+
+        vm.remove = function (index) {
+            vm.participants.splice(index, 1);
+        };
+
+        vm.add = function() {
+            if (vm.newParticipant != '' && vm.participants.indexOf(vm.newParticipant) == -1) {
+                vm.participants.push(vm.newParticipant);
+                vm.newParticipant = '';
             }
         }
     }
