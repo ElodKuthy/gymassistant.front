@@ -100,7 +100,8 @@
             if (req.authenticated) {
 
                 result.userInfo = {
-                    userName : users[req.authenticatedAs].userName
+                    userName : users[req.authenticatedAs].userName,
+                    roles : users[req.authenticatedAs].roles
                 };
 
             } else {

@@ -23,15 +23,18 @@
               <div class="progress-bar" role="progressbar" data-ng-style="cell.barStyle" data-ng-bind="cell.barText"></div>
             </div>
             <div>
-              <span class="text-primary" data-ng-show="cell.signedUp">
+              <span data-ng-show="vm.showParticipantList" data-placement="right" data-content="{{cell.participantList}}" data-trigger="hover" data-html="true" bs-popover>
+                <span class="glyphicon glyphicon-list" style="font-size:1.8em;"></span>
+              </span>
+              <span data-ng-show="cell.signedUp">
                 <span class="glyphicon glyphicon-check" style="font-size:1.8em;"></span>
               </span>
               <span class="btn-group pull-right">
-                <button type="button" class="btn btn-sm btn-primary" data-ng-disabled="!cell.signedUp"
+                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="!cell.signedUp"
                         data-ng-click="vm.remove(cell)">
                   <span class="glyphicon glyphicon-minus"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-primary" data-ng-disabled="(cell.isFull || cell.signedUp)"
+                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="(cell.isFull || cell.signedUp)"
                         data-ng-click="vm.add(cell)">
                   <span class="glyphicon glyphicon-plus"></span>
                 </button>

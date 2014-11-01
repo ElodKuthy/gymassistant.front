@@ -69,6 +69,12 @@
 
                 vm.schedule = schedule;
             }
+
+            authenticationService.getUserInfo().then(function(userInfo) {
+                vm.userName = userInfo ? userInfo.userName : null;
+                vm.showParticipantList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
+            });
+
         }
 
         $rootScope.$on('authenticationChanged', fetchSchedule);
@@ -83,6 +89,9 @@
             function success (userInfo) {
                 if (userInfo) {
                     cell.current++;
+                    if (cell.participants) {
+                        cell.participants.push(vm.userName);
+                    }
                     calculateCellProperties(cell, true);
                 } else {
                     $location.path('/login');
@@ -94,6 +103,12 @@
 
         function remove (cell) {
             cell.current--;
+            if (cell.participants) {
+                var index = cell.participants.indexOf(vm.userName);
+                if (index > -1) {
+                    cell.participants.splice(index, 1);
+                }
+            }
             calculateCellProperties(cell, false);
 
         }
@@ -103,8 +118,16 @@
             cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
             cell.isFull = (cell.current >= cell.max);
             cell.signedUp = signedUp;
+            if (cell.participants) {
+                cell.participantList = ['<ul class="list-group">'];
+                cell.participants.forEach(function(participant) {
+                    cell.participantList.push('<li class="list-group-item">');
+                    cell.participantList.push(participant);
+                    cell.participantList.push("</li>");
+                });
+                cell.participantList.push("</ul>");
+                cell.participantList = cell.participantList.join("");
+            }
         }
-
     }
-
 })();
