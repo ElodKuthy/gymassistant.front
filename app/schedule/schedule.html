@@ -38,16 +38,13 @@
               <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="vm.showParticipantList" ng-click="vm.showParticipants(cell)">
                 <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
               </button>
-              <span class="btn-group pull-right">
-                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="!cell.signedUp"
-                        data-ng-click="vm.remove(cell)">
-                  <span class="glyphicon glyphicon-minus"></span>
-                </button>
-                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="(cell.isFull || cell.signedUp || vm.credits.free == 0)"
-                        data-ng-click="vm.add(cell)">
-                  <span class="glyphicon glyphicon-plus"></span>
-                </button>
-              </span>
+              <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="cell.signedUp" data-ng-click="vm.remove(cell)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+              <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="(!vm.userInfo) || (!cell.isFull && !cell.signedUp && vm.credits.free > 0)"
+                      data-ng-click="vm.add(cell)">
+                <span class="glyphicon glyphicon-plus"></span>
+              </button>
             </div>
           </div>
         </td>
