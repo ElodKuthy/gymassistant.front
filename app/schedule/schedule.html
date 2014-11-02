@@ -1,6 +1,13 @@
 <div class="container">
-	<div class="row">
-		<div class="table-responsive">
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        Kreditek (szabad / összes): {{vm.credits.free}} / {{vm.credits.all}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="table-responsive">
     <table id="scheduleTable" class="table table-bordered table-responsive">
       <thead>
         <tr>
@@ -29,7 +36,7 @@
                         data-ng-click="vm.remove(cell)">
                   <span class="glyphicon glyphicon-minus"></span>
                 </button>
-                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="(cell.isFull || cell.signedUp)"
+                <button type="button" class="btn btn-sm btn-default" data-ng-disabled="(cell.isFull || cell.signedUp || vm.credits.free == 0)"
                         data-ng-click="vm.add(cell)">
                   <span class="glyphicon glyphicon-plus"></span>
                 </button>
@@ -41,5 +48,5 @@
       </tbody>
       </table>
     </div>
-	</div>
+  </div>
 </div>

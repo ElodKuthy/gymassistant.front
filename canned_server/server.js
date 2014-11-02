@@ -183,6 +183,18 @@
             res.json(schedule);
         });
 
+    router.route('/credits')
+
+        .get(function(req, res) {
+
+            var credits = {
+                free: 0,
+                all: 12
+            };
+
+            res.json(credits);
+        });
+
     router.get('/', function(req, res) {
         res.json({ message: 'Canned GymAssistant REST API' });
     });

@@ -24,29 +24,40 @@
     function ScheduleService($http, $q, $window) {
 
         return {
-            getSchedule: getSchedule
+            getSchedule: getSchedule,
+            getCredits: getCredits
         };
 
         function getSchedule() {
 
-
             var deferred = $q.defer();
-
             var authorization = $window.sessionStorage['authorization'];
+
             $http.get('/api/schedule', {
                 headers: { 'Authorization': authorization }
-            }).then(success, error);
-
-
-            function success(result) {
-                deferred.resolve(result.data);
-            }
-
-            function error(result) {
-                deferred.reject(result);
-            }
+            }).then(function(success) {
+                deferred.resolve(success.data);
+            }, function(error) {
+                deferred.reject(error);
+            });
 
             return deferred.promise;
+        }
+
+        function getCredits() {
+            var deferred = $q.defer();
+            var authorization = $window.sessionStorage['authorization'];
+
+            $http.get('/api/credits', {
+                headers: { 'Authorization': authorization }
+            }).then(function(success) {
+                deferred.resolve(success.data);
+            }, function(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+
         }
     }
 
@@ -56,10 +67,13 @@
 
         var vm = this;
 
-        function fetchSchedule() {
-            scheduleService.getSchedule().then(success);
+        vm.schedule = {};
+        vm.userInfo = null;
+        vm.credits = {};
+        vm.showParticipantList = false;
 
-            function success(result) {
+        function fetchSchedule() {
+            scheduleService.getSchedule().then(function(result) {
                 var schedule = result;
 
                 schedule.rows.forEach(function (row) {
@@ -69,10 +83,15 @@
                 });
 
                 vm.schedule = schedule;
-            }
+
+            });
+
+            scheduleService.getCredits().then(function(credits) {
+                vm.credits = credits;
+            });
 
             authenticationService.getUserInfo().then(function(userInfo) {
-                vm.userName = userInfo ? userInfo.userName : null;
+                vm.userInfo = userInfo;
                 vm.showParticipantList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
             });
 
@@ -85,18 +104,15 @@
         vm.add = add;
 
         function add (cell) {
-            authenticationService.getUserInfo().then(success);
-
-            function success (userInfo) {
-                if (userInfo) {
-                    cell.current++;
-                    if (cell.participants) {
-                        cell.participants.push(vm.userName);
-                    }
-                    calculateCellProperties(cell, true);
-                } else {
-                    $location.path('/login');
+            if (vm.userInfo && vm.credits.free > 0) {
+                cell.current++;
+                vm.credits.free--;
+                if (cell.participants) {
+                    cell.participants.push(vm.userInfo.userName);
                 }
+                calculateCellProperties(cell, true);
+            } else {
+                $location.path('/login');
             }
         }
 
@@ -105,11 +121,12 @@
         function remove (cell) {
             cell.current--;
             if (cell.participants) {
-                var index = cell.participants.indexOf(vm.userName);
+                var index = cell.participants.indexOf(vm.userInfo.userName);
                 if (index > -1) {
                     cell.participants.splice(index, 1);
                 }
             }
+            vm.credits.free++;
             calculateCellProperties(cell, false);
 
         }
@@ -142,7 +159,7 @@
             modalInstance.result.then(function (result) {
                 cell.participants = result;
                 cell.current = participants.length - 1;
-                calculateCellProperties(cell, cell.participants.indexOf(vm.userName) > -1);
+                calculateCellProperties(cell, cell.participants.indexOf(vm.userInfo.userName) > -1);
             });
         }
     }
