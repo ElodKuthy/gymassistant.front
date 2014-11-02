@@ -18,6 +18,7 @@
     "http-server": "^0.6.1",
     "karma": "~0.10",
     "karma-junit-reporter": "^0.2.2",
+    "moment": "^2.8.3",
     "protractor": "^1.1.1",
     "shelljs": "^0.2.6"
   },

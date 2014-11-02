@@ -7,6 +7,12 @@
     </div>
   </div>
   <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {{vm.schedule.dates.begin | date: 'fullDate' }} - {{vm.schedule.dates.end | date: 'fullDate' }}
+      </div>
+    </div>
+  </div>  <div class="row">
     <div class="table-responsive">
     <table id="scheduleTable" class="table table-bordered table-responsive">
       <thead>
@@ -17,6 +23,7 @@
           <th>Szerda</th>
           <th>Csütörtök</th>
           <th>Péntek</th>
+          <th>Szombat</th>
         </tr>
       </thead>
       <tbody data-ng-repeat="row in vm.schedule.rows">
