@@ -17,6 +17,8 @@
         schedule.credits = {};
         schedule.showAttendeeList = false;
 
+        schedule.perviousWeek = perviousWeek;
+        schedule.nextWeek = nextWeek;
         schedule.canJoin = canJoin;
         schedule.join = join;
         schedule.canLeave = canLeave;
@@ -27,8 +29,8 @@
 
         fetchSchedule();
 
-        function fetchSchedule() {
-            scheduleService.getSchedule().then(function (result) {
+        function fetchSchedule(begin, end) {
+            scheduleService.getSchedule(begin, end).then(function (result) {
 
                 schedule.dates = result.dates;
 
@@ -61,6 +63,20 @@
                 schedule.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
             });
 
+        }
+
+        function perviousWeek() {
+            var begin = moment(schedule.dates.begin).subtract( {weeks: 1}).format("YYYY-MM-DD");
+            var end = moment(schedule.dates.end).subtract( {weeks: 1}).format("YYYY-MM-DD");
+
+            fetchSchedule(begin, end);
+        }
+
+        function nextWeek() {
+            var begin = moment(schedule.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
+            var end = moment(schedule.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
+
+            fetchSchedule(begin, end);
         }
 
         function canJoin(instance) {

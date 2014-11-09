@@ -42,10 +42,10 @@
             var url = "/api/schedule";
             
             if (begin) {
-                url.concat("/" + begin);
+                url = url + "/" + begin;
             }
             if (end) {
-                url.concat("/" + end);
+                url = url + "/" + end;
             }
             
             return get(url);

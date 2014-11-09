@@ -6,9 +6,12 @@
           <li>
             Kreditek: {{schedule.credits}}
           </li>
-          <li>||</li>
           <li>
             {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}
+          </li>
+          <li>
+            <i ng-click="schedule.perviousWeek()" class="btn fa fa-caret-square-o-left fa-2x"></i>
+            <i ng-click="schedule.nextWeek()" class="btn fa fa-caret-square-o-right fa-2x"></i>
           </li>
         </ul>
       </div>
