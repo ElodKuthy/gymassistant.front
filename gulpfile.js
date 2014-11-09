@@ -24,15 +24,26 @@ gulp.task('watch', function () {
   gulp.watch(['./app/less/*.less'], ['less']);
 });
 
+gulp.task('bower_components', function () {
+  return gulp.src('bower_components')
+      .pipe(webserver({
+        port: 9001,
+        livereload: false,
+        directoryListing: false
+      }));
+});
 
-gulp.task('client', function () {
+gulp.task('client', ['bower_components'], function () {
   return gulp.src('app')
     .pipe(webserver({
       livereload: true,
       directoryListing: false,
       open: true,
       fallback: 'index.html',
-      proxies: [{source: '/api', target: 'http://localhost:9000/api' }]
+      proxies: [
+        { source: '/bower_components', target: 'http://localhost:9001/' },
+        { source: '/api', target: 'http://localhost:9000/api' }
+      ]
     }));
 });
 

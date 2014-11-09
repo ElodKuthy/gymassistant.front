@@ -1,30 +1,30 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+    <button type="button" class="close" ng-click="attendees.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
     <h4 class="modal-title">Jelentkezők</h4>
 </div>
 <div class="modal-body">
     <ul class="list-group" >
-        <li class="list-group-item" ng-repeat="attendee in vm.attendees">
+        <li class="list-group-item" ng-repeat="attendee in attendees.attendees">
             <span>{{$index + 1}}. </span>
             <span>{{attendee}}</span>
-            <span class="badge" ng-click="vm.remove($index)">
+            <span class="badge" ng-click="attendees.remove($index)">
                 <span class="glyphicon glyphicon-remove"></span>
             </span>
         </li>
-        <li class="list-group-item" ng-hide="vm.attendees.length >= 12">
+        <li class="list-group-item" ng-hide="attendees.attendees.length >= 12">
             <span class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-user"></span>
                 </span>
-                <input type="text" class="form-control" placeholder="..." ng-model="vm.newAttendee" ng-keypress="$event.which == 13 ? vm.add() : return">
-                <span class="input-group-addon" ng-click="vm.add()">
+                <input type="text" class="form-control" placeholder="..." ng-model="attendees.newAttendee" ng-keypress="$event.which == 13 ? attendees.add() : return">
+                <span class="input-group-addon" ng-click="attendees.add()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </span>
             </span>
         </li>
     </ul>
     <div class="modal-footer">
-        <button class="btn btn-default" ng-click="vm.ok()">Rendben</button>
-        <button class="btn btn-default" ng-click="vm.cancel()">Mégsem</button>
+        <button class="btn btn-default" ng-click="attendees.ok()">Rendben</button>
+        <button class="btn btn-default" ng-click="attendees.cancel()">Mégsem</button>
     </div>
 </div>

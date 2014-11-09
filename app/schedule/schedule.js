@@ -1,109 +1,14 @@
-'use strict';
-
 (function () {
 
+    'use strict';
+
     angular
-        .module('gymassistant.front.schedule', [])
-        .config(ScheduleConfig)
-        .factory('scheduleService', ScheduleService)
-        .controller('ScheduleCtrl', ScheduleController)
-        .controller('AttendeesModalCtrl', AttendeesModalController);
+        .module('gymassistant.front.schedule')
+        .controller('Schedule', Schedule);
 
-    ScheduleConfig.$inject = ['$routeProvider'];
+    Schedule.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService'];
 
-    function ScheduleConfig ($routeProvider) {
-        $routeProvider.when('/orarend', {
-            templateUrl: 'schedule/schedule.html',
-            controllerAs: 'vm',
-            controller: 'ScheduleCtrl'
-        });
-    }
-
-    ScheduleService.$inject = ['$http', '$q', '$window'];
-
-    function ScheduleService($http, $q, $window) {
-
-        return {
-            getSchedule: getSchedule,
-            getCredits: getCredits,
-            joinClass: joinClass,
-            leaveClass: leaveClass
-        };
-
-        function getSchedule() {
-
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage['authorization'];
-
-            $http.get('/api/schedule', {
-                headers: { 'Authorization': authorization }
-            }).then(function(success) {
-                deferred.resolve(success.data);
-            }, function(error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
-
-        function getCredits() {
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage['authorization'];
-
-            $http.get('/api/credits', {
-                headers: { 'Authorization': authorization }
-            }).then(function(success) {
-                deferred.resolve(success.data);
-            }, function(error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-
-        }
-
-        function joinClass(classId) {
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage['authorization'];
-
-            $http.get('/api/join/' + classId, {
-                headers: { 'Authorization': authorization }
-            }).then(function(result) {
-                if (result.data.error) {
-                    deferred.reject(result.data.error);
-                } else {
-                    deferred.resolve(result.data);
-                }
-            }, function(error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
-
-        function leaveClass(classId) {
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage['authorization'];
-
-            $http.get('/api/leave/' + classId, {
-                headers: { 'Authorization': authorization }
-            }).then(function(result) {
-                if (result.data.error) {
-                    deferred.reject(result.data.error);
-                } else {
-                    deferred.resolve(result.data);
-                }
-            }, function(error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
-    }
-
-    ScheduleController.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService'];
-
-    function ScheduleController ($rootScope, $location, $modal, authenticationService, scheduleService) {
+    function Schedule($rootScope, $location, $modal, authenticationService, scheduleService) {
 
         var vm = this;
 
@@ -113,7 +18,7 @@
         vm.showAttendeeList = false;
 
         function fetchSchedule() {
-            scheduleService.getSchedule().then(function(result) {
+            scheduleService.getSchedule().then(function (result) {
 
                 vm.dates = result.dates;
 
@@ -138,11 +43,11 @@
 
             });
 
-            scheduleService.getCredits().then(function(result) {
+            scheduleService.getCredits().then(function (result) {
                 vm.credits = result.credits;
             });
 
-            authenticationService.getUserInfo().then(function(userInfo) {
+            authenticationService.getUserInfo().then(function (userInfo) {
                 vm.userInfo = userInfo;
                 vm.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
             });
@@ -155,16 +60,16 @@
 
         vm.add = add;
 
-        function add (instance) {
+        function add(instance) {
             if (vm.userInfo && vm.credits > 0) {
-                scheduleService.joinClass(instance.id).then(function() {
+                scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
                     vm.credits--;
                     if (instance.attendees) {
                         instance.attendees.push(vm.userInfo.userName);
                     }
                     calculateInstanceProperties(instance, true);
-                }, function(error) {
+                }, function (error) {
                     alert(error);
                 });
 
@@ -175,8 +80,8 @@
 
         vm.remove = remove;
 
-        function remove (instance) {
-            scheduleService.leaveClass(instance.id).then(function() {
+        function remove(instance) {
+            scheduleService.leaveClass(instance.id).then(function () {
                 instance.current--;
                 if (instance.attendees) {
                     var index = instance.attendees.indexOf(vm.userInfo.userName);
@@ -205,8 +110,8 @@
 
             var modalInstance = $modal.open({
                 templateUrl: 'schedule/attendees.html',
-                controller: 'AttendeesModalCtrl',
-                controllerAs: 'vm',
+                controller: 'Attendees',
+                controllerAs: 'attendees',
                 size: 'sm',
                 resolve: {
                     attendees: function () {
@@ -220,35 +125,6 @@
                 instance.current = attendees.length - 1;
                 calculateInstanceProperties(instance, instance.attendees.indexOf(vm.userInfo.userName) > -1);
             });
-        }
-    }
-
-    AttendeesModalController.$inject = ['$modalInstance', 'attendees'];
-
-    function AttendeesModalController($modalInstance, attendees) {
-
-        var vm = this;
-        vm.newAttendee = '';
-
-        vm.attendees = attendees.slice(0);
-
-        vm.ok = function () {
-            $modalInstance.close(vm.attendees);
-        };
-
-        vm.cancel = function () {
-            $modalInstance.dismiss('cancel');
-        };
-
-        vm.remove = function (index) {
-            vm.attendees.splice(index, 1);
-        };
-
-        vm.add = function() {
-            if (vm.newAttendee != '' && vm.attendees.indexOf(vm.newAttendee) == -1) {
-                vm.attendees.push(vm.newAttendee);
-                vm.newAttendee = '';
-            }
         }
     }
 })();
