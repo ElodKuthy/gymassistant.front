@@ -2,22 +2,47 @@
   <div class="row">
     <div class="panel panel-default">
       <div class="panel-body">
-        <span>
-          Kreditek (szabad / összes): {{vm.credits.free}} / {{vm.credits.all}}
-        </span>
-        <button type="button" class="btn btn-default btn-lg pull-right" ng-click="">
-          <span class="glyphicon glyphicon-floppy-disk"></span>
-        </button>
+        <ul class="list-inline">
+          <li>
+            Kreditek: {{vm.credits}}
+          </li>
+          <li>||</li>
+          <li>
+            {{vm.dates.begin | date: "longDate"}} - {{vm.dates.end | date: "longDate"}}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        {{vm.schedule.dates.begin | date: 'fullDate' }} - {{vm.schedule.dates.end | date: 'fullDate' }}
+  <div id="scheduleTable" class="row">
+    <div class="col-lg-2" ng-repeat="day in vm.schedule.days">
+      <div class="panel panel-default" ng-repeat="instance in day">
+        <div class="panel-heading" ng-class="{selected: instance.signedUp}">
+          {{ instance.date | date: "EEEE H:mm" }}
+        </div>
+        <div ng-if="instance.name === 'Placeholder'" class="panel-body placeholder">
+          Ebben az időpontban jelenleg nem tartunk órát. Szertenéd, hogy legyen? <a href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
+        </div>
+        <div ng-if="instance.name != 'Placeholder'" class="panel-body" ng-class="instance.coach.toLowerCase()">
+          <div ng-bind="instance.name"></div>
+          <div class="trainer" ng-bind="instance.coach"></div>
+          <progressbar max="instance.max" value="instance.current">{{instance.current}} / {{instance.max}}</progressbar>
+          <div>
+            <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="vm.showAttendeeList" ng-click="vm.showAttendees(instance)">
+              <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
+            </button>
+            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="instance.signedUp" data-ng-click="vm.remove(instance)">
+              <span class="glyphicon glyphicon-remove"></span>
+            </button>
+            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="(!vm.userInfo) || (!instance.isFull && !instance.signedUp && vm.credits > 0)"
+                    data-ng-click="vm.add(instance)">
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>  <div class="row">
+<!--
     <div class="table-responsive">
     <table id="scheduleTable" class="table table-bordered table-responsive">
       <thead>
@@ -40,7 +65,7 @@
             <div class="trainer" data-ng-bind="cell.trainer"></div>
             <progressbar max="cell.max" value="cell.current">{{cell.barText}}</progressbar>
             <div>
-              <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="vm.showParticipantList" ng-click="vm.showParticipants(cell)">
+              <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="vm.showAttendeeList" ng-click="vm.showAttendees(cell)">
                 <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
               </button>
               <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="cell.signedUp" data-ng-click="vm.remove(cell)">
@@ -57,5 +82,6 @@
       </tbody>
       </table>
     </div>
+-->
   </div>
 </div>

@@ -7,7 +7,7 @@
         .config(ScheduleConfig)
         .factory('scheduleService', ScheduleService)
         .controller('ScheduleCtrl', ScheduleController)
-        .controller('ParticipantsModalCtrl', ParticipantsModalController);
+        .controller('AttendeesModalCtrl', AttendeesModalController);
 
     ScheduleConfig.$inject = ['$routeProvider'];
 
@@ -25,7 +25,9 @@
 
         return {
             getSchedule: getSchedule,
-            getCredits: getCredits
+            getCredits: getCredits,
+            joinClass: joinClass,
+            leaveClass: leaveClass
         };
 
         function getSchedule() {
@@ -59,6 +61,44 @@
             return deferred.promise;
 
         }
+
+        function joinClass(classId) {
+            var deferred = $q.defer();
+            var authorization = $window.sessionStorage['authorization'];
+
+            $http.get('/api/join/' + classId, {
+                headers: { 'Authorization': authorization }
+            }).then(function(result) {
+                if (result.data.error) {
+                    deferred.reject(result.data.error);
+                } else {
+                    deferred.resolve(result.data);
+                }
+            }, function(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
+
+        function leaveClass(classId) {
+            var deferred = $q.defer();
+            var authorization = $window.sessionStorage['authorization'];
+
+            $http.get('/api/leave/' + classId, {
+                headers: { 'Authorization': authorization }
+            }).then(function(result) {
+                if (result.data.error) {
+                    deferred.reject(result.data.error);
+                } else {
+                    deferred.resolve(result.data);
+                }
+            }, function(error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        }
     }
 
     ScheduleController.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService'];
@@ -70,29 +110,41 @@
         vm.schedule = {};
         vm.userInfo = null;
         vm.credits = {};
-        vm.showParticipantList = false;
+        vm.showAttendeeList = false;
 
         function fetchSchedule() {
             scheduleService.getSchedule().then(function(result) {
-                var schedule = result;
 
-                schedule.rows.forEach(function (row) {
-                    row.classes.forEach(function (cell) {
-                        calculateCellProperties(cell, cell.signedUp);
-                    });
+                vm.dates = result.dates;
+
+                var schedule = result.schedule;
+                var currentDate = moment(0);
+                var currentDay = [];
+
+                vm.schedule = {};
+                vm.schedule.days = [];
+
+                schedule.forEach(function (instance) {
+                    if (currentDate.isBefore(moment(instance.date))) {
+                        currentDate = moment(instance.date).endOf("day");
+                        currentDay = [];
+                        vm.schedule.days.push(currentDay);
+                    }
+
+                    calculateInstanceProperties(instance, instance.signedUp);
+
+                    currentDay.push(instance);
                 });
-
-                vm.schedule = schedule;
 
             });
 
-            scheduleService.getCredits().then(function(credits) {
-                vm.credits = credits;
+            scheduleService.getCredits().then(function(result) {
+                vm.credits = result.credits;
             });
 
             authenticationService.getUserInfo().then(function(userInfo) {
                 vm.userInfo = userInfo;
-                vm.showParticipantList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
+                vm.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
             });
 
         }
@@ -103,14 +155,19 @@
 
         vm.add = add;
 
-        function add (cell) {
-            if (vm.userInfo && vm.credits.free > 0) {
-                cell.current++;
-                vm.credits.free--;
-                if (cell.participants) {
-                    cell.participants.push(vm.userInfo.userName);
-                }
-                calculateCellProperties(cell, true);
+        function add (instance) {
+            if (vm.userInfo && vm.credits > 0) {
+                scheduleService.joinClass(instance.id).then(function() {
+                    instance.current++;
+                    vm.credits--;
+                    if (instance.attendees) {
+                        instance.attendees.push(vm.userInfo.userName);
+                    }
+                    calculateInstanceProperties(instance, true);
+                }, function(error) {
+                    alert(error);
+                });
+
             } else {
                 $location.path('/login');
             }
@@ -118,63 +175,65 @@
 
         vm.remove = remove;
 
-        function remove (cell) {
-            cell.current--;
-            if (cell.participants) {
-                var index = cell.participants.indexOf(vm.userInfo.userName);
-                if (index > -1) {
-                    cell.participants.splice(index, 1);
+        function remove (instance) {
+            scheduleService.leaveClass(instance.id).then(function() {
+                instance.current--;
+                if (instance.attendees) {
+                    var index = instance.attendees.indexOf(vm.userInfo.userName);
+                    if (index > -1) {
+                        instance.attendees.splice(index, 1);
+                    }
                 }
-            }
-            vm.credits.free++;
-            calculateCellProperties(cell, false);
-
+                vm.credits++;
+                calculateInstanceProperties(instance, false);
+            }, function (error) {
+                alert(error);
+            });
         }
 
-        function calculateCellProperties(cell, signedUp) {
-            cell.barText = cell.current + ' / ' + cell.max;
-            cell.barStyle = { "width" : (cell.current / cell.max * 100) + "%" };
-            cell.isFull = (cell.current >= cell.max);
-            cell.signedUp = signedUp;
+        function calculateInstanceProperties(instance, signedUp) {
+            instance.barText = instance.current + ' / ' + instance.max;
+            instance.isFull = (instance.current >= instance.max);
+            instance.signedUp = signedUp;
         }
 
-        vm.showParticipants = showParticipants;
+        vm.showAttendees = showAttendees;
 
-        function showParticipants(cell) {
+        function showAttendees(instance) {
 
-            var participants = cell.participants;
+            var attendees = instance.attendees;
 
             var modalInstance = $modal.open({
-                templateUrl: 'schedule/participants.html',
-                controller: 'ParticipantsModalCtrl',
+                templateUrl: 'schedule/attendees.html',
+                controller: 'AttendeesModalCtrl',
                 controllerAs: 'vm',
                 size: 'sm',
                 resolve: {
-                    participants: function () {
-                        return participants;
+                    attendees: function () {
+                        return attendees;
                     }
                 }
             });
 
             modalInstance.result.then(function (result) {
-                cell.participants = result;
-                cell.current = participants.length - 1;
-                calculateCellProperties(cell, cell.participants.indexOf(vm.userInfo.userName) > -1);
+                instance.attendees = result;
+                instance.current = attendees.length - 1;
+                calculateInstanceProperties(instance, instance.attendees.indexOf(vm.userInfo.userName) > -1);
             });
         }
     }
 
-    ParticipantsModalController.$inject = ['$modalInstance', 'participants'];
+    AttendeesModalController.$inject = ['$modalInstance', 'attendees'];
 
-    function ParticipantsModalController($modalInstance, participants) {
+    function AttendeesModalController($modalInstance, attendees) {
 
         var vm = this;
-        vm.newParticipant = '';
+        vm.newAttendee = '';
 
-        vm.participants = participants.slice(0);
+        vm.attendees = attendees.slice(0);
 
         vm.ok = function () {
-            $modalInstance.close(vm.participants);
+            $modalInstance.close(vm.attendees);
         };
 
         vm.cancel = function () {
@@ -182,13 +241,13 @@
         };
 
         vm.remove = function (index) {
-            vm.participants.splice(index, 1);
+            vm.attendees.splice(index, 1);
         };
 
         vm.add = function() {
-            if (vm.newParticipant != '' && vm.participants.indexOf(vm.newParticipant) == -1) {
-                vm.participants.push(vm.newParticipant);
-                vm.newParticipant = '';
+            if (vm.newAttendee != '' && vm.attendees.indexOf(vm.newAttendee) == -1) {
+                vm.attendees.push(vm.newAttendee);
+                vm.newAttendee = '';
             }
         }
     }

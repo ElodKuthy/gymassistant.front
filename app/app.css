@@ -1,6 +1,7 @@
 body {
   padding-top: 75px;
   padding-bottom: 20px;
+  background-color: gray;
 }
 #scheduleTable div.trainer {
   text-align: right;
@@ -8,6 +9,7 @@ body {
 
 .progress-bar {
   background-image: linear-gradient(to bottom, grey 0%, black 100%);
+  color: #d9d9d9;
 }
 
 .badge {
@@ -19,6 +21,53 @@ body {
   cursor: pointer;
 }
 
-.selected {
-  background-image: linear-gradient(to bottom, lavender 0%, lightgray 100%);
+
+.panel-default > .panel-heading.selected {
+  color: #d9d9d9;
+  background-image: linear-gradient(to bottom, lightgreen 0%, green 100%);
+}
+
+.placeholder {
+  height: 144px;
+}
+
+#scheduleTable .panel-body {
+  color: #d9d9d9;
+}
+
+.krisztina {
+  background-color:#269abc;
+}
+
+.dávid {
+  background-color: #C79665;
+}
+
+.arnold {
+  background-color: #245269;
+}
+
+.zsolt {
+  background-color: #608D4E;
+}
+
+.albert {
+  background-color: #AE5E53;
+}
+
+.trainer {
+  text-align: right;
+}
+
+.placeholder {
+  background-color: gray;
+}
+
+.placeholder > a {
+  color: #0d3349;
+}
+
+.panel-default > .panel-heading {
+  color: #d9d9d9;
+  background-image: linear-gradient(to bottom, grey 0%, black 100%);
 }

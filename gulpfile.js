@@ -45,4 +45,4 @@ gulp.task('canned_server', function () {
 
 gulp.task('default', ['run']);
 
-gulp.task('run', ['client', 'canned_server', 'watch']);
+gulp.task('run', ['client', 'watch']);

@@ -4,19 +4,19 @@
 </div>
 <div class="modal-body">
     <ul class="list-group" >
-        <li class="list-group-item" ng-repeat="participant in vm.participants">
+        <li class="list-group-item" ng-repeat="attendee in vm.attendees">
             <span>{{$index + 1}}. </span>
-            <span>{{participant}}</span>
+            <span>{{attendee}}</span>
             <span class="badge" ng-click="vm.remove($index)">
                 <span class="glyphicon glyphicon-remove"></span>
             </span>
         </li>
-        <li class="list-group-item" ng-hide="vm.participants.length >= 12">
+        <li class="list-group-item" ng-hide="vm.attendees.length >= 12">
             <span class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-user"></span>
                 </span>
-                <input type="text" class="form-control" placeholder="..." ng-model="vm.newParticipant" ng-keypress="$event.which == 13 ? vm.add() : return">
+                <input type="text" class="form-control" placeholder="..." ng-model="vm.newAttendee" ng-keypress="$event.which == 13 ? vm.add() : return">
                 <span class="input-group-addon" ng-click="vm.add()">
                     <span class="glyphicon glyphicon-plus"></span>
                 </span>

@@ -6,6 +6,7 @@
         .module('gymassistant.front', [
             'ngRoute',
             'ui.bootstrap',
+            'angularMoment',
             'gymassistant.front.authentication',
             'gymassistant.front.schedule'
         ])
