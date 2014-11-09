@@ -17,7 +17,9 @@
         schedule.credits = {};
         schedule.showAttendeeList = false;
 
+        schedule.canJoin = canJoin;
         schedule.join = join;
+        schedule.canLeave = canLeave;
         schedule.leave = leave;
         schedule.showAttendees = showAttendees;
 
@@ -61,38 +63,55 @@
 
         }
 
+        function canJoin(instance) {
+
+            return schedule.userInfo
+                && schedule.credits > 0
+                && !instance.isFull
+                && !instance.signedUp
+                && moment().isBefore(instance.date);
+        }
+
         function join(instance) {
-            if (vm.userInfo && vm.credits > 0) {
+            if (canJoin(instance)) {
                 scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
-                    vm.credits--;
+                    schedule.credits--;
                     if (instance.attendees) {
-                        instance.attendees.push(vm.userInfo.userName);
+                        instance.attendees.push(schedule.userInfo.userName);
                     }
                     calculateInstanceProperties(instance, true);
                 }, function (error) {
                     errorService.modal(error, "sm");
                 });
 
-            } else {
+            } else if (!schedule.userInfo) {
                 $location.path('/login');
             }
         }
 
+        function canLeave(instance) {
+            return instance.signedUp
+                && moment().add({ days: 1}).isBefore(instance.date);
+        }
+
+
         function leave(instance) {
-            scheduleService.leaveClass(instance.id).then(function () {
-                instance.current--;
-                if (instance.attendees) {
-                    var index = instance.attendees.indexOf(vm.userInfo.userName);
-                    if (index > -1) {
-                        instance.attendees.splice(index, 1);
+            if (canLeave(instance)) {
+                scheduleService.leaveClass(instance.id).then(function () {
+                    instance.current--;
+                    if (instance.attendees) {
+                        var index = instance.attendees.indexOf(schedule.userInfo.userName);
+                        if (index > -1) {
+                            instance.attendees.splice(index, 1);
+                        }
                     }
-                }
-                vm.credits++;
-                calculateInstanceProperties(instance, false);
-            }, function (error) {
-                errorService.modal(error, "sm");
-            });
+                    schedule.credits++;
+                    calculateInstanceProperties(instance, false);
+                }, function (error) {
+                    errorService.modal(error, "sm");
+                });
+            }
         }
 
         function showAttendees(instance) {
@@ -114,7 +133,7 @@
             modalInstance.result.then(function (result) {
                 instance.attendees = result;
                 instance.current = attendees.length - 1;
-                calculateInstanceProperties(instance, instance.attendees.indexOf(vm.userInfo.userName) > -1);
+                calculateInstanceProperties(instance, instance.attendees.indexOf(schedule.userInfo.userName) > -1);
             });
         }
 

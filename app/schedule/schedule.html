@@ -28,14 +28,16 @@
           <div class="trainer" ng-bind="instance.coach"></div>
           <progressbar max="instance.max" value="instance.current">{{instance.current}} / {{instance.max}}</progressbar>
           <div>
-            <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="schedule.showAttendeeList" ng-click="schedule.showAttendees(instance)">
+            <button type="button" class="btn btn-default" tooltip="Jelentkezők" ng-show="schedule.showAttendeeList"
+                    ng-click="schedule.showAttendees(instance)">
               <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
             </button>
-            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="instance.signedUp" data-ng-click="schedule.leave(instance)">
+            <button type="button" class="btn btn-default pull-right animate-if" ng-if="schedule.canLeave(instance)"
+                    ng-click="schedule.leave(instance)">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
-            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="(!schedule.userInfo) || (!instance.isFull && !instance.signedUp && schedule.credits > 0)"
-                    data-ng-click="schedule.join(instance)">
+            <button type="button" class="btn btn-default pull-right animate-if" ng-if="schedule.canJoin(instance)"
+                    ng-click="schedule.join(instance)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </div>
