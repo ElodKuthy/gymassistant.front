@@ -15,7 +15,7 @@
     </div>
   </div>
   <div id="scheduleTable" class="row">
-    <div class="col-lg-2" ng-repeat="day in schedule.schedule.days">
+    <div class="col-lg-2" ng-repeat="day in schedule.instances.days">
       <div class="panel panel-default" ng-repeat="instance in day">
         <div class="panel-heading" ng-class="{selected: instance.signedUp}">
           {{ instance.date | date: "EEEE H:mm" }}
@@ -31,11 +31,11 @@
             <button type="button" class="btn btn-default" tooltip="Jelentkezők" data-ng-show="schedule.showAttendeeList" ng-click="schedule.showAttendees(instance)">
               <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
             </button>
-            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="instance.signedUp" data-ng-click="schedule.remove(instance)">
+            <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="instance.signedUp" data-ng-click="schedule.leave(instance)">
               <span class="glyphicon glyphicon-remove"></span>
             </button>
             <button type="button" class="btn btn-default pull-right animate-if" data-ng-if="(!schedule.userInfo) || (!instance.isFull && !instance.signedUp && schedule.credits > 0)"
-                    data-ng-click="schedule.add(instance)">
+                    data-ng-click="schedule.join(instance)">
               <span class="glyphicon glyphicon-plus"></span>
             </button>
           </div>

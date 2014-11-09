@@ -6,34 +6,41 @@
         .module('gymassistant.front.schedule')
         .controller('Schedule', Schedule);
 
-    Schedule.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService'];
+    Schedule.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService', 'errorService'];
 
-    function Schedule($rootScope, $location, $modal, authenticationService, scheduleService) {
+    function Schedule($rootScope, $location, $modal, authenticationService, scheduleService, errorService) {
 
-        var vm = this;
+        var schedule = this;
 
-        vm.schedule = {};
-        vm.userInfo = null;
-        vm.credits = {};
-        vm.showAttendeeList = false;
+        schedule.instances = {};
+        schedule.userInfo = null;
+        schedule.credits = {};
+        schedule.showAttendeeList = false;
+
+        schedule.join = join;
+        schedule.leave = leave;
+        schedule.showAttendees = showAttendees;
+
+        $rootScope.$on('authenticationChanged', fetchSchedule);
+
+        fetchSchedule();
 
         function fetchSchedule() {
             scheduleService.getSchedule().then(function (result) {
 
-                vm.dates = result.dates;
+                schedule.dates = result.dates;
 
-                var schedule = result.schedule;
                 var currentDate = moment(0);
                 var currentDay = [];
 
-                vm.schedule = {};
-                vm.schedule.days = [];
+                schedule.instances = {};
+                schedule.instances.days = [];
 
-                schedule.forEach(function (instance) {
+                result.schedule.forEach(function (instance) {
                     if (currentDate.isBefore(moment(instance.date))) {
                         currentDate = moment(instance.date).endOf("day");
                         currentDay = [];
-                        vm.schedule.days.push(currentDay);
+                        schedule.instances.days.push(currentDay);
                     }
 
                     calculateInstanceProperties(instance, instance.signedUp);
@@ -44,23 +51,17 @@
             });
 
             scheduleService.getCredits().then(function (result) {
-                vm.credits = result.credits;
+                schedule.credits = result.credits;
             });
 
             authenticationService.getUserInfo().then(function (userInfo) {
-                vm.userInfo = userInfo;
-                vm.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
+                schedule.userInfo = userInfo;
+                schedule.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
             });
 
         }
 
-        $rootScope.$on('authenticationChanged', fetchSchedule);
-
-        fetchSchedule();
-
-        vm.add = add;
-
-        function add(instance) {
+        function join(instance) {
             if (vm.userInfo && vm.credits > 0) {
                 scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
@@ -70,7 +71,7 @@
                     }
                     calculateInstanceProperties(instance, true);
                 }, function (error) {
-                    alert(error);
+                    errorService.modal(error, "sm");
                 });
 
             } else {
@@ -78,9 +79,7 @@
             }
         }
 
-        vm.remove = remove;
-
-        function remove(instance) {
+        function leave(instance) {
             scheduleService.leaveClass(instance.id).then(function () {
                 instance.current--;
                 if (instance.attendees) {
@@ -92,17 +91,9 @@
                 vm.credits++;
                 calculateInstanceProperties(instance, false);
             }, function (error) {
-                alert(error);
+                errorService.modal(error, "sm");
             });
         }
-
-        function calculateInstanceProperties(instance, signedUp) {
-            instance.barText = instance.current + ' / ' + instance.max;
-            instance.isFull = (instance.current >= instance.max);
-            instance.signedUp = signedUp;
-        }
-
-        vm.showAttendees = showAttendees;
 
         function showAttendees(instance) {
 
@@ -126,5 +117,12 @@
                 calculateInstanceProperties(instance, instance.attendees.indexOf(vm.userInfo.userName) > -1);
             });
         }
+
+        function calculateInstanceProperties(instance, signedUp) {
+            instance.barText = instance.current + ' / ' + instance.max;
+            instance.isFull = (instance.current >= instance.max);
+            instance.signedUp = signedUp;
+        }
+
     }
 })();

@@ -1,30 +1,31 @@
-'use strict';
+"use strict";
 
 (function () {
 
     angular
-        .module('gymassistant.front', [
-            'ngRoute',
-            'ui.bootstrap',
-            'angularMoment',
-            'gymassistant.front.authentication',
-            'gymassistant.front.schedule'
+        .module("gymassistant.front", [
+            "ngRoute",
+            "ui.bootstrap",
+            "angularMoment",
+            "gymassistant.front.error",
+            "gymassistant.front.authentication",
+            "gymassistant.front.schedule"
         ])
         .config(AppConfig)
-        .controller('MainCtrl', MainController);
+        .controller("MainCtrl", MainController);
 
-    AppConfig.$inject = ['$routeProvider', '$locationProvider'];
+    AppConfig.$inject = ["$routeProvider", "$locationProvider"];
 
     function AppConfig ($routeProvider, $locationProvider) {
           $routeProvider.
-              when('/', {
-                  templateUrl: 'home.html'
+              when("/", {
+                  templateUrl: "home.html"
               }).
-          otherwise({redirectTo: '/'});
+          otherwise({redirectTo: "/"});
       $locationProvider.html5Mode(true);
     }
 
-    MainController.inject = ['$rootScope', '$location', 'authenticationService'];
+    MainController.inject = ["$rootScope", "$location", "authenticationService"];
 
     function MainController($rootScope, $location, authenticationService) {
 
@@ -36,7 +37,7 @@
         vm.login = login;
         vm.logout = logout;
 
-        $rootScope.$on('authenticationChanged', checkUserInfo);
+        $rootScope.$on("authenticationChanged", checkUserInfo);
 
         function login() {
             $location.path("/login");
@@ -44,7 +45,7 @@
 
         function logout() {
             authenticationService.logout();
-            $rootScope.$broadcast('authenticationChanged');
+            $rootScope.$broadcast("authenticationChanged");
         }
 
         function checkUserInfo() {
