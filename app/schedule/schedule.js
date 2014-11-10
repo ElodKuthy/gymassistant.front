@@ -1,14 +1,14 @@
 (function () {
 
-    'use strict';
+    "use strict";
 
     angular
-        .module('gymassistant.front.schedule')
-        .controller('Schedule', Schedule);
+        .module("gymassistant.front.schedule")
+        .controller("Schedule", Schedule);
 
-    Schedule.$inject = ['$rootScope', '$location', 'authenticationService', 'scheduleService', 'errorService'];
+    Schedule.$inject = ["$rootScope", "$routeParams", "$location", "authenticationService", "scheduleService", "errorService"];
 
-    function Schedule($rootScope, $location, authenticationService, scheduleService, errorService) {
+    function Schedule($rootScope, $routeParams, $location, authenticationService, scheduleService, errorService) {
 
         var schedule = this;
 
@@ -26,9 +26,9 @@
         schedule.leave = leave;
         schedule.showAttendees = showAttendees;
 
-        $rootScope.$on('authenticationChanged', fetchSchedule);
+        $rootScope.$on("authenticationChanged", fetchSchedule);
 
-        fetchSchedule();
+        fetchSchedule($routeParams.begin, $routeParams.end);
 
         function fetchSchedule(begin, end) {
             scheduleService.getSchedule(begin, end).then(function (result) {
@@ -36,16 +36,21 @@
                 schedule.dates = result.dates;
 
                 var currentDate = moment(0);
+                var currentWeek = [];
                 var currentDay = [];
 
-                schedule.instances = {};
-                schedule.instances.days = [];
+                schedule.weeks = [];
 
                 result.schedule.forEach(function (data) {
-                    if (currentDate.isBefore(moment(data.date))) {
+
+                    if (!currentDate.isSame(data.date, "day")) {
+                        if (!currentDate.isSame(data.date, "week")) {
+                            currentWeek = [];
+                            schedule.weeks.push(currentWeek);
+                        }
                         currentDate = moment(data.date).endOf("day");
                         currentDay = [];
-                        schedule.instances.days.push(currentDay);
+                        currentWeek.push(currentDay);
                     }
 
                     var instance = createInstanceFromData(data);
@@ -61,7 +66,7 @@
 
             authenticationService.getUserInfo().then(function (userInfo) {
                 schedule.userInfo = userInfo;
-                schedule.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf('coach') > -1) : false;
+                schedule.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf("coach") > -1) : false;
             });
 
         }
@@ -70,18 +75,19 @@
             var begin = moment(schedule.dates.begin).subtract( {weeks: 1}).format("YYYY-MM-DD");
             var end = moment(schedule.dates.end).subtract( {weeks: 1}).format("YYYY-MM-DD");
 
-            fetchSchedule(begin, end);
+            $location.path("/orarend/" + begin + "/" + end);
         }
 
         function nextWeek() {
             var begin = moment(schedule.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
             var end = moment(schedule.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
 
-            fetchSchedule(begin, end);
+            $location.path("/orarend/" + begin + "/" + end);
         }
 
         function currentWeek() {
-            fetchSchedule();
+
+            $location.path("/orarend/aktualis");
         }
 
         function canJoin(instance) {
@@ -107,7 +113,7 @@
                 });
 
             } else if (!schedule.userInfo) {
-                $location.path('/login');
+                $location.path("/login");
             }
         }
 
@@ -137,7 +143,7 @@
 
         function showAttendees(instance) {
 
-            $location.path('/resztvevok/' + instance.id);
+            $location.path("/resztvevok/" + instance.id);
         }
 
         function createInstanceFromData(data) {
@@ -160,7 +166,7 @@
         }
 
         function calculateInstanceProperties(instance, signedUp) {
-            instance.barText = instance.current + ' / ' + instance.max;
+            instance.barText = instance.current + " / " + instance.max;
             instance.isFull = (instance.current >= instance.max);
             instance.signedUp = signedUp;
         }

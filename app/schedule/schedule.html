@@ -1,12 +1,12 @@
 <div id="scheduleBar" class="navbar navbar-default navbar-fixed-bottom">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#scheduleCollapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#scheduleCollapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
       <span class="navbar-brand">
         <i class="fa fa-credit-card"></i>
         {{schedule.credits}}
@@ -17,58 +17,68 @@
       <span class="navbar-brand hidden-lg">
         {{schedule.dates.begin | date: "shortDate"}} - {{schedule.dates.end | date: "shortDate"}}
       </span>
+        </div>
+        <div id="scheduleCollapse" class="navbar-collapse collapse schedule">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.perviousWeek()">
+                            <i class="fa fa-caret-square-o-left"></i> Előző
+                        </button>
+                        <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.currentWeek()">
+                            <i class="fa fa-calendar-o"></i> Aktuális
+                        </button>
+                        <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.nextWeek()">
+                            <i class="fa fa-caret-square-o-right"></i> Következő
+                        </button>
+                    </div>
+                </li>
+                <li>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
     </div>
-    <div id="scheduleCollapse" class="navbar-collapse collapse schedule">
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <div class="btn-group">
-            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.perviousWeek()">
-              <i class="fa fa-caret-square-o-left"></i> Előző
-            </button>
-            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.currentWeek()">
-              <i class="fa fa-calendar-o"></i> Aktuális
-            </button>
-            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.nextWeek()">
-              <i class="fa fa-caret-square-o-right"></i> Következő
-            </button>
-          </div>
-        </li>
-        <li>
-        </li>
-      </ul>
-    </div><!--/.navbar-collapse -->
-  </div>
 </div>
 <div class="container">
-  <div id="scheduleTable" class="row">
-    <div class="col-lg-2" ng-repeat="day in schedule.instances.days">
-      <div class="panel panel-default" ng-repeat="instance in day">
-        <div class="panel-heading" ng-class="{selected: instance.signedUp}">
-          {{ instance.date | date: "EEEE H:mm" }}
+    <div id="scheduleTable">
+        <div class="row" ng-repeat="week in schedule.weeks">
+            <div class="col-lg-2" ng-repeat="day in week">
+                <div class="panel panel-default" ng-repeat="instance in day">
+                    <div class="panel-heading" ng-class="{selected: instance.signedUp}">
+                        {{ instance.date | date: "EEEE H:mm" }}
+                    </div>
+                    <div ng-if="instance.name === 'Placeholder'" class="panel-body placeholder">
+                        Ebben az időpontban jelenleg nem tartunk órát. Szeretnéd, hogy legyen? <a
+                            href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
+                    </div>
+                    <div ng-if="instance.name != 'Placeholder'" class="panel-body"
+                         ng-class="instance.coach.toLowerCase()">
+                        <div ng-bind="instance.name"></div>
+                        <div class="trainer" ng-bind="instance.coach"></div>
+                        <progressbar max="instance.max" value="instance.current">{{instance.current}} /
+                            {{instance.max}}
+                        </progressbar>
+                        <div>
+                            <button type="button" class="btn btn-primary" tooltip="Jelentkezők"
+                                    ng-show="schedule.showAttendeeList"
+                                    ng-click="schedule.showAttendees(instance)">
+                                <i class="fa fa-navicon"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary pull-right animate-if"
+                                    ng-if="schedule.canLeave(instance)"
+                                    ng-click="schedule.leave(instance)">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                            <button type="button" class="btn btn-primary pull-right animate-if"
+                                    ng-if="schedule.canJoin(instance)"
+                                    ng-click="schedule.join(instance)">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div ng-if="instance.name === 'Placeholder'" class="panel-body placeholder">
-          Ebben az időpontban jelenleg nem tartunk órát. Szeretnéd, hogy legyen? <a href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
-        </div>
-        <div ng-if="instance.name != 'Placeholder'" class="panel-body" ng-class="instance.coach.toLowerCase()">
-          <div ng-bind="instance.name"></div>
-          <div class="trainer" ng-bind="instance.coach"></div>
-          <progressbar max="instance.max" value="instance.current">{{instance.current}} / {{instance.max}}</progressbar>
-          <div>
-            <button type="button" class="btn btn-primary" tooltip="Jelentkezők" ng-show="schedule.showAttendeeList"
-                    ng-click="schedule.showAttendees(instance)">
-              <i class="fa fa-navicon"></i>
-            </button>
-            <button type="button" class="btn btn-primary pull-right animate-if" ng-if="schedule.canLeave(instance)"
-                    ng-click="schedule.leave(instance)">
-              <i class="fa fa-remove"></i>
-            </button>
-            <button type="button" class="btn btn-primary pull-right animate-if" ng-if="schedule.canJoin(instance)"
-                    ng-click="schedule.join(instance)">
-              <i class="fa fa-plus"></i>
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
