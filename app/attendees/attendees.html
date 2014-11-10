@@ -1,0 +1,60 @@
+<div class="container">
+    <div id="attendeesBar" class="navbar navbar-default navbar-fixed-bottom">
+        <div class="container">
+            <div class="navbar-header">
+                <div class="navbar-brand" >
+                    {{ attendees.trainingInstance.name }}
+                </div>
+                <div class="navbar-brand" >
+                    {{ attendees.trainingInstance.coach }}
+                </div>
+                <span class="navbar-brand visible-lg">
+                    {{attendees.trainingInstance.date | date: "yyyy. MMMM dd. HH:mm"}}
+                </span>
+                <span class="navbar-brand hidden-lg">
+                    {{attendees.trainingInstance.date | date: "short"}}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="list-group" >
+            <li class="list-group-item clearfix"
+                ng-repeat="attendee in attendees.trainingInstance.attendees | orderBy: attendee"
+                ng-class='{ "list-group-item-success": attendees.checkedIn(attendee) }'>
+                <span>{{$index + 1}}. </span>
+                <span>{{attendee}}</span>
+                <span class="pull-right">
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.checkedIn(attendee)"
+                            ng-click="attendees.undoCheckIn(attendee)">
+                        <i class="fa fa-undo"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                            ng-click="attendees.checkIn(attendee)">
+                        <i class="fa fa-check-circle"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.notCheckedIn(attendee)"
+                            ng-click="attendees.remove(attendee)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </span>
+            </li>
+            <li class="list-group-item clearfix" ng-if="attendees.canAdd()">
+                <span class="input-group" ng-class='{ "has-error": attendees.addAttendeeError }'>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-user"></span>
+                    </span>
+                    <input type="text" class="form-control" placeholder="Tanítvány hozzáadása" ng-model="attendees.newAttendee"
+                           typeahead="user as user.userName for user in attendees.usersCanBeAdded | filter: { userName: $viewValue }">
+
+                    <span class="input-group-addon" ng-click="attendees.add()">
+                        <i class="fa fa-plus"></i>
+                    </span>
+                </span>
+                <span ng-if="attendees.addAttendeeError" class="text-danger">
+                    {{ attendees.addAttendeeError }}
+                </span>
+            </li>
+        </ul>
+    </div>
+</div>

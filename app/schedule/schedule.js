@@ -6,9 +6,9 @@
         .module('gymassistant.front.schedule')
         .controller('Schedule', Schedule);
 
-    Schedule.$inject = ['$rootScope', '$location', '$modal', 'authenticationService', 'scheduleService', 'errorService'];
+    Schedule.$inject = ['$rootScope', '$location', 'authenticationService', 'scheduleService', 'errorService'];
 
-    function Schedule($rootScope, $location, $modal, authenticationService, scheduleService, errorService) {
+    function Schedule($rootScope, $location, authenticationService, scheduleService, errorService) {
 
         var schedule = this;
 
@@ -19,6 +19,7 @@
 
         schedule.perviousWeek = perviousWeek;
         schedule.nextWeek = nextWeek;
+        schedule.currentWeek = currentWeek;
         schedule.canJoin = canJoin;
         schedule.join = join;
         schedule.canLeave = canLeave;
@@ -40,14 +41,14 @@
                 schedule.instances = {};
                 schedule.instances.days = [];
 
-                result.schedule.forEach(function (instance) {
-                    if (currentDate.isBefore(moment(instance.date))) {
-                        currentDate = moment(instance.date).endOf("day");
+                result.schedule.forEach(function (data) {
+                    if (currentDate.isBefore(moment(data.date))) {
+                        currentDate = moment(data.date).endOf("day");
                         currentDay = [];
                         schedule.instances.days.push(currentDay);
                     }
 
-                    calculateInstanceProperties(instance, instance.signedUp);
+                    var instance = createInstanceFromData(data);
 
                     currentDay.push(instance);
                 });
@@ -77,6 +78,10 @@
             var end = moment(schedule.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
 
             fetchSchedule(begin, end);
+        }
+
+        function currentWeek() {
+            fetchSchedule();
         }
 
         function canJoin(instance) {
@@ -132,25 +137,26 @@
 
         function showAttendees(instance) {
 
-            var attendees = instance.attendees;
+            $location.path('/resztvevok/' + instance.id);
+        }
 
-            var modalInstance = $modal.open({
-                templateUrl: 'schedule/attendees.html',
-                controller: 'Attendees',
-                controllerAs: 'attendees',
-                size: 'sm',
-                resolve: {
-                    attendees: function () {
-                        return attendees;
-                    }
-                }
-            });
+        function createInstanceFromData(data) {
 
-            modalInstance.result.then(function (result) {
-                instance.attendees = result;
-                instance.current = attendees.length - 1;
-                calculateInstanceProperties(instance, instance.attendees.indexOf(schedule.userInfo.userName) > -1);
-            });
+            var instance = {
+                id: data.id,
+                parent: data.parent,
+                name: data.name,
+                coach: data.coach,
+                current: data.current,
+                max: data.max,
+                date: data.date,
+                attendees: data.attendees ? data.attendees.slice(0) : undefined,
+                signedUp: data.signedUp
+            };
+
+            calculateInstanceProperties(instance, instance.signedUp);
+
+            return instance;
         }
 
         function calculateInstanceProperties(instance, signedUp) {

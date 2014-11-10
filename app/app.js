@@ -9,6 +9,7 @@
             "angularMoment",
             "gymassistant.front.error",
             "gymassistant.front.authentication",
+            "gymassistant.front.attendees",
             "gymassistant.front.schedule"
         ])
         .config(AppConfig)

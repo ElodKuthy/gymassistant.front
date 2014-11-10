@@ -1,22 +1,45 @@
-<div class="container">
-  <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <ul class="list-inline">
-          <li>
-            Kreditek: {{schedule.credits}}
-          </li>
-          <li>
-            {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}
-          </li>
-          <li>
-            <i ng-click="schedule.perviousWeek()" class="btn fa fa-caret-square-o-left fa-2x"></i>
-            <i ng-click="schedule.nextWeek()" class="btn fa fa-caret-square-o-right fa-2x"></i>
-          </li>
-        </ul>
-      </div>
+<div id="scheduleBar" class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#scheduleCollapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <span class="navbar-brand">
+        <i class="fa fa-credit-card"></i>
+        {{schedule.credits}}
+      </span>
+      <span class="navbar-brand visible-lg">
+        {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}
+      </span>
+      <span class="navbar-brand hidden-lg">
+        {{schedule.dates.begin | date: "shortDate"}} - {{schedule.dates.end | date: "shortDate"}}
+      </span>
     </div>
+    <div id="scheduleCollapse" class="navbar-collapse collapse schedule">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <div class="btn-group">
+            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.perviousWeek()">
+              <i class="fa fa-caret-square-o-left"></i> Előző
+            </button>
+            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.currentWeek()">
+              <i class="fa fa-calendar-o"></i> Aktuális
+            </button>
+            <button type="button" class="btn btn-info navbar-btn" ng-click="schedule.nextWeek()">
+              <i class="fa fa-caret-square-o-right"></i> Következő
+            </button>
+          </div>
+        </li>
+        <li>
+        </li>
+      </ul>
+    </div><!--/.navbar-collapse -->
   </div>
+</div>
+<div class="container">
   <div id="scheduleTable" class="row">
     <div class="col-lg-2" ng-repeat="day in schedule.instances.days">
       <div class="panel panel-default" ng-repeat="instance in day">
@@ -24,24 +47,24 @@
           {{ instance.date | date: "EEEE H:mm" }}
         </div>
         <div ng-if="instance.name === 'Placeholder'" class="panel-body placeholder">
-          Ebben az időpontban jelenleg nem tartunk órát. Szertenéd, hogy legyen? <a href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
+          Ebben az időpontban jelenleg nem tartunk órát. Szeretnéd, hogy legyen? <a href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
         </div>
         <div ng-if="instance.name != 'Placeholder'" class="panel-body" ng-class="instance.coach.toLowerCase()">
           <div ng-bind="instance.name"></div>
           <div class="trainer" ng-bind="instance.coach"></div>
           <progressbar max="instance.max" value="instance.current">{{instance.current}} / {{instance.max}}</progressbar>
           <div>
-            <button type="button" class="btn btn-default" tooltip="Jelentkezők" ng-show="schedule.showAttendeeList"
+            <button type="button" class="btn btn-primary" tooltip="Jelentkezők" ng-show="schedule.showAttendeeList"
                     ng-click="schedule.showAttendees(instance)">
-              <span tooltip="Jelentkezők" class="glyphicon glyphicon-list"></span>
+              <i class="fa fa-navicon"></i>
             </button>
-            <button type="button" class="btn btn-default pull-right animate-if" ng-if="schedule.canLeave(instance)"
+            <button type="button" class="btn btn-primary pull-right animate-if" ng-if="schedule.canLeave(instance)"
                     ng-click="schedule.leave(instance)">
-              <span class="glyphicon glyphicon-remove"></span>
+              <i class="fa fa-remove"></i>
             </button>
-            <button type="button" class="btn btn-default pull-right animate-if" ng-if="schedule.canJoin(instance)"
+            <button type="button" class="btn btn-primary pull-right animate-if" ng-if="schedule.canJoin(instance)"
                     ng-click="schedule.join(instance)">
-              <span class="glyphicon glyphicon-plus"></span>
+              <i class="fa fa-plus"></i>
             </button>
           </div>
         </div>
