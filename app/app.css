@@ -11,12 +11,9 @@ body {
   background-image: linear-gradient(to bottom, lightgreen 0%, green 100%);
 }
 
-.placeholder {
-  height: 144px;
-}
-
 #scheduleTable .panel-body {
   color: #d9d9d9;
+  height: 144px;
 }
 
 .krisztina {

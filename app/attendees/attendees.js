@@ -6,11 +6,13 @@
         .module("gymassistant.front.attendees")
         .controller("Attendees", Attendees);
 
-    Attendees.$inject = ["$routeParams", "scheduleService"];
+    Attendees.$inject = ["$rootScope", "$window", "$routeParams", "$location", "authenticationService", "scheduleService"];
 
-    function Attendees($routeParams, scheduleService) {
+    function Attendees($rootScope, $window, $routeParams, $location, authenticationService, scheduleService) {
 
         var attendees = this;
+
+        checkAuthentication();
 
         attendees.trainingInstance = {};
         attendees.allUsers = [];
@@ -26,6 +28,16 @@
         attendees.remove = remove;
         attendees.canAdd = canAdd;
         attendees.add = add;
+
+        function checkAuthentication() {
+            authenticationService.getUserInfo().then(function (userInfo) {
+                if (!userInfo) {
+                    $window.history.length > 1 ? $window.history.back() : $location.path('/');
+                }
+            });
+        }
+
+        $rootScope.$on("authenticationChanged", checkAuthentication);
 
         scheduleService.getInstance($routeParams.id).then(function(result) {
 

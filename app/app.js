@@ -13,7 +13,7 @@
             "gymassistant.front.schedule"
         ])
         .config(AppConfig)
-        .controller("MainCtrl", MainController);
+        .controller("Navbar", Navbar);
 
     AppConfig.$inject = ["$routeProvider", "$locationProvider"];
 
@@ -26,23 +26,18 @@
       $locationProvider.html5Mode(true);
     }
 
-    MainController.inject = ["$rootScope", "$location", "authenticationService"];
+    Navbar.inject = ["$rootScope", "$location", "authenticationService"];
 
-    function MainController($rootScope, $location, authenticationService) {
+    function Navbar($rootScope, authenticationService) {
 
-        var vm = this;
+        var navbar = this;
 
         update(null);
         checkUserInfo();
 
-        vm.login = login;
-        vm.logout = logout;
+        navbar.logout = logout;
 
         $rootScope.$on("authenticationChanged", checkUserInfo);
-
-        function login() {
-            $location.path("/belepes");
-        }
 
         function logout() {
             authenticationService.logout();
@@ -54,9 +49,10 @@
         }
 
         function update(userInfo) {
-            vm.welcomeText = userInfo ? "Üdv " + userInfo.userName + "!" : "Üdv, kérlek lépj be!";
-            vm.showLoginButton = userInfo ? false : true;
-            vm.showLogoutButton = userInfo ? true : false;
+            navbar.welcomeText = userInfo ? "Üdv " + userInfo.userName + "!" : "Üdv, kérlek lépj be!";
+            navbar.welcomeTextLink = userInfo ? "/profilom" : "/belepes";
+            navbar.showLogin = userInfo ? false : true;
+            navbar.showLogout = userInfo ? true : false;
         }
 
     }

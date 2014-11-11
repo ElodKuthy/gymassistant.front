@@ -26,7 +26,7 @@
         <base href="/">
     </head>
 
-    <body data-ng-controller="MainCtrl as vm">
+    <body data-ng-controller="Navbar as navbar">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
                 <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -42,14 +42,14 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">Göncy 2 Segéd</a>
-                <p class="navbar-brand" data-ng-bind='vm.welcomeText'></p>
+                <a class="navbar-brand" ng-attr-href="{{navbar.welcomeTextLink}}" ng-bind="navbar.welcomeText"></a>
             </div>
             <div id="mainCollapse" class="navbar-collapse collapse">
 
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="/orarend/aktualis">Órarend</a></li>
-                    <li><a href="/belepes" ng-show="vm.showLoginButton">Belépés</a></li>
-                    <li><a href="#" ng-show="vm.showLogoutButton" data-ng-click="vm.logout()">Kilépés</a></li>
+                    <li><a href="/belepes" ng-show="navbar.showLogin">Belépés</a></li>
+                    <li><a href="#" ng-show="navbar.showLogout" data-ng-click="navbar.logout()">Kilépés</a></li>
                 </ul>
             </div><!--/.navbar-collapse -->
           </div>
