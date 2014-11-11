@@ -3,6 +3,12 @@
     margin-left: 25%;
   }
 }
+
+.omb_login {
+  max-width: 640px;
+  margin: auto;
+}
+
 .omb_login .omb_authTitle {
   text-align: center;
   line-height: 300%;
@@ -36,8 +42,8 @@
 .omb_login .omb_loginOr .omb_hrOr {
   background-color: #cdcdcd;
   height: 1px;
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 .omb_login .omb_loginOr .omb_spanOr {
   display: block;
@@ -49,10 +55,10 @@
   width: 3em;
   text-align: center;
 }
-.omb_login .omb_loginForm .input-group.i {
+.omb_login .input-group.i {
   width: 2em;
 }
-.omb_login .omb_loginForm .help-block {
+.omb_login .help-block {
   color: red;
 }
 @media (min-width: 768px) {
