@@ -6,9 +6,9 @@
         .module("gymassistant.front.schedule")
         .controller("Schedule", Schedule);
 
-    Schedule.$inject = ["$rootScope", "$routeParams", "$location", "authenticationService", "scheduleService", "errorService"];
+    Schedule.$inject = ["$route", "$rootScope", "$routeParams", "$location", "authenticationService", "scheduleService", "errorService"];
 
-    function Schedule($rootScope, $routeParams, $location, authenticationService, scheduleService, errorService) {
+    function Schedule($route, $rootScope, $routeParams, $location, authenticationService, scheduleService, errorService) {
 
         var schedule = this;
 
@@ -26,7 +26,9 @@
         schedule.leave = leave;
         schedule.showAttendees = showAttendees;
 
-        $rootScope.$on("authenticationChanged", fetchSchedule);
+        $rootScope.$on("authenticationChanged", function() {
+            $route.reload();
+        });
 
         fetchSchedule($routeParams.begin, $routeParams.end);
 

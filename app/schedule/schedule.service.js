@@ -15,7 +15,6 @@
             getCredits: getCredits,
             joinClass: joinClass,
             leaveClass: leaveClass,
-            updateSchedule: updateSchedule,
             getUsers: getUsers,
             getInstance: getInstance
         };
@@ -40,26 +39,6 @@
             return deferred.promise;
         }
 
-        function post(url, data) {
-
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage["authorization"];
-
-            $http.post(url, data, {
-                headers: {"Authorization": authorization}
-            }).then(function (result) {
-                if (result.data.error) {
-                    deferred.reject(result.data.error);
-                } else {
-                    deferred.resolve(result.data);
-                }
-            }, function (error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
-        
         function getSchedule(begin, end) {
             
             var url = "/api/schedule";
@@ -81,20 +60,12 @@
 
         function joinClass(classId) {
             
-            return get("/api/join/" + classId);
+            return get("/api/join/session/" + classId);
         }
 
         function leaveClass(classId) {
             
-            return get("/api/leave/" + classId);
-        }
-
-        function updateSchedule(schedule) {
-
-            var data = {};
-            data.schedule = schedule;
-
-            return post("/api/schedule", data);
+            return get("/api/leave/session/" + classId);
         }
 
         function getUsers() {

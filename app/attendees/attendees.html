@@ -3,16 +3,16 @@
         <div class="container">
             <div class="navbar-header">
                 <div class="navbar-brand" >
-                    {{ attendees.trainingInstance.name }}
+                    {{ attendees.training.name }}
                 </div>
                 <div class="navbar-brand" >
-                    {{ attendees.trainingInstance.coach }}
+                    {{ attendees.training.coach }}
                 </div>
                 <span class="navbar-brand visible-lg">
-                    {{attendees.trainingInstance.date | date: "yyyy. MMMM dd. HH:mm"}}
+                    {{attendees.training.date | date: "yyyy. MMMM dd. HH:mm"}}
                 </span>
                 <span class="navbar-brand hidden-lg">
-                    {{attendees.trainingInstance.date | date: "short"}}
+                    {{attendees.training.date | date: "short"}}
                 </span>
             </div>
         </div>
@@ -20,22 +20,22 @@
     <div class="row">
         <ul class="list-group" >
             <li class="list-group-item clearfix"
-                ng-repeat="attendee in attendees.trainingInstance.attendees | orderBy: attendee"
-                ng-class='{ "list-group-item-success": attendees.checkedIn(attendee) }'>
+                ng-repeat="attendee in attendees.training.attendees | orderBy: attendee"
+                ng-class='{ "list-group-item-success": attendees.checkedIn(attendee), "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
                 <span>{{$index + 1}}. </span>
                 <span>{{attendee}}</span>
                 <span class="pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.checkedIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
                             ng-click="attendees.undoCheckIn(attendee)">
-                        <i class="fa fa-undo"></i>
+                        <i class="fa fa-undo"></i> Visszavonás
                     </button>
                     <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.checkIn(attendee)">
-                        <i class="fa fa-check-circle"></i>
+                        <i class="fa fa-check-circle"></i> Bejelentkezés
                     </button>
                     <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.notCheckedIn(attendee)"
                             ng-click="attendees.remove(attendee)">
-                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-trash"></i> Eltávoítás
                     </button>
                 </span>
             </li>
