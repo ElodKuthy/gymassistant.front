@@ -11,7 +11,7 @@
 
     function LoginConfig ($routeProvider)
     {
-        $routeProvider.when('/login', {
+        $routeProvider.when('/belepes', {
             templateUrl: 'authentication/login.html',
             controller: 'LoginCtrl',
             controllerAs: 'vm'

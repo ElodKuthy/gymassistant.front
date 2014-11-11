@@ -41,7 +41,7 @@
         $rootScope.$on("authenticationChanged", checkUserInfo);
 
         function login() {
-            $location.path("/login");
+            $location.path("/belepes");
         }
 
         function logout() {

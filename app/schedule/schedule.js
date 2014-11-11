@@ -113,7 +113,7 @@
                 });
 
             } else if (!schedule.userInfo) {
-                $location.path("/login");
+                $location.path("/belepes");
             }
         }
 
