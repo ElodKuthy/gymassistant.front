@@ -6,9 +6,9 @@
         .module("gymassistant.front.schedule")
         .factory("scheduleService", ScheduleService);
 
-    ScheduleService.$inject = ["$http", "$q", "$window"];
+    ScheduleService.$inject = ["httpService"];
 
-    function ScheduleService($http, $q, $window) {
+    function ScheduleService(httpService) {
 
         return {
             getSchedule: getSchedule,
@@ -18,26 +18,6 @@
             getUsers: getUsers,
             getInstance: getInstance
         };
-
-        function get(url) {
-
-            var deferred = $q.defer();
-            var authorization = $window.sessionStorage["authorization"];
-
-            $http.get(url, {
-                headers: {"Authorization": authorization}
-            }).then(function (result) {
-                if (result.data.error) {
-                    deferred.reject(result.data.error);
-                } else {
-                    deferred.resolve(result.data);
-                }
-            }, function (error) {
-                deferred.reject(error);
-            });
-
-            return deferred.promise;
-        }
 
         function getSchedule(begin, end) {
             
@@ -50,32 +30,32 @@
                 url = url + "/" + end;
             }
             
-            return get(url);
+            return httpService.get(url);
         }
 
         function getCredits() {
             
-            return get("/api/credits");
+            return httpService.get("/api/credits");
         }
 
         function joinClass(classId) {
             
-            return get("/api/join/session/" + classId);
+            return httpService.get("/api/join/session/" + classId);
         }
 
         function leaveClass(classId) {
             
-            return get("/api/leave/session/" + classId);
+            return httpService.get("/api/leave/session/" + classId);
         }
 
         function getUsers() {
 
-            return get("/api/users");
+            return httpService.get("/api/users");
         }
 
         function getInstance(id) {
 
-            return get("api/schedule/" + id);
+            return httpService.get("/api/schedule/" + id);
         }
     }
 })();

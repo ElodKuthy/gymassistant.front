@@ -11,7 +11,7 @@
         <meta name="description" content="Gym Assistant Web Application">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- build:css css/all.min.css -->
+        <!-- build:css -->
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.css">
         <link rel="stylesheet" type="text/css" href="/bower_components/fontawesome/css/font-awesome.css">
@@ -67,7 +67,7 @@
 
         </div>
 
-        <!-- build:js js/all.min.js -->
+        <!-- build:vendor -->
         <script src="/bower_components/modernizr/modernizr.js"></script>
         <script src="/bower_components/jquery/dist/jquery.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -79,7 +79,13 @@
         <script src="/bower_components/angular-resource/angular-resource.js"></script>
         <script src="/bower_components/moment/moment.js"></script>
         <script src="/bower_components/angular-moment/angular-moment.js"></script>
+        <!-- endbuild -->
+        <!-- build:js -->
         <script src="/app.js"></script>
+
+        <script src="/common/common.module.js"></script>
+        <script src="/common/http.service.js"></script>
+
         <script src="/authentication/authentication.js"></script>
         <script src="/authentication/login.js"></script>
 
@@ -96,7 +102,6 @@
         <script src="/attendees/attendees.js"></script>
         <script src="/attendees/attendees.config.js"></script>
         <script src="/attendees/attendees.service.js"></script>
-
-    <!-- endbuild -->
+        <!-- endbuild -->
     </body>
 </html>

@@ -1,24 +1,24 @@
-'use strict';
-
 (function () {
 
-    angular
-        .module('gymassistant.front.authentication')
-        .config(LoginConfig)
-        .controller('LoginCtrl', LoginController);
+    "use strict";
 
-    LoginConfig.$inject = ['$routeProvider'];
+    angular
+        .module("gymassistant.front.authentication")
+        .config(LoginConfig)
+        .controller("LoginCtrl", LoginController);
+
+    LoginConfig.$inject = ["$routeProvider"];
 
     function LoginConfig ($routeProvider)
     {
-        $routeProvider.when('/belepes', {
-            templateUrl: 'authentication/login.html',
-            controller: 'LoginCtrl',
-            controllerAs: 'vm'
+        $routeProvider.when("/belepes", {
+            templateUrl: "authentication/login.html",
+            controller: "LoginCtrl",
+            controllerAs: "vm"
         });
     }
 
-    LoginController.$inject = ['$rootScope', '$window', '$location', 'authenticationService'];
+    LoginController.$inject = ["$rootScope", "$window", "$location", "authenticationService"];
 
     function LoginController ($rootScope, $window, $location, authenticationService) {
 
@@ -26,7 +26,7 @@
 
         authenticationService.getUserInfo().then(function(userInfo) {
             if (userInfo) {
-                $window.history.length > 1 ? $window.history.back() : $location.path('/');
+                $window.history.length > 1 ? $window.history.back() : $location.path("/");
             }
 
             vm.login = login;
@@ -45,8 +45,8 @@
             function success() {
                 clear();
 
-                $rootScope.$broadcast('authenticationChanged');
-                $window.history.length > 1 ? $window.history.back() : $location.path('/');
+                $rootScope.$broadcast("authenticationChanged");
+                $window.history.length > 1 ? $window.history.back() : $location.path("/");
             }
 
             function error(error) {

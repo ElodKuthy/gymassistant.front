@@ -1,12 +1,13 @@
-"use strict";
-
 (function () {
+
+    "use strict";
 
     angular
         .module("gymassistant.front", [
             "ngRoute",
             "ui.bootstrap",
             "angularMoment",
+            "gymassistant.front.common",
             "gymassistant.front.error",
             "gymassistant.front.authentication",
             "gymassistant.front.attendees",
@@ -26,7 +27,7 @@
       $locationProvider.html5Mode(true);
     }
 
-    Navbar.inject = ["$rootScope", "$location", "authenticationService"];
+    Navbar.inject = ["$rootScope", "authenticationService"];
 
     function Navbar($rootScope, authenticationService) {
 

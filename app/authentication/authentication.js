@@ -1,20 +1,20 @@
-'use strict';
-
 (function () {
 
+    "use strict";
+
     angular
-        .module('gymassistant.front.authentication', [])
-        .factory('authenticationService', AuthenticationService);
+        .module("gymassistant.front.authentication", [])
+        .factory("authenticationService", AuthenticationService);
 
-    AuthenticationService.$inject = ['$http', '$q', '$window'];
+    AuthenticationService.$inject = ["$q", "$window", "httpService"];
 
-    function AuthenticationService($http, $q, $window) {
+    function AuthenticationService($q, $window, httpService) {
 
         var authorization;
         var authenticated;
 
         function login(userName, password) {
-            authorization = 'Basic ' + window.btoa(userName + ':' + password);
+            authorization = "Basic " + window.btoa(userName + ":" + password);
 
             return authorize();
         }
@@ -24,26 +24,22 @@
 
             if (authorization) {
 
-                $http.get('/api/login', {
-                    headers: {'Authorization': authorization}
-                }).then(success, error);
+                httpService.get("/api/login", authorization)
+                    .then(
+                    function (result) {
+
+                        if (result.userInfo && !result.error) {
+                            $window.sessionStorage["authorization"] = authorization;
+                            authenticated.resolve(result.userInfo);
+                        } else {
+                            authenticated.reject(result.error);
+                        }
+                    },
+                    function (error) {
+                        authenticated.reject(error);
+                    });
             } else {
                 authenticated.reject();
-            }
-
-
-            function success(result) {
-
-                if (result.data.userInfo) {
-                    $window.sessionStorage['authorization'] = authorization;
-                    authenticated.resolve(result.data.userInfo);
-                } else {
-                    authenticated.reject(result.data.error);
-                }
-            }
-
-            function error(error) {
-                authenticated.reject(error);
             }
 
             return authenticated.promise;
@@ -51,7 +47,7 @@
 
         function logout() {
             authorization = null;
-            $window.sessionStorage['authorization'] = null;
+            $window.sessionStorage["authorization"] = null;
             authenticated = $q.defer();
             authenticated.reject();
         }
@@ -73,7 +69,7 @@
         }
 
         function init() {
-            authorization = $window.sessionStorage['authorization'];
+            authorization = $window.sessionStorage["authorization"];
             authorize();
         }
 

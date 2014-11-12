@@ -1,59 +1,109 @@
-var gulp = require('gulp'),
-  jshint = require('gulp-jshint'),
-  less = require('gulp-less'),
-  webserver = require('gulp-webserver'),
-  nodemon = require('gulp-nodemon');
+var gulp = require("gulp");
+var del = require("del");
+var plugins = require("gulp-load-plugins")();
 
-gulp.task('html', function () {
-  return gulp.src('./app/**/*.html');
- });
-
-gulp.task('js', function () {
-  return gulp.src('./app/**/*.js');
- });
-
-gulp.task('less', function () {
-  return gulp.src('./app/less/*.less')
-    .pipe(less())
-    .pipe(gulp.dest('./app/css'));
- });
-
-gulp.task('watch', function () {
-  gulp.watch(['./app/**/*.html'], ['html']);
-  gulp.watch(['./app/js/**/*.js'], ['js']);
-  gulp.watch(['./app/less/*.less'], ['less']);
-});
-
-gulp.task('bower_components', function () {
-  return gulp.src('bower_components')
-      .pipe(webserver({
+gulp.task("bower_components", function () {
+  return gulp.src("bower_components")
+      .pipe(plugins.webserver({
         port: 9001,
         livereload: false,
         directoryListing: false
       }));
 });
 
-gulp.task('client', ['bower_components'], function () {
-  return gulp.src('app')
-    .pipe(webserver({
-      livereload: true,
+gulp.task("dev:http", ["bower_components"], function () {
+  return gulp.src("app")
+    .pipe(plugins.webserver({
+      livereload: false,
       directoryListing: false,
-      open: true,
-      fallback: 'index.html',
+      open: false,
+      fallback: "index.html",
+      https: false,
       proxies: [
-        { source: '/bower_components', target: 'http://localhost:9001/' },
-        { source: '/api', target: 'http://localhost:9000/api' }
+        { source: "/bower_components", target: "http://localhost:9001/" }
       ]
     }));
 });
 
-gulp.task('canned_server', function () {
-  nodemon({ script: './canned_server/server.js', ext: 'js', ignore: ['./app/**'] })
-      .on('restart', function () {
-        console.log('Canned server restarted')
-      })
+gulp.task("dev:https", ["bower_components"], function () {
+    return gulp.src("app")
+        .pipe(plugins.webserver({
+            livereload: false,
+            directoryListing: false,
+            open: false,
+            fallback: "index.html",
+            https: true,
+            proxies: [
+                { source: "/bower_components", target: "http://localhost:9001/" }
+            ]
+        }));
 });
 
-gulp.task('default', ['run']);
+gulp.task("clean:dist", function() {
+    return del("dist");
+});
 
-gulp.task('run', ['client', 'watch']);
+gulp.task("copy-fonts", ["clean:dist"], function() {
+    return gulp.src("./bower_components/fontawesome/fonts/*")
+        .pipe(gulp.dest("./dist/fonts"));
+});
+
+gulp.task("vendor", ["clean:dist"], function () {
+    return gulp.src([
+        "./bower_components/modernizr/modernizr.js",
+        "./bower_components/jquery/dist/jquery.js",
+        "./bower_components/bootstrap/dist/js/bootstrap.js",
+        "./bower_components/angular/angular.js",
+        "./bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js",
+        "./bower_components/angular-animate/angular-animate.js",
+        "./bower_components/angular-i18n/angular-locale_hu-hu.js",
+        "./bower_components/angular-route/angular-route.js",
+        "./bower_components/angular-resource/angular-resource.js",
+        "./bower_components/moment/moment.js",
+        "./bower_components/angular-moment/angular-moment.js"])
+        .pipe(plugins.concat("vendor.min.js"))
+        //.pipe(plugins.uglify())
+        .pipe(gulp.dest("./dist/js"));
+});
+
+gulp.task("js", ["clean:dist"], function () {
+    return gulp.src(["./app/**/*.module.js", "./app/**/*.js"])
+        .pipe(plugins.concat("all.min.js"))
+        //.pipe(plugins.uglify())
+        .pipe(gulp.dest("./dist/js"));
+});
+
+gulp.task("css", ["clean:dist"], function () {
+    return gulp.src(["./bower_components/bootstrap/dist/css/bootstrap.css",
+        "./bower_components/bootstrap/dist/css/bootstrap-theme.css",
+        "./bower_components/fontawesome/css/font-awesome.css",
+        "./app/**/*.css"])
+        .pipe(plugins.concat("all.min.css"))
+        .pipe(plugins.csso())
+        .pipe(gulp.dest("./dist/css"));
+});
+
+gulp.task("html_replace", ["clean:dist"], function () {
+    gulp.src("./app/**/*.html")
+        .pipe(plugins.htmlReplace({
+            "css": "css/all.min.css",
+            "js": "js/all.min.js",
+            "vendor": "js/vendor.min.js"
+        }))
+        .pipe(gulp.dest("dist/"));
+});
+
+gulp.task("stage", function () {
+    return gulp.src("dist")
+        .pipe(plugins.webserver({
+            livereload: false,
+            directoryListing: false,
+            open: false,
+            fallback: "index.html",
+            https: true
+    }));
+});
+
+gulp.task("default", ["build"]);
+
+gulp.task("build", ["clean:dist", "css", "vendor", "js", "html_replace"]);
