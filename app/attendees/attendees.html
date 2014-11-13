@@ -42,7 +42,7 @@
             <li class="list-group-item clearfix" ng-if="attendees.canAdd()">
                 <span class="input-group" ng-class='{ "has-error": attendees.addAttendeeError }'>
                     <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-user"></span>
+                        <i class="fa fa-user"></i>
                     </span>
                     <input type="text" class="form-control" placeholder="Tanítvány hozzáadása" ng-model="attendees.newAttendee"
                            typeahead="user as user.userName for user in attendees.usersCanBeAdded | filter: { userName: $viewValue }">
