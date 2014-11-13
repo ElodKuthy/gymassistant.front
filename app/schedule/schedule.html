@@ -7,9 +7,9 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-      <span ng-if="schedule.userInfo" class="navbar-brand">
+      <span ng-if="schedule.userInfo && schedule.credits.free" class="navbar-brand">
         <i class="fa fa-credit-card"></i>
-        {{schedule.credits}}
+        <span ng-bind="schedule.credits.free"></span>
       </span>
       <span class="navbar-brand visible-lg">
         {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}

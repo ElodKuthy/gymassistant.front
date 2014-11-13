@@ -1,6 +1,6 @@
 (function () {
 
-    'use strict';
+    "use strict";
 
-    angular.module('gymassistant.front.schedule', []);
+    angular.module("gymassistant.front.schedule", []);
 })();

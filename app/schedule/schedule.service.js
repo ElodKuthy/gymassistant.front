@@ -35,7 +35,7 @@
 
         function getCredits() {
             
-            return httpService.get("/api/credits");
+            return httpService.get("/api/my/credits");
         }
 
         function joinClass(classId) {
