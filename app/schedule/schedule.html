@@ -7,14 +7,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-      <span ng-if="schedule.userInfo && schedule.credits.free" class="navbar-brand">
+      <span ng-if="schedule.userInfo && schedule.credits.free" class="navbar-brand" style="font-size: 14px;">
         <i class="fa fa-credit-card"></i>
         <span ng-bind="schedule.credits.free"></span>
       </span>
-      <span class="navbar-brand visible-lg">
+      <span class="navbar-brand visible-lg" style="font-size: 14px;">
         {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}
       </span>
-      <span class="navbar-brand hidden-lg">
+      <span class="navbar-brand hidden-lg" style="font-size: 14px;">
         {{schedule.dates.begin | date: "shortDate"}} - {{schedule.dates.end | date: "shortDate"}}
       </span>
         </div>
