@@ -11,7 +11,9 @@
             "gymassistant.front.error",
             "gymassistant.front.authentication",
             "gymassistant.front.attendees",
-            "gymassistant.front.schedule"
+            "gymassistant.front.schedule",
+            "gymassistant.front.profile",
+            "gymassistant.front.modal"
         ])
         .config(AppConfig)
         .controller("Navbar", Navbar);
@@ -51,8 +53,7 @@
         function update(userInfo) {
             navbar.welcomeText = userInfo ? "Üdv " + userInfo.userName + "!" : "Üdv, kérlek lépj be!";
             navbar.welcomeTextLink = userInfo ? "/profilom" : "/belepes";
-            navbar.showLogin = userInfo ? false : true;
-            navbar.showLogout = userInfo ? true : false;
+            navbar.isLoggedIn = userInfo ? true : false;
         }
 
     }

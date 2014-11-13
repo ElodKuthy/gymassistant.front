@@ -47,9 +47,10 @@
             <div id="mainCollapse" class="navbar-collapse collapse">
 
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/profilom" ng-if="navbar.isLoggedIn">Profilom</a></li>
                     <li><a href="/orarend/aktualis">Órarend</a></li>
-                    <li><a href="/belepes" ng-show="navbar.showLogin">Belépés</a></li>
-                    <li><a href="#" ng-show="navbar.showLogout" data-ng-click="navbar.logout()">Kilépés</a></li>
+                    <li><a href="/belepes" ng-if="!navbar.isLoggedIn">Belépés</a></li>
+                    <li><a href="#" ng-if="navbar.isLoggedIn" data-ng-click="navbar.logout()">Kilépés</a></li>
                 </ul>
             </div><!--/.navbar-collapse -->
           </div>
@@ -65,6 +66,12 @@
                 <p>Kúthy Előd &copy; 2014</p>
             </footer>
 
+            <!-- build:nop -->
+            <div class="visible-lg alert alert-success col-lg-1">Large</div>
+            <div class="visible-md alert alert-info col-md-2">Medium</div>
+            <div class="visible-sm alert alert-warning col-sm-4">Small</div>
+            <div class="visible-xs alert alert-danger col-xs-6">Extra Small</div>
+            <!-- endbuild -->
         </div>
 
         <!-- build:vendor -->
@@ -86,6 +93,7 @@
         <script src="/common/common.module.js"></script>
         <script src="/common/http.service.js"></script>
 
+        <script src="/authentication/authentication.module.js"></script>
         <script src="/authentication/authentication.js"></script>
         <script src="/authentication/login.js"></script>
 
@@ -102,6 +110,13 @@
         <script src="/attendees/attendees.js"></script>
         <script src="/attendees/attendees.config.js"></script>
         <script src="/attendees/attendees.service.js"></script>
+
+        <script src="/profile/profile.module.js"></script>
+        <script src="/profile/profile.config.js"></script>
+        <script src="/profile/profile.js"></script>
+
+        <script src="/modal/modal.module.js"></script>
+        <script src="/modal/info.js"></script>
         <!-- endbuild -->
     </body>
 </html>

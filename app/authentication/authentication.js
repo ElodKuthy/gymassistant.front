@@ -3,7 +3,7 @@
     "use strict";
 
     angular
-        .module("gymassistant.front.authentication", [])
+        .module("gymassistant.front.authentication")
         .factory("authenticationService", AuthenticationService);
 
     /* @ngInject */
@@ -11,6 +11,16 @@
 
         var authorization;
         var authenticated;
+
+        init();
+
+        return {
+            login: login,
+            logout: logout,
+            getUserInfo: getUserInfo,
+            changePassword: changePassword
+        };
+
 
         function login(userName, password) {
             authorization = "Basic " + window.btoa(userName + ":" + password);
@@ -67,17 +77,14 @@
             return getUserInfoDeferred.promise;
         }
 
+        function changePassword(newPassword) {
+            return httpService.post("/api/change/password", { password: newPassword });
+        }
+
         function init() {
             authorization = $window.sessionStorage["authorization"];
             authorize();
         }
 
-        init();
-
-        return {
-            login: login,
-            logout: logout,
-            getUserInfo: getUserInfo
-        };
     }
 })();

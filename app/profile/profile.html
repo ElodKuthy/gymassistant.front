@@ -1,0 +1,48 @@
+ <div class="container">
+    <div class="row">
+        <div class="col-md-2 col-sm-2 text-center">
+            <span class="fa-stack fa-3x">
+                <i class="fa fa-square fa-stack-2x"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+            </span>
+        </div>
+        <div class="col-md-4 col-sm-6">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Név: <span ng-bind="profile.name"></span>
+                </li>
+                <li class="list-group-item">
+                    Email: <span ng-bind="profile.email"></span>
+                </li>
+                <li class="list-group-item">
+                    Rang: <span ng-bind="profile.role"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+     <div class="row">
+         <div class="col-lg-6 col-md-7 col-sm-9">
+             <div class="panel panel-default">
+                 <div class="panel-heading">
+                     Jelszó csere
+                 </div>
+                 <div class="panel-body text-center">
+                     <form class="form-inline" role="form">
+                         <div class="form-group">
+                             <label class="sr-only" for="newPassword">Új jelszó</label>
+                             <input type="password" class="form-control" id="newPassword"
+                                    ng-model="profile.newPassword" placeholder="Új jelszó">
+                         </div>
+                         <div class="form-group">
+                             <label class="sr-only" for="newPasswordAgain">Új jelszó mégegyszer</label>
+                             <input type="password" class="form-control" id="newPasswordAgain"
+                                    ng-model="profile.newPasswordAgain" placeholder="Új jelszó mégegyszer">
+                         </div>
+                         <button type="button" class="btn btn-primary" ng-click="profile.changePassword()">Mehet</button>
+                         <div class="simple-error-text text-danger text-left" ng-bind="profile.passwordChangeError"></div>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
