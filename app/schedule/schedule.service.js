@@ -6,8 +6,7 @@
         .module("gymassistant.front.schedule")
         .factory("scheduleService", ScheduleService);
 
-    ScheduleService.$inject = ["httpService"];
-
+    /* @ngInject */
     function ScheduleService(httpService) {
 
         return {

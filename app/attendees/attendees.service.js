@@ -5,8 +5,7 @@
     angular.module("gymassistant.front.attendees")
         .factory("attendeesService", AttendeesSevice);
 
-    AttendeesSevice.$inject = ["httpService"];
-
+    /* @ngInject */
     function AttendeesSevice(httpService) {
 
         return {

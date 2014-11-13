@@ -89,7 +89,8 @@ gulp.task("vendor", ["clean:dist"], function () {
 gulp.task("js", ["clean:dist"], function () {
     return gulp.src(["./app/**/*.module.js", "./app/**/*.js"])
         .pipe(plugins.concat("all.min.js"))
-        //.pipe(plugins.uglify())
+        .pipe(plugins.ngAnnotate())
+        .pipe(plugins.uglify())
         .pipe(gulp.dest("./dist/public/js"));
 });
 
@@ -111,17 +112,6 @@ gulp.task("html_replace", ["clean:dist"], function () {
             "vendor": "/js/vendor.min.js"
         }))
         .pipe(gulp.dest("dist/views"));
-});
-
-gulp.task("stage", function () {
-    return gulp.src("dist")
-        .pipe(plugins.webserver({
-            livereload: false,
-            directoryListing: false,
-            open: false,
-            fallback: "index.html",
-            https: true
-    }));
 });
 
 gulp.task("default", ["build"]);

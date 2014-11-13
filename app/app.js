@@ -16,8 +16,7 @@
         .config(AppConfig)
         .controller("Navbar", Navbar);
 
-    AppConfig.$inject = ["$routeProvider", "$locationProvider"];
-
+    /* @ngInject */
     function AppConfig ($routeProvider, $locationProvider) {
           $routeProvider.
               when("/", {

@@ -6,8 +6,7 @@
         .module('gymassistant.front.schedule')
         .config(ScheduleConfig);
 
-    ScheduleConfig.$inject = ['$routeProvider'];
-
+    /* @ngInject */
     function ScheduleConfig($routeProvider) {
         $routeProvider
             .when('/orarend/aktualis', {

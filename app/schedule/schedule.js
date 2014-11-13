@@ -6,8 +6,7 @@
         .module("gymassistant.front.schedule")
         .controller("Schedule", Schedule);
 
-    Schedule.$inject = ["$route", "$rootScope", "$routeParams", "$location", "authenticationService", "scheduleService", "errorService"];
-
+    /* @ngInject */
     function Schedule($route, $rootScope, $routeParams, $location, authenticationService, scheduleService, errorService) {
 
         var schedule = this;

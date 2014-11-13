@@ -6,8 +6,7 @@
         .module("gymassistant.front.error")
         .controller("Error", Error);
 
-    Error.$inject = ["$modalInstance", "message"];
-
+    /* @ngInject */
     function Error($modalInstance, message) {
         var error = this;
 

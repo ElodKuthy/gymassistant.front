@@ -6,8 +6,7 @@
         .module("gymassistant.front.error")
         .factory("errorService", ErrorService);
 
-    ErrorService.$inject = ["$modal"];    
-
+    /* @ngInject */
     function ErrorService($modal) {
         
         return {

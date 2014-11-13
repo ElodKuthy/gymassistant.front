@@ -6,8 +6,7 @@
         .module("gymassistant.front.attendees")
         .config(AttendeesConfig);
 
-    AttendeesConfig.$inject = ['$routeProvider'];
-
+    /* @ngInject */
     function AttendeesConfig($routeProvider) {
         $routeProvider.when('/resztvevok/:id', {
             templateUrl: 'attendees/attendees.html',

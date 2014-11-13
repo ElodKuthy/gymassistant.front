@@ -6,8 +6,7 @@
         .module("gymassistant.front.attendees")
         .controller("Attendees", Attendees);
 
-    Attendees.$inject = ["$rootScope", "$window", "$routeParams", "$location", "authenticationService", "scheduleService", "attendeesService", "errorService"];
-
+    /* @ngInject */
     function Attendees($rootScope, $window, $routeParams, $location, authenticationService, scheduleService, attendeesService, errorService) {
 
         var attendees = this;

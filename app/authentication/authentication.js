@@ -6,8 +6,7 @@
         .module("gymassistant.front.authentication", [])
         .factory("authenticationService", AuthenticationService);
 
-    AuthenticationService.$inject = ["$q", "$window", "httpService"];
-
+    /* @ngInject */
     function AuthenticationService($q, $window, httpService) {
 
         var authorization;

@@ -7,8 +7,7 @@
         .config(LoginConfig)
         .controller("LoginCtrl", LoginController);
 
-    LoginConfig.$inject = ["$routeProvider"];
-
+    /* @ngInject */
     function LoginConfig ($routeProvider)
     {
         $routeProvider.when("/belepes", {
@@ -18,8 +17,7 @@
         });
     }
 
-    LoginController.$inject = ["$rootScope", "$window", "$location", "authenticationService"];
-
+    /* @ngInject */
     function LoginController ($rootScope, $window, $location, authenticationService) {
 
         var vm = this;

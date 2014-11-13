@@ -5,8 +5,7 @@
     angular.module("gymassistant.front.common")
         .factory("httpService", HttpService);
 
-    HttpService.$inject = ["$http", "$q", "$window"];
-
+    /* @ngInject */
     function HttpService($http, $q, $window) {
 
         var api = "https://localhost:9000";
