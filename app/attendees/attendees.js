@@ -141,7 +141,7 @@
             }
 
 
-            if (attendees.newAttendee.credits === 0) {
+            if (attendees.newAttendee.credits.free === 0) {
                 attendees.addAttendeeError = "A tanítványnak nincs szabad kredite";
                 return;
             }
