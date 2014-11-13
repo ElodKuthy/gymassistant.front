@@ -94,7 +94,7 @@
         function canJoin(instance) {
 
             return schedule.userInfo
-                && schedule.credits > 0
+                && schedule.credits.free > 0
                 && !instance.isFull
                 && !instance.signedUp
                 && moment().isBefore(instance.date);
@@ -104,7 +104,7 @@
             if (canJoin(instance)) {
                 scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
-                    schedule.credits--;
+                    schedule.credits.free--;
                     if (instance.attendees) {
                         instance.attendees.push(schedule.userInfo.userName);
                     }
@@ -134,7 +134,7 @@
                             instance.attendees.splice(index, 1);
                         }
                     }
-                    schedule.credits++;
+                    schedule.credits.free++;
                     calculateInstanceProperties(instance, false);
                 }, function (error) {
                     errorService.modal(error, "sm");
