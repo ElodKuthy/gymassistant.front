@@ -8,7 +8,7 @@
     /* @ngInject */
     function HttpService($http, $q, $window) {
 
-        var api = "https://localhost:9000";
+        var api = "https://localhost:8000";
 
         return {
             get: get,
