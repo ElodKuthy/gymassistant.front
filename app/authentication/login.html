@@ -1,5 +1,4 @@
 <div class="container">
-    
     <div class="omb_login">
         <h3 class="omb_authTitle">Belépés</h3>
         <!--<div class="row omb_row-sm-offset-3 omb_socialButtons">
@@ -14,13 +13,13 @@
                     <i class="fa fa-twitter visible-xs"></i>
                     <span class="hidden-xs">Twitter</span>
                 </a>
-            </div>  
+            </div>
             <div class="col-xs-4 col-sm-2">
                 <a href="#" class="btn btn-lg btn-block omb_btn-google">
                     <i class="fa fa-google-plus visible-xs"></i>
                     <span class="hidden-xs">Google+</span>
                 </a>
-            </div>  
+            </div>
         </div>
 
         <div class="row omb_row-sm-offset-3 omb_loginOr">
@@ -34,17 +33,16 @@
             <div class="col-xs-12 col-sm-6">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                        <input type="text" class="form-control" name="username" placeholder="Név vagy email cím" data-ng-model="vm.userName">
+                        <input type="text" class="form-control" name="username" placeholder="Név vagy email cím" data-ng-model="vm.userName" ga-enter="vm.login()">
                     </div>
                     <span class="help-block"></span>
-                                        
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                        <input  type="password" class="form-control" name="password" placeholder="Jelszó" data-ng-model="vm.password" >
+                        <input  type="password" class="form-control" name="password" placeholder="Jelszó" ng-model="vm.password" ga-enter="vm.login()">
                     </div>
                     <span class="help-block text-danger" data-ng-bind="vm.error"></span>
 
-                    <button type="button" class="btn btn-lg btn-primary btn-block" data-ng-click="vm.login()">Belépés</button>
+                    <button type="button" class="btn btn-lg btn-primary btn-block" ng-click="vm.login()" >Belépés</button>
             </div>
         </div>
         <!--<div class="row omb_row-sm-offset-3">
