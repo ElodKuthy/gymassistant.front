@@ -5,6 +5,7 @@
     angular
         .module("gymassistant.front", [
             "ngRoute",
+            "ngCookies",
             "ui.bootstrap",
             "angularMoment",
             "gymassistant.front.common",
