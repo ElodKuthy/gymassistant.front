@@ -7,7 +7,7 @@
         .controller("Schedule", Schedule);
 
     /* @ngInject */
-    function Schedule($routeParams, $location, authenticationService, scheduleService, errorService, eventHelper) {
+    function Schedule($modal, $routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService) {
 
         var schedule = this;
 
@@ -31,44 +31,52 @@
 
         function fetchSchedule(begin, end) {
 
-            scheduleService.getSchedule(begin, end).then(function (result) {
+            loadingService.startLoading();
 
-                schedule.dates = result.dates;
+            var scheduleResult = scheduleService.getSchedule(begin, end);
+            var creditsResult = scheduleService.getCredits();
+            var userInfoResult = authenticationService.getUserInfo();
 
-                var currentDate = moment(0);
-                var currentWeek = [];
-                var currentDay = [];
+            $q.all([scheduleResult, creditsResult, userInfoResult]).then(
+                function (results) {
 
-                schedule.weeks = [];
+                    schedule.dates = results[0].dates;
 
-                result.schedule.forEach(function (data) {
+                    var currentDate = moment(0);
+                    var currentWeek = [];
+                    var currentDay = [];
 
-                    if (!currentDate.isSame(data.date, "day")) {
-                        if (!currentDate.isSame(data.date, "week")) {
-                            currentWeek = [];
-                            schedule.weeks.push(currentWeek);
+                    schedule.weeks = [];
+
+                    results[0].schedule.forEach(function (data) {
+
+                        if (!currentDate.isSame(data.date, "day")) {
+                            if (!currentDate.isSame(data.date, "week")) {
+                                currentWeek = [];
+                                schedule.weeks.push(currentWeek);
+                            }
+                            currentDate = moment(data.date).endOf("day");
+                            currentDay = [];
+                            currentWeek.push(currentDay);
                         }
-                        currentDate = moment(data.date).endOf("day");
-                        currentDay = [];
-                        currentWeek.push(currentDay);
-                    }
 
-                    var instance = createInstanceFromData(data);
+                        var instance = createInstanceFromData(data);
 
-                    currentDay.push(instance);
+                        currentDay.push(instance);
+                    });
+
+                    schedule.credits = results[1].credits;
+
+                    schedule.userInfo = results[2];
+                    schedule.showAttendeeList =
+                        (schedule.userInfo && schedule.userInfo.roles) ? (schedule.userInfo.roles.indexOf("coach") > -1) : false;
+
+                    loadingService.endLoading();
+                },
+                function (error) {
+                    loadingService.endLoading();
+                    errorService.modal(error);
                 });
-
-            });
-
-            scheduleService.getCredits().then(function (result) {
-                schedule.credits = result.credits;
-            });
-
-            authenticationService.getUserInfo().then(function (userInfo) {
-                schedule.userInfo = userInfo;
-                schedule.showAttendeeList = (userInfo && userInfo.roles) ? (userInfo.roles.indexOf("coach") > -1) : false;
-            });
-
         }
 
         function perviousWeek() {

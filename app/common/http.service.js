@@ -15,7 +15,7 @@
             post: post
         };
 
-        function get(url, auth) {
+        function get(url, def, auth) {
 
             var deferred = $q.defer();
                     var authorization = auth ? auth : storageHelper.getAuth();
@@ -24,11 +24,14 @@
                         headers: {"Authorization": authorization}
                     }).then(function (result) {
                         if (result.data.error) {
+                            if (def) {
+                                deferred.resolve(def);
+                            } else {
                             if (result.data.error == "Hibás felhasználónév vagy jelszó") {
                                 storageHelper.setAuth(null);
                             }
-
-                            deferred.reject(result.data.error);
+                                deferred.reject(result.data.error);
+                            }
                         } else {
                             deferred.resolve(result.data);
                 }

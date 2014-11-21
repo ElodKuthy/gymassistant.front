@@ -36,7 +36,7 @@
             var deferred = $q.defer();
             var authorization = "Basic " + window.btoa(userName + ":" + password);
 
-            httpService.get("/api/login", authorization).then(
+            httpService.get("/api/login", null, authorization).then(
                 function (result) {
                     if (result.userInfo && !result.error) {
                         storageHelper.setAuth(authorization, remember);
