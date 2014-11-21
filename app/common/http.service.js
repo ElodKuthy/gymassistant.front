@@ -6,7 +6,7 @@
         .factory("httpService", HttpService);
 
     /* @ngInject */
-    function HttpService($http, $q, $window) {
+    function HttpService($http, $q, storageHelper, eventHelper) {
 
         var api = "https://localhost:8000";
 
@@ -18,12 +18,16 @@
         function get(url, auth) {
 
             var deferred = $q.defer();
-                    var authorization = auth ? auth : $window.sessionStorage["authorization"];
+                    var authorization = auth ? auth : storageHelper.getAuth();
 
                     $http.get(api + url, {
                         headers: {"Authorization": authorization}
                     }).then(function (result) {
                         if (result.data.error) {
+                            if (result.data.error == "Hibás felhasználónév vagy jelszó") {
+                                storageHelper.setAuth(null);
+                            }
+
                             deferred.reject(result.data.error);
                         } else {
                             deferred.resolve(result.data);
@@ -38,13 +42,18 @@
         function post(url, body, auth) {
 
             var deferred = $q.defer();
-            var authorization = auth ? auth : $window.sessionStorage["authorization"];
+            var authorization = auth ? auth : storageHelper.getAuth();
 
             $http.post(api + url, body, {
                 headers: {"Authorization": authorization}
             }).then(function (result) {
                 if (result.data.error) {
-                    deferred.reject(result.data.error);
+                            if (result.data.error == "Hibás felhasználónév vagy jelszó") {
+                                storageHelper.setAuth(null);
+                                eventHelper.broadcast.authenticationChanged();
+                            }
+
+                            deferred.reject(result.data.error);
                 } else {
                     deferred.resolve(result.data);
                 }

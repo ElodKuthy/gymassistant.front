@@ -19,41 +19,36 @@
         };
 
         function getSchedule(begin, end) {
-            
+
             var url = "/api/schedule";
-            
+
             if (begin) {
                 url = url + "/" + begin;
             }
             if (end) {
                 url = url + "/" + end;
             }
-            
+
             return httpService.get(url);
         }
 
         function getCredits() {
-            
             return httpService.get("/api/my/credits");
         }
 
         function joinClass(classId) {
-            
             return httpService.get("/api/join/session/" + classId);
         }
 
         function leaveClass(classId) {
-            
             return httpService.get("/api/leave/session/" + classId);
         }
 
         function getUsers() {
-
             return httpService.get("/api/users");
         }
 
         function getInstance(id) {
-
             return httpService.get("/api/schedule/" + id);
         }
     }

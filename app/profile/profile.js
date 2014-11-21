@@ -6,7 +6,7 @@
         .controller("Profile", Profile);
 
     /* @ngInject */
-    function Profile($rootScope, $window, $modal, authenticationService) {
+    function Profile($modal, authenticationService, eventHelper, userInfo, locationHelper) {
 
         var profile = this;
 
@@ -15,28 +15,24 @@
         profile.newPassword = "";
         profile.newPasswordAgain = "";
         profile.passwordChangeError = "";
-        profile.changePassword = null;
+        profile.changePassword = changePassword;
 
-        checkAuthentication();
+        fillProfile(userInfo);
+
+        eventHelper.subscribe.authenticationChanged(checkAuthentication);
 
         function checkAuthentication() {
-            authenticationService.getUserInfo().then(function (userInfo) {
-                if (!userInfo) {
-                    $window.history.length > 1 ? $window.history.back() : $location.path('/');
-                }
-            });
+            locationHelper.onlyAuthenticated().then(fillProfile);
         }
 
-        $rootScope.$on("authenticationChanged", checkAuthentication);
-
-        authenticationService.getUserInfo().then(function(userInfo) {
+        function fillProfile(userInfo) {
             if (userInfo) {
                 profile.name = userInfo.userName;
                 profile.email = userInfo.email;
                 profile.role = userInfo.roles.indexOf("coach") === -1 ? "Tanítvány" : "Edző";
                 profile.changePassword = changePassword;
             }
-        });
+        }
 
         function changePassword() {
 
@@ -58,11 +54,10 @@
             }
 
             authenticationService.changePassword(profile.newPassword).then(
-                function() {
+                function () {
 
-                    authenticationService.logout();
                     authenticationService.login(profile.name, profile.newPassword).then(
-                        function() {
+                        function () {
                             profile.newPassword = "";
                             profile.newPasswordAgain = "";
 
@@ -81,11 +76,11 @@
                                 }
                             });
                         },
-                        function() {
-                            $rootScope.$broadcast("authenticationChanged");
+                        function () {
+                            authenticationService.logout();
                         });
                 },
-                function(error) {
+                function (error) {
                     profile.passwordChangeError = error;
                 });
         }

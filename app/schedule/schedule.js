@@ -7,7 +7,7 @@
         .controller("Schedule", Schedule);
 
     /* @ngInject */
-    function Schedule($route, $rootScope, $routeParams, $location, authenticationService, scheduleService, errorService) {
+    function Schedule($routeParams, $location, authenticationService, scheduleService, errorService, eventHelper) {
 
         var schedule = this;
 
@@ -25,13 +25,12 @@
         schedule.leave = leave;
         schedule.showAttendees = showAttendees;
 
-        $rootScope.$on("authenticationChanged", function() {
-            $route.reload();
-        });
+        eventHelper.subscribe.authenticationChanged(fetchSchedule);
 
         fetchSchedule($routeParams.begin, $routeParams.end);
 
         function fetchSchedule(begin, end) {
+
             scheduleService.getSchedule(begin, end).then(function (result) {
 
                 schedule.dates = result.dates;
@@ -93,11 +92,11 @@
 
         function canJoin(instance) {
 
-            return schedule.userInfo
-                && schedule.credits.free > 0
-                && !instance.isFull
-                && !instance.signedUp
-                && moment().isBefore(instance.date);
+            return schedule.userInfo &&
+                    schedule.credits.free > 0 &&
+                    !instance.isFull &&
+                    !instance.signedUp &&
+                    moment().isBefore(instance.date);
         }
 
         function join(instance) {
@@ -119,8 +118,8 @@
         }
 
         function canLeave(instance) {
-            return instance.signedUp
-                && moment().add({ days: 1}).isBefore(instance.date);
+            return instance.signedUp &&
+                moment().add({ days: 1}).isBefore(instance.date);
         }
 
 

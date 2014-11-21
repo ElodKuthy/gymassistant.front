@@ -29,9 +29,8 @@
       $locationProvider.html5Mode(true);
     }
 
-    Navbar.inject = ["$rootScope", "authenticationService"];
-
-    function Navbar($rootScope, authenticationService) {
+    /* @ngInject */
+    function Navbar(authenticationService, eventHelper) {
 
         var navbar = this;
 
@@ -40,11 +39,10 @@
 
         navbar.logout = logout;
 
-        $rootScope.$on("authenticationChanged", checkUserInfo);
+        eventHelper.subscribe.authenticationChanged(checkUserInfo);
 
         function logout() {
             authenticationService.logout();
-            $rootScope.$broadcast("authenticationChanged");
         }
 
         function checkUserInfo() {

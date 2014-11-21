@@ -7,14 +7,13 @@
         .controller("Attendees", Attendees);
 
     /* @ngInject */
-    function Attendees($rootScope, $window, $routeParams, $location, authenticationService, scheduleService, attendeesService, errorService) {
+    function Attendees(scheduleService, attendeesService, errorService, eventHelper, locationHelper, userInfo, training, allUsers) {
 
         var attendees = this;
 
-        checkAuthentication();
-
-        attendees.training = {};
-        attendees.allUsers = [];
+        attendees.userInfo = userInfo;
+        attendees.training = training.instance;
+        attendees.allUsers = allUsers.users;
         attendees.usersCanBeAdded = [];
         attendees.newAttendee = "";
         attendees.addAttendeeError = null;
@@ -30,30 +29,16 @@
         attendees.canAdd = canAdd;
         attendees.add = add;
 
-        function checkAuthentication() {
-            authenticationService.getUserInfo().then(function (userInfo) {
-                if (!userInfo) {
-                    $window.history.length > 1 ? $window.history.back() : $location.path('/');
-                }
+        eventHelper.subscribe.authenticationChanged(function() {
+            locationHelper.onlyCoach().result(function(userInfo) {
+                attendees.userInfo = userInfo;
             });
-        }
-
-        $rootScope.$on("authenticationChanged", checkAuthentication);
-
-        scheduleService.getInstance($routeParams.id).then(function(result) {
-
-            attendees.training = result.instance;
         });
 
-        scheduleService.getUsers().then(function(result) {
-
-            attendees.allUsers = result.users;
-
-            attendees.allUsers.forEach(function (user) {
-               if (attendees.training.attendees.indexOf(user.userName) === -1) {
-                   attendees.usersCanBeAdded.push(user);
-               }
-            });
+        attendees.allUsers.forEach(function (user) {
+           if (attendees.training.attendees.indexOf(user.userName) === -1) {
+               attendees.usersCanBeAdded.push(user);
+           }
         });
 
         function checkedIn(attendee) {
@@ -65,9 +50,9 @@
 
             return $.inArray(attendee, attendees.training.participants) === -1;
         }
-        
+
         function canUndoCheckedIn(attendee) {
-            
+
             return moment().isSame(attendees.training.date, "day") && checkedIn(attendee);
         }
 
@@ -125,8 +110,8 @@
 
         function canAdd() {
 
-            return attendees.training.attendees.length < 12
-                && moment().subtract({day: 1}).isBefore(attendees.training.date, "day");
+            return attendees.training.attendees.length < 12 &&
+                moment().subtract({day: 1}).isBefore(attendees.training.date, "day");
         }
 
         function add() {

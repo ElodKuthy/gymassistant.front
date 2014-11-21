@@ -12,7 +12,13 @@
             .when("/profilom", {
                 templateUrl: "profile/profile.html",
                 controllerAs: "profile",
-                controller: "Profile"
+                controller: "Profile",
+                resolve: {
+                    /* @ngInject */
+                    userInfo: function (locationHelper) {
+                        return locationHelper.onlyAuthenticated();
+                    }
+            }
             });
     }
 

@@ -4,60 +4,32 @@
 
     angular
         .module("gymassistant.front.authentication")
-        .config(LoginConfig)
-        .controller("LoginCtrl", LoginController);
+        .controller("Login", Login);
 
     /* @ngInject */
-    function LoginConfig ($routeProvider)
-    {
-        $routeProvider.when("/belepes", {
-            templateUrl: "authentication/login.html",
-            controller: "LoginCtrl",
-            controllerAs: "vm"
-        });
-    }
+    function Login(locationHelper, authenticationService) {
 
-    /* @ngInject */
-    function LoginController ($rootScope, $window, $location, authenticationService) {
+        var login = this;
 
-        var vm = this;
+        login.submit = submit;
+        login.remember = false;
 
-        authenticationService.getUserInfo().then(function(userInfo) {
-            if (userInfo) {
-                $window.history.length > 1 ? $window.history.back() : $location.path("/");
-            }
-
-            vm.login = login;
-            vm.cancel = cancel;
-        });
-
-        function login() {
-            authenticationService.login(vm.userName, vm.password)
-                .then(success, error);
-
-            function clear() {
-                vm.password = "";
-                vm.error = "";
-            }
-
-            function success() {
-                clear();
-
-                $rootScope.$broadcast("authenticationChanged");
-                $window.history.length > 1 ? $window.history.back() : $location.path("/");
-            }
-
-            function error(error) {
-                clear();
-
-                vm.error = error;
-            }
-
+        function clear() {
+            login.password = "";
+            login.error = "";
         }
 
-        function cancel() {
-            vm.userName = "";
-            vm.password = "";
+        function submit() {
+            authenticationService.login(login.userName, login.password, login.remember).then(
+                function() {
+                    clear();
+                    locationHelper.back();
+                },
+                function (error) {
+                    clear();
+                    login.error = error;
+            });
+
         }
     }
 
