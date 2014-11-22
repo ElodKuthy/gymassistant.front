@@ -1,3 +1,5 @@
+"use strict";
+
 var gulp = require("gulp");
 var del = require("del");
 var plugins = require("gulp-load-plugins")();
@@ -46,29 +48,49 @@ gulp.task("copy:static", ["clean:dist"], function() {
 });
 
 gulp.task("copy:fonts", ["clean:dist"], function() {
-    return gulp.src("./bower_components/fontawesome/fonts/*.*")
+    return gulp.src("bower_components/fontawesome/fonts/*.*")
         .pipe(gulp.dest("dist/fonts"));
 });
 
-gulp.task("vendor", ["clean:dist"], function () {
+gulp.task("css:vendor", ["clean:dist"], function () {
     return gulp.src([
-        ".bower_components/modernizr/modernizr.js",
-        "bower_components/jquery/dist/jquery.js",
-        "bower_components/bootstrap/dist/js/bootstrap.js",
-        "bower_components/angular/angular.js",
-        "bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js",
-        "bower_components/angular-animate/angular-animate.js",
-        "bower_components/angular-i18n/angular-locale_hu-hu.js",
-        "bower_components/angular-route/angular-route.js",
-        "bower_components/angular-resource/angular-resource.js",
-        "bower_components/moment/moment.js",
-        "bower_components/angular-moment/angular-moment.js"])
-        .pipe(plugins.concat("vendor.min.js"))
-        .pipe(plugins.uglify())
+        "bower_components/bootstrap/dist/css/bootstrap.min.css",
+        "bower_components/bootstrap/dist/css/bootstrap-theme.min.css",
+        "bower_components/fontawesome/css/font-awesome.min.css"])
+        .pipe(plugins.concat("vendor.min.css"))
+        .pipe(gulp.dest("dist/css"));
+});
+
+gulp.task("css:all", ["clean:dist"], function () {
+    return gulp.src("app/**/*.css")
+        .pipe(plugins.concat("all.min.css"))
+        .pipe(plugins.csso())
+        .pipe(gulp.dest("dist/css"));
+});
+
+gulp.task("js:modernizr", ["clean:dist"], function () {
+    return gulp.src("bower_components/modernizr/modernizr.js")
         .pipe(gulp.dest("dist/js"));
 });
 
-gulp.task("js", ["clean:dist"], function () {
+gulp.task("js:vendor", ["clean:dist"], function () {
+    return gulp.src([
+        "bower_components/jquery/dist/jquery.min.js",
+        "bower_components/bootstrap/dist/js/bootstrap.min.js",
+        "bower_components/angular/angular.min.js",
+        "bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js",
+        "bower_components/angular-animate/angular-animate.min.js",
+        "bower_components/angular-i18n/angular-locale_hu-hu.js",
+        "bower_components/angular-route/angular-route.min.js",
+        "bower_components/angular-resource/angular-resource.min.js",
+        "bower_components/moment/min/moment.min.js",
+        "bower_components/angular-moment/angular-moment.min.js",
+        "bower_components/angular-cookies/angular-cookies.min.js"])
+        .pipe(plugins.concat("vendor.min.js"))
+        .pipe(gulp.dest("dist/js"));
+});
+
+gulp.task("js:all", ["clean:dist"], function () {
     return gulp.src(["app/**/*.module.js", "app/**/*.js"])
         .pipe(plugins.concat("all.min.js"))
         .pipe(plugins.ngAnnotate())
@@ -76,23 +98,14 @@ gulp.task("js", ["clean:dist"], function () {
         .pipe(gulp.dest("dist/js"));
 });
 
-gulp.task("css", ["clean:dist"], function () {
-    return gulp.src([
-        "bower_components/bootstrap/dist/css/bootstrap.css",
-        "bower_components/bootstrap/dist/css/bootstrap-theme.css",
-        "bower_components/fontawesome/css/font-awesome.css",
-        "app/**/*.css"])
-        .pipe(plugins.concat("all.min.css"))
-        .pipe(plugins.csso())
-        .pipe(gulp.dest("dist/css"));
-});
-
 gulp.task("html_replace", ["clean:dist"], function () {
     return gulp.src("app/**/*.html")
         .pipe(plugins.htmlReplace({
-            "css": "/css/all.min.css",
-            "js": "/js/all.min.js",
-            "vendor": "/js/vendor.min.js"
+            "css_vendor": "/css/vendor.min.css",
+            "css_all": "/css/all.min.css",
+            "js_vendor": "/js/vendor.min.js",
+            "js_modernizr": "/js/modernizr.js",
+            "js_all": "/js/all.min.js"
         }))
         .pipe(gulp.dest("dist"));
 });
@@ -108,16 +121,14 @@ gulp.task("deploy:views", ["build"], function () {
         .pipe(gulp.dest("../gymassistant/views"));
 });
 
-gulp.task('templates', function(){
-    gulp.src(['file.txt'])
-        .pipe(replace(/foo(.{3})/g, '$1foo'))
-        .pipe(gulp.dest('build/file.txt'));
-});
-
 gulp.task("default", ["build"]);
 
 gulp.task("copy", ["clean:dist", "copy:static", "copy:fonts"]);
 
-gulp.task("build", ["clean:dist", "copy", "css", "vendor", "js", "html_replace"]);
+gulp.task("css", ["clean:dist", "css:vendor", "css:all"]);
+
+gulp.task("js", ["clean:dist", "js:modernizr", "js:vendor", "js:all"]);
+
+gulp.task("build", ["clean:dist", "copy", "css", "js", "html_replace"]);
 
 gulp.task("deploy", ["build", "deploy:public", "deploy:views"]);

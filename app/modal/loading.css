@@ -20,3 +20,9 @@
     vertical-align: middle;
     pointer-events:none;
 }
+
+.loading-modal .modal-body > i {
+    background: -webkit-linear-gradient(150deg, #ddd, #333);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

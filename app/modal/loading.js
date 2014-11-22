@@ -17,7 +17,7 @@
         function startLoading() {
             loadingModal = $modal.open({
                 templateUrl: "modal/loading.html",
-                windowTemplateUrl: "modal/loading.window.html",
+                windowTemplateUrl: "modal/loading_window.html",
                 backdrop: "static",
                 keyboard: false
             });

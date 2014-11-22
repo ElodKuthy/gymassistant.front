@@ -11,15 +11,22 @@
         <meta name="description" content="Gym Assistant Web Application">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-        <!-- build:css -->
+        <!-- build:css_vendor -->
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css">
         <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap-theme.css">
         <link rel="stylesheet" type="text/css" href="/bower_components/fontawesome/css/font-awesome.css">
+        <!-- endbuild -->
+        <!-- build:css_all -->
         <link rel="stylesheet" type="text/css" href="/app.css">
         <link rel="stylesheet" type="text/css" href="/authentication/login.css">
         <link rel="stylesheet" type="text/css" href="/modal/loading.css">
         <!-- endbuild -->
-        <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+
+        <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+        <!-- build:js_modernizr -->
+        <script src="/bower_components/modernizr/modernizr.js"></script>
+        <!-- endbuild -->
 
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -76,8 +83,7 @@
             <!-- endbuild -->
         </div>
 
-        <!-- build:vendor -->
-        <script src="/bower_components/modernizr/modernizr.js"></script>
+        <!-- build:js_vendor -->
         <script src="/bower_components/jquery/dist/jquery.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <script src="/bower_components/angular/angular.js"></script>
@@ -89,9 +95,9 @@
         <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="/bower_components/moment/moment.js"></script>
         <script src="/bower_components/angular-moment/angular-moment.js"></script>
-        <script src="/bower_components/qcode-decoder/build/qcode-decoder.min.js"></script>
+        <script src="/bower_components/qcode-decoder/build/qrcode.js"></script>
         <!-- endbuild -->
-        <!-- build:js -->
+        <!-- build:js_all -->
         <script src="/app.js"></script>
 
         <script src="/common/common.module.js"></script>
