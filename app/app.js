@@ -51,6 +51,7 @@
             navbar.welcomeText = userInfo ? 'Üdv ' + userInfo.name + '!' : 'Üdv, kérlek lépj be!';
             navbar.welcomeTextLink = userInfo ? '/profilom' : '/belepes';
             navbar.isLoggedIn = userInfo ? true : false;
+            navbar.isCoach = userInfo && userInfo.roles.indexOf('coach') > -1;
         }
 
     }

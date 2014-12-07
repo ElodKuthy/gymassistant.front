@@ -25,15 +25,15 @@
                 <span>{{$index + 1}}. </span>
                 <span>{{attendee.name}}</span>
                 <span class="pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
+                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
                             ng-click="attendees.undoCheckIn(attendee)">
                         <i class="fa fa-undo"></i> Visszavonás
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.checkIn(attendee)">
                         <i class="fa fa-check-circle"></i> Bejelentkezés
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.remove(attendee)">
                         <i class="fa fa-trash"></i> Eltávoítás
                     </button>

@@ -18,6 +18,7 @@
 
         if (client) {
             profile.addCredit = addCredit;
+            profile.resetPassword = resetPassword;
         } else {
             profile.changePassword = changePassword;
         }
@@ -91,7 +92,11 @@
         }
 
         function addCredit() {
-            $location.path('/berlet/vasarlas?tanitvany=' + encodeURI(profile.name));
+            return '/berlet/vasarlas?tanitvany=' + encodeURI(profile.name);
+        }
+
+        function resetPassword() {
+            return '#';
         }
     }
 })();

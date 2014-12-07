@@ -7,7 +7,7 @@
         .controller('NewUser', NewUser);
 
     /* @ngInject */
-    function NewUser($modal, coachService, errorService, userInfo) {
+    function NewUser($modal, $location, coachService, errorService, userInfo) {
 
         var newUser = this;
 
@@ -25,9 +25,11 @@
             coachService.addNewUser(newUser.name, newUser.email).then(newUserSaved, newUserSaveError);
 
             function newUserSaved() {
+                var name = newUser.name;
+
                 reset();
 
-                $modal.open({
+                var modalInstance = $modal.open({
                     templateUrl: "modal/info.html",
                     controller: "Info",
                     controllerAs: "info",
@@ -41,6 +43,12 @@
                         }
                     }
                 });
+
+                modalInstance.result.then(afterInfoDialog);
+
+                function afterInfoDialog() {
+                    $location.path("/profil/" + name);
+                }
             }
 
             function newUserSaveError(error) {

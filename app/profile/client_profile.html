@@ -15,21 +15,21 @@
                     <div class="input-group">
                         <span class="input-group-addon">Név</span>
                         <input ng-model="profile.name" class="form-control" id="name">
-                        <a hef="#" ng-click="profile.changeName()" class="input-group-addon btn btn-default">Módosít</a>
+                        <a hef="#" ng-click="profile.changeName()" class="input-group-addon btn btn-default" disabled>Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="input-group">
                         <span class="input-group-addon">Email</span>
-                        <input ng-model="profile.name" class="form-control" id="email">
-                        <a hef="#" ng-click="profile.changeEmail()" class="input-group-addon btn btn-default">Módosít</a>
+                        <input ng-model="profile.email" class="form-control" id="email">
+                        <a hef="#" ng-click="profile.changeEmail()" class="input-group-addon btn btn-default" disabled>Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">
-                    <a hef="#" ng-click="profile.resetPassword()">Új jelszó generálása</a>
+                    <a ng-href="{{profile.resetPassword()}}" disabled>Új jelszó generálása</a>
                 </li>
                 <li class="list-group-item">
-                    <a hef="#" ng-click="profile.addCredit()">Bérletvásárlás</a>
+                    <a ng-href="{{profile.addCredit()}}">Bérletvásárlás</a>
                 </li>
             </ul>
         </div>

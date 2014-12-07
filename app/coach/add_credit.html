@@ -63,7 +63,7 @@
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="series in addCredit.series | orderBy: 'firstDate'">
                             <label>
-                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join() }}
+                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }}
                             </label>
                         </li>
                     </ul>

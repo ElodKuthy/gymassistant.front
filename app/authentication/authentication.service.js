@@ -23,7 +23,7 @@
         function login(userName, password, remember) {
 
             var deferred = $q.defer();
-            var authorization = "Basic " + window.btoa(userName + ":" + password);
+            var authorization = "Basic " + window.btoa(encodeURIComponent(escape(userName + ":" + password)));
 
             httpService.get("/api/login", null, authorization).then(
                 function (result) {
