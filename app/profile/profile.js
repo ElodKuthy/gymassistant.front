@@ -1,23 +1,28 @@
 (function () {
 
-    "use strict";
+    'use strict';
 
-    angular.module("gymassistant.front.profile")
-        .controller("Profile", Profile);
+    angular.module('gymassistant.front.profile')
+        .controller('Profile', Profile);
 
     /* @ngInject */
-    function Profile($modal, authenticationService, eventHelper, userInfo, locationHelper) {
+    function Profile($location, $modal, authenticationService, eventHelper, userInfo, locationHelper, client) {
 
         var profile = this;
 
-        profile.name = "";
-        profile.email = "";
-        profile.newPassword = "";
-        profile.newPasswordAgain = "";
-        profile.passwordChangeError = "";
-        profile.changePassword = changePassword;
+        profile.name = '';
+        profile.email = '';
+        profile.newPassword = '';
+        profile.newPasswordAgain = '';
+        profile.passwordChangeError = '';
 
-        fillProfile(userInfo);
+        if (client) {
+            profile.addCredit = addCredit;
+        } else {
+            profile.changePassword = changePassword;
+        }
+
+        fillProfile(client ? client : userInfo);
 
         eventHelper.subscribe.authenticationChanged(checkAuthentication);
 
@@ -27,29 +32,29 @@
 
         function fillProfile(userInfo) {
             if (userInfo) {
-                profile.name = userInfo.userName;
+                profile.name = userInfo.name;
                 profile.email = userInfo.email;
-                profile.role = userInfo.roles.indexOf("coach") === -1 ? "Tanítvány" : "Edző";
-                profile.changePassword = changePassword;
+                profile.role = userInfo.roles.indexOf('admin') === -1 ? (userInfo.roles.indexOf('coach') === -1 ? 'Tanítvány' : 'Edző') : 'Adminisztrátor';
+                profile.qr = userInfo.qr;
             }
         }
 
         function changePassword() {
 
-            profile.passwordChangeError = "";
+            profile.passwordChangeError = '';
 
             if (!profile.newPassword) {
-                profile.passwordChangeError = "Az új jelszót kötelező megadni";
+                profile.passwordChangeError = 'Az új jelszót kötelező megadni';
                 return;
             }
 
             if (!profile.newPasswordAgain) {
-                profile.passwordChangeError = "Az ellenőrző jelszót kötelező megadni";
+                profile.passwordChangeError = 'Az ellenőrző jelszót kötelező megadni';
                 return;
             }
 
             if (profile.newPassword != profile.newPasswordAgain) {
-                profile.passwordChangeError = "Az új és ellenőrző jelszó nem egyezik meg";
+                profile.passwordChangeError = 'Az új és ellenőrző jelszó nem egyezik meg';
                 return;
             }
 
@@ -58,20 +63,20 @@
 
                     authenticationService.login(profile.name, profile.newPassword).then(
                         function () {
-                            profile.newPassword = "";
-                            profile.newPasswordAgain = "";
+                            profile.newPassword = '';
+                            profile.newPasswordAgain = '';
 
                             $modal.open({
-                                templateUrl: "modal/info.html",
-                                controller: "Info",
-                                controllerAs: "info",
-                                size: "sm",
+                                templateUrl: 'modal/info.html',
+                                controller: 'Info',
+                                controllerAs: 'info',
+                                size: 'sm',
                                 resolve: {
                                     title: function () {
-                                        return "Jelszó változtatás";
+                                        return 'Jelszó változtatás';
                                     },
                                     message: function () {
-                                        return "A jelszavát sikeresen megváltoztattuk";
+                                        return 'A jelszavát sikeresen megváltoztattuk';
                                     }
                                 }
                             });
@@ -83,6 +88,10 @@
                 function (error) {
                     profile.passwordChangeError = error;
                 });
+        }
+
+        function addCredit() {
+            $location.path('/berlet/vasarlas?tanitvany=' + encodeURI(profile.name));
         }
     }
 })();

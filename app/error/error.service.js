@@ -21,7 +21,7 @@
                 controllerAs: "error",
                 size: size,
                 resolve: {
-                    message: function () { return error; }
+                    message: function () { return error.message; }
                 }
             });
         }

@@ -21,9 +21,9 @@
         <ul class="list-group" >
             <li class="list-group-item clearfix"
                 ng-repeat="attendee in attendees.training.attendees | orderBy: attendee"
-                ng-class='{ "list-group-item-success": attendees.checkedIn(attendee), "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
+                ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
                 <span>{{$index + 1}}. </span>
-                <span>{{attendee}}</span>
+                <span>{{attendee.name}}</span>
                 <span class="pull-right">
                     <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
                             ng-click="attendees.undoCheckIn(attendee)">
@@ -33,7 +33,7 @@
                             ng-click="attendees.checkIn(attendee)">
                         <i class="fa fa-check-circle"></i> Bejelentkezés
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.notCheckedIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.remove(attendee)">
                         <i class="fa fa-trash"></i> Eltávoítás
                     </button>
@@ -45,7 +45,7 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <input type="text" class="form-control" placeholder="Tanítvány hozzáadása" ng-model="attendees.newAttendee"
-                           typeahead="user as user.userName for user in attendees.usersCanBeAdded | filter: { userName: $viewValue }">
+                           typeahead="user as user.name for user in attendees.usersCanBeAdded | filter: { name: $viewValue }">
 
                     <span class="input-group-addon" ng-click="attendees.add()">
                         <i class="fa fa-plus"></i>

@@ -22,34 +22,33 @@
 
             var url = "/api/schedule";
 
-            if (begin) {
-                url = url + "/" + begin;
-            }
-            if (end) {
-                url = url + "/" + end;
+            if (begin && end) {
+                url = url + "/from/" + begin + "/to/" + end;
+            } else {
+                url = url + "/this/week";
             }
 
             return httpService.get(url);
         }
 
         function getCredits() {
-            return httpService.get("/api/my/credits", { credits: null });
+            return httpService.get("/api/my/credits");
         }
 
         function joinClass(classId) {
-            return httpService.get("/api/join/session/" + classId);
+            return httpService.get("/api/join/training/id/" + classId);
         }
 
         function leaveClass(classId) {
-            return httpService.get("/api/leave/session/" + classId);
+            return httpService.get("/api/leave/training/id/" + classId);
         }
 
         function getUsers() {
-            return httpService.get("/api/users");
+            return httpService.get("/api/all/users");
         }
 
         function getInstance(id) {
-            return httpService.get("/api/schedule/" + id);
+            return httpService.get("/api/training/id/" + id);
         }
     }
 })();

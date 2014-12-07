@@ -33,14 +33,18 @@
 
             loadingService.startLoading();
 
-            var scheduleResult = scheduleService.getSchedule(begin, end);
-            var creditsResult = scheduleService.getCredits();
-            var userInfoResult = authenticationService.getUserInfo();
+            var promises = [];
+            promises.push(scheduleService.getSchedule(begin, end));
+            schedule.userInfo = authenticationService.getUserInfo();
+            if (schedule.userInfo) {
+               promises.push(scheduleService.getCredits());
+            }
 
-            $q.all([scheduleResult, creditsResult, userInfoResult]).then(
+            $q.all(promises).then(
                 function (results) {
 
-                    schedule.dates = results[0].dates;
+                    schedule.dates = { begin: begin ? moment(begin).format() : moment().startOf('isoWeek').format(), end: end ? moment(end).format() : moment().endOf('isoWeek').format() };
+                    schedule.credits = results.length > 1 ? results[1] : null;
 
                     var currentDate = moment(0);
                     var currentWeek = [];
@@ -48,7 +52,7 @@
 
                     schedule.weeks = [];
 
-                    results[0].schedule.forEach(function (data) {
+                    results[0].forEach(function (data) {
 
                         if (!currentDate.isSame(data.date, "day")) {
                             if (!currentDate.isSame(data.date, "week")) {
@@ -64,12 +68,6 @@
 
                         currentDay.push(instance);
                     });
-
-                    schedule.credits = results[1].credits;
-
-                    schedule.userInfo = results[2];
-                    schedule.showAttendeeList =
-                        (schedule.userInfo && schedule.userInfo.roles) ? (schedule.userInfo.roles.indexOf("coach") > -1) : false;
 
                     loadingService.endLoading();
                 },
@@ -157,15 +155,15 @@
         function createInstanceFromData(data) {
 
             var instance = {
-                id: data.id,
-                parent: data.parent,
+                id: data._id,
                 name: data.name,
                 coach: data.coach,
                 current: data.current,
                 max: data.max,
                 date: data.date,
                 attendees: data.attendees ? data.attendees.slice(0) : undefined,
-                signedUp: data.signedUp
+                signedUp: data.isAttendee,
+                showAttendeeList: schedule.userInfo ? (data.coach === schedule.userInfo.name) : false
             };
 
             calculateInstanceProperties(instance, instance.signedUp);
@@ -174,6 +172,7 @@
         }
 
         function calculateInstanceProperties(instance, signedUp) {
+            instance.currentBar = (instance.current === 0 || instance.current > 3) ? instance.current : 4;
             instance.barText = instance.current + " / " + instance.max;
             instance.isFull = (instance.current >= instance.max);
             instance.signedUp = signedUp;

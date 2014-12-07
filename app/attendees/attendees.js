@@ -12,14 +12,12 @@
         var attendees = this;
 
         attendees.userInfo = userInfo;
-        attendees.training = training.instance;
-        attendees.allUsers = allUsers.users;
+        attendees.training = training;
+        attendees.allUsers = allUsers;
         attendees.usersCanBeAdded = [];
         attendees.newAttendee = "";
         attendees.addAttendeeError = null;
 
-        attendees.checkedIn = checkedIn;
-        attendees.notCheckedIn = notCheckedIn;
         attendees.canCheckIn = canCheckIn;
         attendees.checkIn = checkIn;
         attendees.canUndoCheckedIn = canUndoCheckedIn;
@@ -36,55 +34,40 @@
         });
 
         attendees.allUsers.forEach(function (user) {
-           if (attendees.training.attendees.indexOf(user.userName) === -1) {
-               attendees.usersCanBeAdded.push(user);
-           }
+            if ($.grep(attendees.training.attendees, function (current) { return current.name === user.name; }).length === 0) {
+                attendees.usersCanBeAdded.push(user);
+            }
         });
 
-        function checkedIn(attendee) {
-
-            return $.inArray(attendee, attendees.training.participants) > -1;
-        }
-
-        function notCheckedIn(attendee) {
-
-            return $.inArray(attendee, attendees.training.participants) === -1;
-        }
-
         function canUndoCheckedIn(attendee) {
-
-            return moment().isSame(attendees.training.date, "day") && checkedIn(attendee);
+            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && attendee.checkedIn;
         }
 
         function canCheckIn(attendee) {
-
-            return moment().isSame(attendees.training.date, "day") && notCheckedIn(attendee);
+            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
-
-            return moment().isAfter(attendees.training.date, "day") && notCheckedIn(attendee);
-        }
+            return moment().subtract({ hours: 1 }).isAfter(attendees.training.date) && !attendee.checkedIn;
+       }
 
         function checkIn(attendee) {
-
-            attendeesService.checkIn(attendees.training.id, attendee).then(
+            attendeesService.checkIn(attendees.training._id, attendee.name).then(
                 function() {
-                    attendees.training.participants.push(attendee);
+                    $.grep(attendees.training.attendees, function (current) { return current.name === attendee.name; })[0].checkedIn = true;
                 },
                 function(error) {
                     errorService.modal(error, "sm");
                 });
         }
 
-        function undoCheckIn(participant) {
-
-            attendeesService.undoCheckIn(attendees.training.id, participant).then(
+        function undoCheckIn(attendee) {
+            attendeesService.undoCheckIn(attendees.training._id, attendee.name).then(
                 function() {
-                    attendees.training.participants = $.grep(attendees.training.participants,
+                    $.grep(attendees.training.attendees,
                         function(current) {
-                            return current != participant;
-                        });
+                            return current.name === attendee.name;
+                        })[0].isParticipant = false;
                 },
                 function(error) {
                     errorService.modal(error, "sm");
@@ -93,13 +76,13 @@
 
         function remove(attendee) {
 
-            attendeesService.removeFromTraining(attendees.training.id, attendee).then(
+            attendeesService.removeFromTraining(attendees.training._id, attendee.name).then(
 
                 function () {
 
                     attendees.training.attendees = $.grep(attendees.training.attendees,
                         function (current) {
-                            return current != attendee;
+                            return current.name != attendee.name;
                         });
                 },
                 function (error) {
@@ -110,14 +93,14 @@
 
         function canAdd() {
 
-            return attendees.training.attendees.length < 12 &&
-                moment().subtract({day: 1}).isBefore(attendees.training.date, "day");
+            return attendees.training.attendees.length < 16 &&
+                moment().subtract({hours: 3}).isBefore(attendees.training.date);
         }
 
         function add() {
 
             var userToBeAdded = $.grep(attendees.usersCanBeAdded, function(user) {
-                return user.userName === attendees.newAttendee.userName;
+                return user.name === attendees.newAttendee.name;
             });
 
             if (userToBeAdded.length === 0) {
@@ -125,20 +108,19 @@
                 return;
             }
 
-
-            if (attendees.newAttendee.credits.free === 0) {
-                attendees.addAttendeeError = "A tanítványnak nincs szabad kredite";
-                return;
-            }
-
             attendees.addAttendeeError = "";
 
-            attendeesService.addToTraining(attendees.training.id, attendees.newAttendee.userName).then(
+            attendeesService.addToTraining(attendees.training._id, attendees.newAttendee.name).then(
 
                 function() {
 
-                    attendees.training.attendees.push(attendees.newAttendee.userName);
-                    attendees.newAttendee = null;
+                    scheduleService.getInstance(attendees.training._id).then(function (result) {
+                        attendees.training = result;
+                        attendees.newAttendee = null;
+                    }, function (error) {
+                        errorService.modal(error, "sm");
+                    });
+
                 },
                 function (error) {
 

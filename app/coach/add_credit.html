@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-offset-2 col-lg-5">
+            <form role="form">
+                <h2>Bérlet vásárlás</h2>
+                <div class="form-group">
+                    <h4>Tanítvány neve</h4>
+                    <input type="name" ng-model="addCredit.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in addCredit.usersCanBeAdded | filter: $viewValue">
+                </div>
+                <div class="form-group">
+                    <h4>Bérlet típusa</h4>
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'normal'">Normál</label>
+                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'first'" disabled>Első alkalom</label>
+                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'seminar'" disabled>Szeminárium</label>
+                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'private'" disabled>Személyi edzés</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h4>Alkalmak száma</h4>
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled">1</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2"  ng-disabled="addCredit.choicesDisabled">2</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3"  ng-disabled="addCredit.choicesDisabled">3</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4"  ng-disabled="addCredit.choicesDisabled">4</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5"  ng-disabled="addCredit.choicesDisabled">5</label>
+                    </div>
+                <div>
+                <div class="form-group">
+                    <h4>Bérlet érvényessége</h4>
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled">Napijegy</label>
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="addCredit.choicesDisabled">4 hetes</label>
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="addCredit.choicesDisabled">12 hetes</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h4>Összesen</h4>
+                    <div>
+                        {{ addCredit.amountPerWeek() }} x {{ addCredit.period() }} = {{ addCredit.amount() }} edzés
+                    </div>
+                </div>
+                <div class="form-group">
+                    <h4>Választott edzések</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="series in addCredit.series | orderBy: 'firstDate'">
+                            <label>
+                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join() }}
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <h4>Összesen kiválasztva</h4>
+                    <div>
+                        {{ addCredit.selectedAmountPerWeek() }} x {{ addCredit.period() }} = {{ addCredit.selectedAmount() }} edzés
+                    </div>
+                </div>
+                <div ng-if="addCredit.hasError" class="text-danger">
+                    <i class="fa fa-exclamation-triangle"></i> {{ addCredit.error }}
+                </div>
+                <button type="button" ng-click="addCredit.addSubscription()" class="btn btn-default">Mehet</button>
+            </form>
+        </div>
+    </div>
+</div>

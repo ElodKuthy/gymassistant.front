@@ -56,12 +56,12 @@
                          ng-class="instance.coach.toLowerCase()">
                         <div ng-bind="instance.name"></div>
                         <div class="trainer" ng-bind="instance.coach"></div>
-                        <progressbar max="instance.max" value="instance.current">{{instance.current}} /
+                        <progressbar max="instance.max" value="instance.currentBar">{{instance.current}} /
                             {{instance.max}}
                         </progressbar>
                         <div>
                             <button type="button" class="btn btn-primary"
-                                    ng-show="schedule.showAttendeeList"
+                                    ng-show="instance.showAttendeeList"
                                     ng-click="schedule.showAttendees(instance)">
                                 <i class="fa fa-navicon"></i>
                             </button>

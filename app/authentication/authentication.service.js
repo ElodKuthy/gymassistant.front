@@ -16,19 +16,8 @@
             changePassword: changePassword
         };
 
-
         function getUserInfo() {
-            var deferred = $q.defer();
-
-            httpService.get("/api/user").then(
-                function (result) {
-                    deferred.resolve(result.userInfo);
-                },
-                function (error) {
-                    deferred.resolve(null);
-                });
-
-            return deferred.promise;
+            return storageHelper.getUserInfo();
         }
 
         function login(userName, password, remember) {
@@ -38,9 +27,10 @@
 
             httpService.get("/api/login", null, authorization).then(
                 function (result) {
-                    if (result.userInfo && !result.error) {
+                    if (!result.error) {
                         storageHelper.setAuth(authorization, remember);
-                        deferred.resolve(result.userInfo);
+                        storageHelper.setUserInfo(result, remember);
+                        deferred.resolve(result);
                         eventHelper.broadcast.authenticationChanged();
                     } else {
                         deferred.reject(result.error);
@@ -57,8 +47,9 @@
             var deferred = $q.defer();
 
             storageHelper.setAuth(null);
+            storageHelper.setUserInfo(null);
             eventHelper.broadcast.authenticationChanged();
-            deferred.resolve({});
+            deferred.resolve(null);
 
             return deferred.promise;
         }

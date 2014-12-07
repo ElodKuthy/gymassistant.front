@@ -1,0 +1,17 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-offset-2 col-lg-4">
+            <form role="form">
+                <div class="form-group">
+                    <label for="name">Név</label>
+                    <input type="name" ng-model="newUser.name" class="form-control" id="name" placeholder="Adja meg az új felhasználó nevét">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email cím</label>
+                    <input type="email" ng-model="newUser.email" class="form-control" id="email" placeholder="Adja meg az új felhasználó email címét">
+                </div>
+                <button type="button" ng-click="newUser.save()" class="btn btn-default">Mentés</button>
+            </form>
+        </div>
+    </div>
+</div>

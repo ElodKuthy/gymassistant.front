@@ -17,58 +17,48 @@
 
         function onlyCoach() {
             var deferred = $q.defer();
-            authenticationService.getUserInfo().then(
-                function(userInfo) {
-                    if (!userInfo || userInfo.roles.indexOf("coach") === -1) {
-                        deferred.reject("Ezt a nézetet csak edzők érhetik el");
-                        back();
-                    }
+            var userInfo = authenticationService.getUserInfo();
 
-                    deferred.resolve(userInfo);
-                },
-                function(error) {
-                    back();
-            });
+            if (!userInfo || userInfo.roles.indexOf("coach") === -1) {
+                deferred.reject("Ezt a nézetet csak edzők érhetik el");
+                back();
+            }
 
+            deferred.resolve(userInfo);
 
             return deferred.promise;
         }
 
         function onlyAuthenticated() {
             var deferred = $q.defer();
-            authenticationService.getUserInfo().then(function(userInfo){
-                if (!userInfo) {
-                    deferred.reject("Ezt a nézetet csak belépett felhsználók érhetik el");
-                    back();
-                }
+            var userInfo = authenticationService.getUserInfo();
 
-                deferred.resolve(userInfo);
-            });
+            if (!userInfo) {
+                deferred.reject("Ezt a nézetet csak belépett felhsználók érhetik el");
+                back();
+            }
 
+            deferred.resolve(userInfo);
 
             return deferred.promise;
         }
 
         function onlyNotAuthenticated() {
             var deferred = $q.defer();
-            authenticationService.getUserInfo().then(function(userInfo){
-                if (userInfo) {
-                    deferred.reject("Már be van lépve");
-                    back();
-                }
+            var userInfo = authenticationService.getUserInfo();
 
-                deferred.resolve({});
-            });
+            if (userInfo) {
+                deferred.reject("Már be van lépve");
+                back();
+            }
+
+            deferred.resolve({});
 
             return deferred.promise;
         }
 
         function back() {
-            if ($window.history.length > 1) {
-                $window.history.back();
-            } else {
                 $location.path("/");
-            }
         }
     }
 

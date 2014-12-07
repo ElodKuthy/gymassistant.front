@@ -1,31 +1,33 @@
 (function () {
 
-    "use strict";
+    'use strict';
 
     angular
-        .module("gymassistant.front", [
-            "ngRoute",
-            "ngCookies",
-            "ui.bootstrap",
-            "angularMoment",
-            "gymassistant.front.common",
-            "gymassistant.front.error",
-            "gymassistant.front.authentication",
-            "gymassistant.front.attendees",
-            "gymassistant.front.schedule",
-            "gymassistant.front.profile",
-            "gymassistant.front.modal"
+        .module('gymassistant.front', [
+            'ngRoute',
+            'ngCookies',
+            'ui.bootstrap',
+            'angularMoment',
+            'ja.qr',
+            'gymassistant.front.common',
+            'gymassistant.front.error',
+            'gymassistant.front.authentication',
+            'gymassistant.front.attendees',
+            'gymassistant.front.schedule',
+            'gymassistant.front.profile',
+            'gymassistant.front.modal',
+            'gymassistant.front.coach'
         ])
         .config(AppConfig)
-        .controller("Navbar", Navbar);
+        .controller('Navbar', Navbar);
 
     /* @ngInject */
     function AppConfig ($routeProvider, $locationProvider) {
           $routeProvider.
-              when("/", {
-                  templateUrl: "home/home.html"
+              when('/', {
+                  templateUrl: 'home/home.html'
               }).
-          otherwise({redirectTo: "/"});
+          otherwise({redirectTo: '/'});
       $locationProvider.html5Mode(true);
     }
 
@@ -34,24 +36,20 @@
 
         var navbar = this;
 
-        update(null);
-        checkUserInfo();
+        update();
 
         navbar.logout = logout;
 
-        eventHelper.subscribe.authenticationChanged(checkUserInfo);
+        eventHelper.subscribe.authenticationChanged(update);
 
         function logout() {
             authenticationService.logout();
         }
 
-        function checkUserInfo() {
-            authenticationService.getUserInfo().then(update);
-        }
-
-        function update(userInfo) {
-            navbar.welcomeText = userInfo ? "Üdv " + userInfo.userName + "!" : "Üdv, kérlek lépj be!";
-            navbar.welcomeTextLink = userInfo ? "/profilom" : "/belepes";
+        function update() {
+            var userInfo = authenticationService.getUserInfo();
+            navbar.welcomeText = userInfo ? 'Üdv ' + userInfo.name + '!' : 'Üdv, kérlek lépj be!';
+            navbar.welcomeTextLink = userInfo ? '/profilom' : '/belepes';
             navbar.isLoggedIn = userInfo ? true : false;
         }
 

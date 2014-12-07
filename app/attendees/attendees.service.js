@@ -17,22 +17,22 @@
 
         function addToTraining(id, userName) {
 
-            return httpService.get("/api/add/user/" + userName + "/session/" + id);
+            return httpService.get("/api/add/user/" + userName + "/to/training/id/" + id);
         }
 
         function removeFromTraining(id, userName) {
 
-            return httpService.get("/api/remove/user/" + userName + "/session/" + id);
+            return httpService.get("/api/remove/user/" + userName + "/from/training/id/" + id);
         }
 
         function checkIn(id, userName) {
 
-            return httpService.get("/api/check/in/user/" + userName + "/session/" + id);
+            return httpService.get("/api/check/in/user/" + userName + "/to/training/id/" + id);
         }
 
         function undoCheckIn(id, userName) {
 
-            return httpService.get("/api/undo/check/in/user/" + userName + "/session/" + id);
+            return httpService.get("/api/undo/check/in/user/" + userName + "/for/training/id/" + id);
         }
     }
 
