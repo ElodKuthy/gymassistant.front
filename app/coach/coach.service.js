@@ -32,7 +32,7 @@
 
         function addNewSubscriptionTillDate(amountPerWeek, userName, date, series) {
 
-            return httpService.get('/api/add/subscription/with/'+ amount + '/credits/per/week/to/user/' + userName + '/till/date/' + date + (series && series.length ? '?series=' + series.join() : ''));
+            return httpService.get('/api/add/subscription/with/'+ amountPerWeek + '/credits/per/week/to/user/' + userName + '/till/date/' + date + (series && series.length ? '?series=' + series.join() : ''));
         }
 
         function getSeries() {
