@@ -12,6 +12,7 @@
             addNewUser: addNewUser,
             getUserInfo: getUserInfo,
             addNewSubscription: addNewSubscription,
+            addNewSubscriptionTillDate: addNewSubscriptionTillDate,
             getSeries: getSeries
         };
 
@@ -27,6 +28,11 @@
         function addNewSubscription(amount, userName, period, series) {
 
             return httpService.get('/api/add/subscription/with/'+ amount + '/credits/to/user/' + userName + '/for/' + period + (series && series.length ? '?series=' + series.join() : ''));
+        }
+
+        function addNewSubscriptionTillDate(amountPerWeek, userName, date, series) {
+
+            return httpService.get('/api/add/subscription/with/'+ amount + '/credits/per/week/to/user/' + userName + '/till/date/' + date + (series && series.length ? '?series=' + series.join() : ''));
         }
 
         function getSeries() {

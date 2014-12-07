@@ -19,19 +19,37 @@
                 <div class="form-group">
                     <h4>Alkalmak száma</h4>
                     <div class="btn-group">
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled">1</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2"  ng-disabled="addCredit.choicesDisabled">2</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3"  ng-disabled="addCredit.choicesDisabled">3</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4"  ng-disabled="addCredit.choicesDisabled">4</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5"  ng-disabled="addCredit.choicesDisabled">5</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled()">1</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2"  ng-disabled="addCredit.choicesDisabled()">2</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3"  ng-disabled="addCredit.choicesDisabled()">3</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4"  ng-disabled="addCredit.choicesDisabled()">4</label>
+                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5"  ng-disabled="addCredit.choicesDisabled()">5</label>
                     </div>
                 <div>
                 <div class="form-group">
                     <h4>Bérlet érvényessége</h4>
-                    <div class="btn-group">
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled">Napijegy</label>
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="addCredit.choicesDisabled">4 hetes</label>
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="addCredit.choicesDisabled">12 hetes</label>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="periodRadios" id="normalPeriodRadioBtn" ng-model="addCredit.periodType" value="normal">
+                        Normál
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" name="periodRadios" id="customPeriodRadioBtn" ng-model="addCredit.periodType" value="custom">
+                        Egyedi
+                      </label>
+                    </div>
+                    <div class="btn-group" ng-disabled="addCredit.periodChoicesDisabled()">
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.periodChoicesDisabled()">Napijegy</label>
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="addCredit.periodChoicesDisabled()">4 hetes</label>
+                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="addCredit.periodChoicesDisabled()">12 hetes</label>
+                    </div>
+                    <div class="input-group" style="padding-top: 10px">
+                        <input type="text" class="form-control" datepicker-popup="longDate" ng-model="addCredit.calendar.date" is-open="addCredit.calendar.opened" min-date="addCredit.calendar.minDate" max-date="addCredit.calendar.maxDate" datepicker-options="addCredit.calendar.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" current-text="Mai nap" clear-text="Töröl" close-text="Bezárás" ng-disabled="addCredit.datePickedDisabled()">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-disabled="addCredit.datePickedDisabled()" ng-click="addCredit.calendar.open($event)"><i class="fa fa-calendar"></i></button>
+                        </span>
                     </div>
                 </div>
                 <div class="form-group">
