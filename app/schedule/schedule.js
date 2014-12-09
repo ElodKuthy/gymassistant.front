@@ -99,7 +99,6 @@
         function canJoin(instance) {
 
             return schedule.userInfo &&
-                    schedule.credits.free > 0 &&
                     !instance.isFull &&
                     !instance.signedUp &&
                     moment().isBefore(instance.date);
