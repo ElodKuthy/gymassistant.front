@@ -6,7 +6,7 @@
         .controller('Profile', Profile);
 
     /* @ngInject */
-    function Profile($location, $modal, authenticationService, eventHelper, userInfo, locationHelper, client) {
+    function Profile($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client) {
 
         var profile = this;
 
@@ -19,6 +19,7 @@
         if (client) {
             profile.addCredit = addCredit;
             profile.resetPassword = resetPassword;
+            profile.changeEmail = changeEmail;
         } else {
             profile.changePassword = changePassword;
         }
@@ -59,7 +60,7 @@
                 return;
             }
 
-            authenticationService.changePassword(profile.newPassword).then(
+            profileService.changePassword(profile.newPassword).then(
                 function () {
 
                     authenticationService.login(profile.name, profile.newPassword).then(
@@ -97,6 +98,18 @@
 
         function resetPassword() {
             return '#';
+        }
+
+        function changeEmail() {
+            profileService.changeEmail(profile.name, profile.email).then(changeEmailSuccess, changeEmailError);
+
+            function changeEmailSuccess (result) {
+                infoService.modal('Email cím változtatás', result);
+            }
+
+            function changeEmailError (error) {
+                errorService.modal(error);
+            }
         }
     }
 })();

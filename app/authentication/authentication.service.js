@@ -12,8 +12,7 @@
         return {
             login: login,
             logout: logout,
-            getUserInfo: getUserInfo,
-            changePassword: changePassword
+            getUserInfo: getUserInfo
         };
 
         function getUserInfo() {
@@ -52,10 +51,6 @@
             deferred.resolve(null);
 
             return deferred.promise;
-        }
-
-        function changePassword(newPassword) {
-            return httpService.post("/api/change/password", { password: newPassword });
         }
     }
 })();

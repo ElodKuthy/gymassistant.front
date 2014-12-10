@@ -13,15 +13,15 @@
             modal: modal
         };
 
-        function modal(error, size) {
+        function modal(error) {
 
-            $modal.open({
+            return $modal.open({
                 templateUrl: "error/error.html",
                 controller: "Error",
                 controllerAs: "error",
-                size: size,
+                size: 'sm',
                 resolve: {
-                    message: function () { return error.message; }
+                    message: function () { return error; }
                 }
             });
         }
