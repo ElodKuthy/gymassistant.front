@@ -27,7 +27,7 @@
                 },
                 function (error) {
                     clear();
-                    login.error = error.message;
+                    login.error = error;
             });
 
         }
