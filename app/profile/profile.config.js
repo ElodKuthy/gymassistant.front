@@ -23,7 +23,7 @@
                         return $q.when(null);
                     },
                     /* @ngInject */
-                    allUsers: function (scheduleService) {
+                    allUsers: function ($q) {
                         return $q.when(null);
                     }
                 }
