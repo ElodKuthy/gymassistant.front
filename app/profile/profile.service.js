@@ -10,7 +10,8 @@
 
         return {
             changePassword: changePassword,
-            changeEmail: changeEmail
+            changeEmail: changeEmail,
+            sendRegistrationEmail: sendRegistrationEmail
         };
 
         function changePassword(newPassword) {
@@ -19,6 +20,10 @@
 
         function changeEmail(name, email) {
             return httpService.get('/api/change/email/of/user/' + name + '/to/' + email);
+        }
+
+        function sendRegistrationEmail(name) {
+            return httpService.get('/api/send/registration/email/to/user/' + name);
         }
     }
 

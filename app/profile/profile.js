@@ -18,7 +18,7 @@
 
         if (client) {
             profile.addCredit = addCredit;
-            profile.resetPassword = resetPassword;
+            profile.registrationEmail = registrationEmail;
             profile.changeEmail = changeEmail;
         } else {
             profile.changePassword = changePassword;
@@ -96,19 +96,17 @@
             return '/berlet/vasarlas?tanitvany=' + encodeURI(profile.name);
         }
 
-        function resetPassword() {
-            return '#';
+        function registrationEmail() {
+            profileService.sendRegistrationEmail(profile.name)
+                .then(function (result) { infoService.modal('Regisztrációs email újraküldése', result); })
+                .catch(errorService.modal);
         }
 
         function changeEmail() {
-            profileService.changeEmail(profile.name, profile.email).then(changeEmailSuccess, changeEmailError);
+            profileService.changeEmail(profile.name, profile.email).then(changeEmailSuccess, errorService.modal);
 
             function changeEmailSuccess (result) {
                 infoService.modal('Email cím változtatás', result);
-            }
-
-            function changeEmailError (error) {
-                errorService.modal(error);
             }
         }
     }
