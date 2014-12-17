@@ -23,7 +23,7 @@
                 ng-repeat="attendee in attendees.training.attendees | orderBy: attendee"
                 ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
                 <span>{{$index + 1}}. </span>
-                <span>{{attendee.name}}</span>
+                <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
                 <span class="pull-right">
                     <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
                             ng-click="attendees.undoCheckIn(attendee)">
