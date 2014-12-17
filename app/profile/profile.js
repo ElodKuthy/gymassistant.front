@@ -6,7 +6,7 @@
         .controller('Profile', Profile);
 
     /* @ngInject */
-    function Profile($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client) {
+    function Profile($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers) {
 
         var profile = this;
 
@@ -20,6 +20,8 @@
             profile.addCredit = addCredit;
             profile.registrationEmail = registrationEmail;
             profile.changeEmail = changeEmail;
+            profile.allUsers = allUsers;
+            profile.viewUser = viewUser;
         } else {
             profile.changePassword = changePassword;
         }
@@ -90,6 +92,10 @@
                 function (error) {
                     profile.passwordChangeError = error;
                 });
+        }
+
+        function viewUser() {
+            $location.path('/profil/' + profile.userToView.name);
         }
 
         function addCredit() {

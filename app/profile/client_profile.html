@@ -1,5 +1,15 @@
  <div class="container">
     <div class="row">
+        <div class="col-sm-offset-2 col-sm-4" style="margin-bottom: 20px;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tanítvány keresése"
+                ng-model="profile.userToView" ga-enter="profile.viewUser()"
+                typeahead="user as user.name for user in profile.allUsers | filter: { name: $viewValue }">
+                <a hef="#" ng-click="profile.viewUser()" class="input-group-addon btn btn-default">Mutasd</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-2 col-sm-2 text-center">
             <div class="fa-stack fa-4x">
                 <i class="fa fa-square fa-stack-2x"></i>

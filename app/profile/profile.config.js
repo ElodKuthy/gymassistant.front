@@ -21,6 +21,10 @@
                     /* @ngInject */
                     client: function ($q) {
                         return $q.when(null);
+                    },
+                    /* @ngInject */
+                    allUsers: function (scheduleService) {
+                        return $q.when(null);
                     }
                 }
             })
@@ -32,6 +36,10 @@
                     /* @ngInject */
                     userInfo: function (locationHelper) {
                         return locationHelper.onlyCoach();
+                    },
+                    /* @ngInject */
+                    allUsers: function (scheduleService) {
+                        return scheduleService.getUsers();
                     },
                     /* @ngInject */
                     client: function ($q, $route, coachService, locationHelper) {
