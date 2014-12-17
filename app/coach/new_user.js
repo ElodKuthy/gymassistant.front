@@ -15,19 +15,27 @@
         newUser.email = '';
         newUser.save = save;
 
-        function reset() {
+        function reset(form) {
             newUser.name = '';
             newUser.email = '';
+            if (form) {
+                form.$setPristine();
+                form.$setUntouched();
+            }
         }
 
-        function save() {
+        function save(form) {
+
+            if(!form || !form.$valid) {
+                return;
+            }
 
             coachService.addNewUser(newUser.name, newUser.email).then(newUserSaved, newUserSaveError);
 
             function newUserSaved() {
                 var name = newUser.name;
 
-                reset();
+                reset(form);
 
                 var modalInstance = $modal.open({
                     templateUrl: "modal/info.html",
