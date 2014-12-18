@@ -85,7 +85,7 @@ gulp.task("js:vendor", ["clean:dist"], function () {
         "bower_components/angular-resource/angular-resource.min.js",
         "bower_components/moment/min/moment.min.js",
         "bower_components/angular-moment/angular-moment.min.js",
-        "bower_components/angular-cookies/angular-cookies.min.js",
+        "bower_components/angular-cookie/angular-cookie.min.js",
         "bower_components/qcode-decoder/build/qrcode.js",
         "bower_components/qrcode/lib/qrcode.min.js",
         "bower_components/angular-qr/angular-qr.min.js"])
