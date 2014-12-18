@@ -6,7 +6,7 @@
         .factory("storageHelper", StorageHelper);
 
     /* @ngInject */
-    function StorageHelper($window, $cookieStore) {
+    function StorageHelper($window, ipCookie) {
 
         var authorizationCookieKey = "authorization";
         var userInfoCookieKey = "userInfo";
@@ -21,7 +21,7 @@
         function getAuth() {
             var authorization = $window.sessionStorage.authorization;
             if (!authorization) {
-                authorization = $cookieStore.get(authorizationCookieKey);
+                authorization = ipCookie(authorizationCookieKey);
                 $window.sessionStorage.authorization = authorization;
             }
 
@@ -31,17 +31,18 @@
         function setAuth(authorization, remember) {
             $window.sessionStorage.authorization = authorization;
             if (!authorization) {
-                $cookieStore.remove(authorizationCookieKey);
+                ipCookie.remove(authorizationCookieKey);
             } else if (remember) {
-                $cookieStore.put(authorizationCookieKey, authorization);
+                ipCookie(authorizationCookieKey, authorization, { expires: 1000 });
             }
         }
 
         function getUserInfo() {
             var userInfo = window.sessionStorage.userInfo;
             if (!userInfo) {
-                userInfo = $cookieStore.get(userInfoCookieKey);
+                userInfo = ipCookie(userInfoCookieKey);
                 if (userInfo) {
+                    userInfo = JSON.stringify(userInfo);
                     $window.sessionStorage.userInfo = userInfo;
                 }
             }
@@ -52,9 +53,9 @@
         function setUserInfo(userInfo, remember) {
             $window.sessionStorage.userInfo = JSON.stringify(userInfo);
             if (!userInfo) {
-                $cookieStore.remove(userInfoCookieKey);
+                ipCookie.remove(userInfoCookieKey);
             } else if (remember) {
-                $cookieStore.put(userInfoCookieKey, JSON.stringify(userInfo));
+                ipCookie(userInfoCookieKey, JSON.stringify(userInfo), { expires: 1000 });
             }
         }
     }

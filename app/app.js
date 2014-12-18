@@ -5,10 +5,10 @@
     angular
         .module('gymassistant.front', [
             'ngRoute',
-            'ngCookies',
             'ui.bootstrap',
             'angularMoment',
             'ja.qr',
+            'ipCookie',
             'gymassistant.front.common',
             'gymassistant.front.error',
             'gymassistant.front.authentication',
