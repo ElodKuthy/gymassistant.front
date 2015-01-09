@@ -3,6 +3,7 @@
 var gulp = require("gulp");
 var del = require("del");
 var plugins = require("gulp-load-plugins")();
+var config = require('./config.json');
 
 gulp.task("bower_components", function () {
   return gulp.src("bower_components")
@@ -116,12 +117,12 @@ gulp.task("html_replace", ["clean:dist"], function () {
 gulp.task("deploy:public", ["build"], function () {
     return gulp.src(["dist/*.*", "dist/css/*", "dist/js/*", "dist/fonts/*", "!dist/*.html"], { base: "dist"})
         .pipe(plugins.replace(/https:\/\/localhost:8000/g, ""))
-        .pipe(gulp.dest("../gymassistant/public"));
+        .pipe(gulp.dest(config.deploy.target + "/public"));
 });
 
 gulp.task("deploy:views", ["build"], function () {
     return gulp.src(["dist/**/*.html"], { base: "dist"})
-        .pipe(gulp.dest("../gymassistant/views"));
+        .pipe(gulp.dest(config.deploy.target + "/views"));
 });
 
 gulp.task("default", ["deploy"]);
