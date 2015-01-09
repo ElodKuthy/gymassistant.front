@@ -1,4 +1,5 @@
 {
   "deploy": {
     "target": "/home/strider/gymassistant"
+  }
 }
