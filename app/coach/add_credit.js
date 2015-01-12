@@ -72,7 +72,7 @@
         series.forEach(function (current) {
                 var dates = [];
                 current.dates.forEach(function (currentDate) {
-                    dates.push($filter('date')(moment({ days: currentDate.day, hours: currentDate.hour }).toDate(), 'EEEE H:mm'));
+                    dates.push($filter('date')(moment({ hours: currentDate.hour }).day(currentDate.day).toDate(), 'EEEE H:mm'));
                 });
 
                 addCredit.series.push({
