@@ -4,46 +4,46 @@
 
     angular
         .module('gymassistant.front.coach')
-        .controller('AddCredit', AddCredit);
+        .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCredit($modal, $filter, coachService, errorService, clientName, allUsers, series) {
+    function AddCreditController($modal, $filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService) {
 
-        var addCredit = this;
+        var vm = this;
 
-        addCredit.userName = clientName ? clientName : '';
-        addCredit.amountPerWeek = amountPerWeek;
-        addCredit.amount = amount;
-        addCredit.period = period;
-        addCredit.type = type;
-        addCredit.choicesDisabled = false;
-        addCredit.addSubscription = addSubscription;
-        addCredit.series = [];
-        addCredit.usersCanBeAdded = [];
-        addCredit.hasError = false;
-        addCredit.error = '';
-        addCredit.selectedAmountPerWeek = selectedAmountPerWeek;
-        addCredit.selectedAmount = selectedAmount;
-        addCredit.calendar = {};
-        addCredit.calendar.today = calendarToday;
-        addCredit.calendar.clear = calendarClear;
-        addCredit.calendar.minDate = moment().add().toDate();
-        addCredit.calendar.maxDate = moment().add({ months: 3, weeks: 1}).toDate();
-        addCredit.calendar.open = calendarOpen;
-        addCredit.calendar.opened = false;
-        addCredit.periodType = 'normal';
-        addCredit.amountChoicesDisabled = amountChoicesDisabled;
-        addCredit.periodChoicesDisabled = periodChoicesDisabled;
-        addCredit.datePickedDisabled = datePickedDisabled;
+        vm.userName = clientName ? clientName : '';
+        vm.amountPerWeek = amountPerWeek;
+        vm.amount = amount;
+        vm.period = period;
+        vm.type = type;
+        vm.choicesDisabled = false;
+        vm.addSubscription = addSubscription;
+        vm.series = [];
+        vm.usersCanBeAdded = [];
+        vm.coachesCanBeAdded = [];
+        vm.hasError = false;
+        vm.error = '';
+        vm.selectedAmountPerWeek = selectedAmountPerWeek;
+        vm.selectedAmount = selectedAmount;
+        vm.calendar = {};
+        vm.calendar.today = calendarToday;
+        vm.calendar.clear = calendarClear;
+        vm.calendar.minDate = moment({ years: 2014 }).toDate();
+        vm.calendar.maxDate = moment().add({ months: 3, weeks: 1}).toDate();
+        vm.calendar.open = calendarOpen;
+        vm.calendar.opened = false;
+        vm.amountChoicesDisabled = amountChoicesDisabled;
+        vm.periodChoicesDisabled = periodChoicesDisabled;
+        vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
         function calendarToday() {
-            addCredit.calendar.date = $filter('date')(addCredit.calendar.minDate, 'longDate');
+            vm.calendar.date = $filter('date')(moment().toDate(), 'longDate');
         }
 
-        addCredit.calendar.today();
+        vm.calendar.today();
 
         function calendarClear() {
-            addCredit.calendar.date = null;
+            vm.calendar.date = null;
         }
 
         /* @ngInject */
@@ -51,10 +51,10 @@
             $event.preventDefault();
             $event.stopPropagation();
 
-            addCredit.calendar.opened = true;
+            vm.calendar.opened = true;
         }
 
-        addCredit.calendar.dateOptions = {
+        vm.calendar.dateOptions = {
             formatYear: 'yy',
             startingDay: 1
         };
@@ -64,8 +64,12 @@
         var _period = 4;
 
         allUsers.forEach(function (user) {
-            if (user.roles.indexOf('coach') === -1 && user.roles.indexOf('admin') === -1) {
-                addCredit.usersCanBeAdded.push(user.name);
+            if (user.roles.indexOf('admin') === -1) {
+                if (user.roles.indexOf('coach') === -1) {
+                    vm.usersCanBeAdded.push(user.name);
+                } else {
+                    vm.coachesCanBeAdded.push(user.name);
+                }
             }
         });
 
@@ -75,9 +79,10 @@
                     dates.push($filter('date')(moment({ hours: currentDate.hour }).day(currentDate.day).toDate(), 'EEEE H:mm'));
                 });
 
-                addCredit.series.push({
+                vm.series.push({
                     _id: current._id,
                     name: current.name,
+                    coach: current.coach,
                     firstDate: moment({ days: current.dates[0].day, hours: current.dates[0].hour }).toDate(),
                     dates: dates,
                     selected: false
@@ -89,11 +94,7 @@
         }
 
         function periodChoicesDisabled() {
-            return _type === 'first' || _type === 'seminar' || addCredit.periodType === 'custom';
-        }
-
-        function datePickedDisabled() {
-            return _type === 'first' || _type === 'seminar' || addCredit.periodType === 'normal';
+            return _type === 'first' || _type === 'seminar';
         }
 
         function type(value) {
@@ -120,16 +121,12 @@
         }
 
         function period(value) {
-            if(addCredit.periodType === 'normal') {
 
-                if (value) {
-                    _period = value;
-                }
-
-                return _period;
-            } else {
-                return moment(addCredit.calendar.date).diff(moment(), 'weeks') + 1;
+            if (value) {
+                _period = value;
             }
+
+            return _period;
         }
 
 
@@ -148,22 +145,26 @@
 
         function setError(err) {
             if (err){
-                addCredit.hasError = true;
-                addCredit.error = err;
+                vm.hasError = true;
+                vm.error = err;
             } else {
-                addCredit.hasError = false;
-                addCredit.error = '';
+                vm.hasError = false;
+                vm.error = '';
             }
         }
 
         function addSubscription() {
 
-            if (!addCredit.userName) {
+            if (!vm.userName) {
                 setError('A tanítvány nevének megadása kötelező');
                 return;
             }
 
-            if (addCredit.amount() != addCredit.selectedAmount()) {
+            if (vm.adminMode && !vm.coachName) {
+                setError('Az edző nevének megadása kötelező');
+            }
+
+            if (vm.amount() != vm.selectedAmount()) {
                 setError('A bérlet alkalmak száma nem egyezik a kiválasztott órák számával');
                 return;
             }
@@ -172,16 +173,16 @@
 
             var series = [];
 
-            addCredit.series.forEach(function (current) {
+            vm.series.forEach(function (current) {
                 if (current.selected) {
                     series.push(current._id);
                 }
             });
 
-            if (addCredit.periodType === 'normal') {
-                coachService.addNewSubscription(addCredit.amount(), addCredit.userName, periodString(), series).then(subscriptionAdded, error);
+            if (vm.adminMode) {
+                adminService.addNewSubscription(vm.amount(), vm.userName, vm.coachName, moment(vm.calendar.date).unix(), periodString(), series).then(subscriptionAdded, error);
             } else {
-                coachService.addNewSubscriptionTillDate(addCredit.amountPerWeek(), addCredit.userName, moment(addCredit.calendar.date).unix(), series).then(subscriptionAdded, error);
+                coachService.addNewSubscription(vm.amount(), vm.userName, periodString(), series).then(subscriptionAdded, error);
             }
 
             function error(err) {
@@ -208,7 +209,7 @@
 
         function selectedAmountPerWeek() {
             var result = 0;
-            addCredit.series.forEach(function (current) {
+            vm.series.forEach(function (current) {
                 if (current.selected) {
                     result += current.dates.length;
                 }

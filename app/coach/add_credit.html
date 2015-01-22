@@ -5,65 +5,61 @@
                 <h2>Bérlet vásárlás</h2>
                 <div class="form-group">
                     <h4>Tanítvány neve</h4>
-                    <input type="name" ng-model="addCredit.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in addCredit.usersCanBeAdded | filter: $viewValue">
+                    <input type="name" ng-model="vm.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue">
                 </div>
                 <div class="form-group">
                     <h4>Bérlet típusa</h4>
                     <div class="btn-group">
-                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'normal'">Normál</label>
-                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'first'" disabled>Első alkalom</label>
-                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'seminar'" disabled>Szeminárium</label>
-                        <label class="btn btn-default" ng-model="addCredit.type" ng-model-options="{ getterSetter: true }" btn-radio="'private'" disabled>Személyi edzés</label>
+                        <label class="btn btn-default" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'normal'">Normál</label>
+                        <label class="btn btn-default" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'first'" disabled>Első alkalom</label>
+                        <label class="btn btn-default" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'seminar'" disabled>Szeminárium</label>
+                        <label class="btn btn-default" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'private'" disabled>Személyi edzés</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <h4>Alkalmak száma</h4>
                     <div class="btn-group">
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.choicesDisabled()">1</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2"  ng-disabled="addCredit.choicesDisabled()">2</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3"  ng-disabled="addCredit.choicesDisabled()">3</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4"  ng-disabled="addCredit.choicesDisabled()">4</label>
-                        <label class="btn btn-default" ng-model="addCredit.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5"  ng-disabled="addCredit.choicesDisabled()">5</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="vm.choicesDisabled()">1</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2" ng-disabled="vm.choicesDisabled()">2</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3" ng-disabled="vm.choicesDisabled()">3</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="vm.choicesDisabled()">4</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5" ng-disabled="vm.choicesDisabled()">5</label>
+                        <label class="btn btn-default" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="7" ng-disabled="vm.choicesDisabled()">Tibi</label>
                     </div>
                 <div>
                 <div class="form-group">
                     <h4>Bérlet érvényessége</h4>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="periodRadios" id="normalPeriodRadioBtn" ng-model="addCredit.periodType" value="normal">
-                        Normál
-                      </label>
+                    <div class="btn-group" ng-disabled="vm.periodChoicesDisabled()">
+                        <label class="btn btn-default" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="vm.periodChoicesDisabled()">Napijegy</label>
+                        <label class="btn btn-default" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="vm.periodChoicesDisabled()">4 hetes</label>
+                        <label class="btn btn-default" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="vm.periodChoicesDisabled()">12 hetes</label>
                     </div>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="periodRadios" id="customPeriodRadioBtn" ng-model="addCredit.periodType" value="custom">
-                        Egyedi
-                      </label>
-                    </div>
-                    <div class="btn-group" ng-disabled="addCredit.periodChoicesDisabled()">
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="addCredit.periodChoicesDisabled()">Napijegy</label>
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="addCredit.periodChoicesDisabled()">4 hetes</label>
-                        <label class="btn btn-default" ng-model="addCredit.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="addCredit.periodChoicesDisabled()">12 hetes</label>
-                    </div>
+                </div>
+                <div class="form-group" ng-show="vm.adminMode">
+                    <h4>Bérlet érvényességének kezdete</h4>
                     <div class="input-group" style="padding-top: 10px">
-                        <input type="text" class="form-control" datepicker-popup="longDate" ng-model="addCredit.calendar.date" is-open="addCredit.calendar.opened" min-date="addCredit.calendar.minDate" max-date="addCredit.calendar.maxDate" datepicker-options="addCredit.calendar.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" current-text="Mai nap" clear-text="Töröl" close-text="Bezárás" ng-disabled="addCredit.datePickedDisabled()">
+                        <input type="text" class="form-control" datepicker-popup="longDate" ng-model="vm.calendar.date" is-open="vm.calendar.opened" min-date="vm.calendar.minDate" max-date="vm.calendar.maxDate" datepicker-options="vm.calendar.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" current-text="Mai nap" clear-text="Töröl" close-text="Bezárás">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-disabled="addCredit.datePickedDisabled()" ng-click="addCredit.calendar.open($event)"><i class="fa fa-calendar"></i></button>
+                            <button type="button" class="btn btn-default" ng-click="vm.calendar.open($event)"><i class="fa fa-calendar"></i></button>
                         </span>
                     </div>
+                </div>
+                <div class="form-group" ng-show="vm.adminMode">
+                    <h4>Edző neve</h4>
+                    <input type="name" ng-model="vm.coachName" class="form-control" id="coachName" placeholder="Adja meg az edző nevét" typeahead="user as user for user in vm.coachesCanBeAdded | filter: $viewValue">
                 </div>
                 <div class="form-group">
                     <h4>Összesen</h4>
                     <div>
-                        {{ addCredit.amountPerWeek() }} x {{ addCredit.period() }} = {{ addCredit.amount() }} edzés
+                        {{ vm.amountPerWeek() }} x {{ vm.period() }} = {{ vm.amount() }} edzés
                     </div>
                 </div>
                 <div class="form-group">
                     <h4>Választott edzések</h4>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="series in addCredit.series | orderBy: 'firstDate'">
+                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'firstDate'">
                             <label>
-                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }}
+                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }} <span ng-if="vm.adminMode">({{ series.coach }})</span>
                             </label>
                         </li>
                     </ul>
@@ -71,13 +67,13 @@
                 <div class="form-group">
                     <h4>Összesen kiválasztva</h4>
                     <div>
-                        {{ addCredit.selectedAmountPerWeek() }} x {{ addCredit.period() }} = {{ addCredit.selectedAmount() }} edzés
+                        {{ vm.selectedAmountPerWeek() }} x {{ vm.period() }} = {{ vm.selectedAmount() }} edzés
                     </div>
                 </div>
-                <div ng-if="addCredit.hasError" class="text-danger">
-                    <i class="fa fa-exclamation-triangle"></i> {{ addCredit.error }}
+                <div ng-if="vm.hasError" class="text-danger">
+                    <i class="fa fa-exclamation-triangle"></i> {{ vm.error }}
                 </div>
-                <button type="button" ng-click="addCredit.addSubscription()" class="btn btn-default">Mehet</button>
+                <button type="button" ng-click="vm.addSubscription()" class="btn btn-default">Mehet</button>
             </form>
         </div>
     </div>

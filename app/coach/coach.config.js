@@ -22,8 +22,8 @@
         })
         .when('/berlet/vasarlas', {
             templateUrl: 'coach/add_credit.html',
-            controllerAs: 'addCredit',
-            controller: 'AddCredit',
+            controllerAs: 'vm',
+            controller: 'AddCreditController',
             resolve: {
                 /* @ngInject */
                 userInfo: function (locationHelper) {

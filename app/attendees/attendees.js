@@ -12,6 +12,7 @@
         var attendees = this;
 
         attendees.userInfo = userInfo;
+        attendees.adminMode = userInfo.roles.indexOf('admin') > -1;
         attendees.training = training;
         attendees.allUsers = allUsers;
         attendees.usersCanBeAdded = [];
@@ -94,7 +95,7 @@
         function canAdd() {
 
             return attendees.training.attendees.length < 16 &&
-                moment().subtract({hours: 3}).isBefore(attendees.training.date);
+                (attendees.adminMode || moment().subtract({hours: 3}).isBefore(attendees.training.date));
         }
 
         function add() {
