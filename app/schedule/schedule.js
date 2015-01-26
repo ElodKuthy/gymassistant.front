@@ -162,7 +162,7 @@
                 date: data.date,
                 attendees: data.attendees ? data.attendees.slice(0) : undefined,
                 signedUp: data.isAttendee,
-                showAttendeeList: schedule.userInfo ? (( schedule.userInfo.roles.indexOf('coach') > -1) || (data.coach === schedule.userInfo.name)) : false
+                showAttendeeList: schedule.userInfo ? (( schedule.userInfo.roles.indexOf('admin') > -1) || (data.coach === schedule.userInfo.name)) : false
             };
 
             calculateInstanceProperties(instance, instance.signedUp);

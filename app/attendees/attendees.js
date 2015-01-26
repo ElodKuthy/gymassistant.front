@@ -41,11 +41,11 @@
         });
 
         function canUndoCheckedIn(attendee) {
-            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && attendee.checkedIn;
+            return (attendees.adminMode || moment().subtract({ hours: 1 }).isBefore(attendees.training.date)) && attendee.checkedIn;
         }
 
         function canCheckIn(attendee) {
-            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && !attendee.checkedIn;
+            return (attendees.adminMode || moment().subtract({ hours: 1 }).isBefore(attendees.training.date)) && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
@@ -68,7 +68,7 @@
                     $.grep(attendees.training.attendees,
                         function(current) {
                             return current.name === attendee.name;
-                        })[0].isParticipant = false;
+                        })[0].checkedIn = false;
                 },
                 function(error) {
                     errorService.modal(error, "sm");
