@@ -4,26 +4,25 @@
 
     angular
         .module("gymassistant.front.schedule")
-        .controller("Schedule", Schedule);
+        .controller("ScheduleController", ScheduleController);
 
     /* @ngInject */
-    function Schedule($modal, $routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService) {
+    function ScheduleController($modal, $routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService) {
 
-        var schedule = this;
+        var vm = this;
 
-        schedule.instances = {};
-        schedule.userInfo = null;
-        schedule.credits = {};
-        schedule.showAttendeeList = false;
+        vm.userInfo = null;
+        vm.credit = {};
+        vm.showAttendeeList = false;
 
-        schedule.perviousWeek = perviousWeek;
-        schedule.nextWeek = nextWeek;
-        schedule.currentWeek = currentWeek;
-        schedule.canJoin = canJoin;
-        schedule.join = join;
-        schedule.canLeave = canLeave;
-        schedule.leave = leave;
-        schedule.showAttendees = showAttendees;
+        vm.perviousWeek = perviousWeek;
+        vm.nextWeek = nextWeek;
+        vm.currentWeek = currentWeek;
+        vm.canJoin = canJoin;
+        vm.join = join;
+        vm.canLeave = canLeave;
+        vm.leave = leave;
+        vm.showAttendees = showAttendees;
 
         eventHelper.subscribe.authenticationChanged(fetchSchedule);
 
@@ -35,29 +34,29 @@
 
             var promises = [];
             promises.push(scheduleService.getSchedule(begin, end));
-            schedule.userInfo = authenticationService.getUserInfo();
-            if (schedule.userInfo) {
-               promises.push(scheduleService.getCredits());
+            vm.userInfo = authenticationService.getUserInfo();
+            if (vm.userInfo) {
+               promises.push(scheduleService.getCurrentCredit());
             }
 
             $q.all(promises).then(
                 function (results) {
 
-                    schedule.dates = { begin: begin ? moment(begin).format() : moment().startOf('isoWeek').format(), end: end ? moment(end).format() : moment().endOf('isoWeek').format() };
-                    schedule.credits = results.length > 1 ? results[1] : null;
+                    vm.dates = { begin: begin ? moment(begin).format() : moment().startOf('isoWeek').format(), end: end ? moment(end).format() : moment().endOf('isoWeek').format() };
+                    vm.credit = results.length > 1 ? results[1] : null;
 
                     var currentDate = moment(0);
                     var currentWeek = [];
                     var currentDay = [];
 
-                    schedule.weeks = [];
+                    vm.weeks = [];
 
                     results[0].forEach(function (data) {
 
                         if (!currentDate.isSame(data.date, "day")) {
                             if (!currentDate.isSame(data.date, "week")) {
                                 currentWeek = [];
-                                schedule.weeks.push(currentWeek);
+                                vm.weeks.push(currentWeek);
                             }
                             currentDate = moment(data.date).endOf("day");
                             currentDay = [];
@@ -78,15 +77,15 @@
         }
 
         function perviousWeek() {
-            var begin = moment(schedule.dates.begin).subtract( {weeks: 1}).format("YYYY-MM-DD");
-            var end = moment(schedule.dates.end).subtract( {weeks: 1}).format("YYYY-MM-DD");
+            var begin = moment(vm.dates.begin).subtract( {weeks: 1}).format("YYYY-MM-DD");
+            var end = moment(vm.dates.end).subtract( {weeks: 1}).format("YYYY-MM-DD");
 
             $location.path("/orarend/" + begin + "/" + end);
         }
 
         function nextWeek() {
-            var begin = moment(schedule.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
-            var end = moment(schedule.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
+            var begin = moment(vm.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
+            var end = moment(vm.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
 
             $location.path("/orarend/" + begin + "/" + end);
         }
@@ -98,7 +97,7 @@
 
         function canJoin(instance) {
 
-            return schedule.userInfo &&
+            return vm.userInfo &&
                     !instance.isFull &&
                     !instance.signedUp &&
                     moment().isBefore(instance.date);
@@ -108,16 +107,16 @@
             if (canJoin(instance)) {
                 scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
-                    schedule.credits.free--;
+                    vm.credit.free--;
                     if (instance.attendees) {
-                        instance.attendees.push(schedule.userInfo.userName);
+                        instance.attendees.push(vm.userInfo.userName);
                     }
                     calculateInstanceProperties(instance, true);
                 }, function (error) {
                     errorService.modal(error, "sm");
                 });
 
-            } else if (!schedule.userInfo) {
+            } else if (!vm.userInfo) {
                 $location.path("/belepes");
             }
         }
@@ -133,12 +132,12 @@
                 scheduleService.leaveClass(instance.id).then(function () {
                     instance.current--;
                     if (instance.attendees) {
-                        var index = instance.attendees.indexOf(schedule.userInfo.userName);
+                        var index = instance.attendees.indexOf(vm.userInfo.userName);
                         if (index > -1) {
                             instance.attendees.splice(index, 1);
                         }
                     }
-                    schedule.credits.free++;
+                    vm.credit.free++;
                     calculateInstanceProperties(instance, false);
                 }, function (error) {
                     errorService.modal(error, "sm");
@@ -162,7 +161,7 @@
                 date: data.date,
                 attendees: data.attendees ? data.attendees.slice(0) : undefined,
                 signedUp: data.isAttendee,
-                showAttendeeList: schedule.userInfo ? (( schedule.userInfo.roles.indexOf('admin') > -1) || (data.coach === schedule.userInfo.name)) : false
+                showAttendeeList: vm.userInfo ? (( vm.userInfo.roles.indexOf('admin') > -1) || (data.coach === vm.userInfo.name)) : false
             };
 
             calculateInstanceProperties(instance, instance.signedUp);

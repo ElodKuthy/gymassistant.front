@@ -1,48 +1,60 @@
 <div id="scheduleBar" class="navbar navbar-default navbar-fixed-bottom">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#scheduleCollapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-      <span ng-if="schedule.userInfo && schedule.credits.free" class="navbar-brand" style="font-size: 14px;">
-        <i class="fa fa-credit-card"></i>
-        <span ng-bind="schedule.credits.free"></span>
-      </span>
-      <span class="navbar-brand visible-lg" style="font-size: 14px;">
-        {{schedule.dates.begin | date: "longDate"}} - {{schedule.dates.end | date: "longDate"}}
-      </span>
-      <span class="navbar-brand hidden-lg" style="font-size: 14px;">
-        {{schedule.dates.begin | date: "shortDate"}} - {{schedule.dates.end | date: "shortDate"}}
-      </span>
-        </div>
-        <div id="scheduleCollapse" class="navbar-collapse collapse schedule">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default navbar-btn" ng-click="schedule.perviousWeek()">
-                            <i class="fa fa-caret-square-o-left"></i> Előző
-                        </button>
-                        <button type="button" class="btn btn-default navbar-btn" ng-click="schedule.currentWeek()">
-                            <i class="fa fa-calendar-o"></i> Aktuális
-                        </button>
-                        <button type="button" class="btn btn-default navbar-btn" ng-click="schedule.nextWeek()">
-                            <i class="fa fa-caret-square-o-right"></i> Következő
-                        </button>
-                    </div>
-                </li>
-                <li>
-                </li>
-            </ul>
-        </div>
-        <!--/.navbar-collapse -->
+        <ul class="list-inline visible-lg visible-md" style="padding: 15px; margin: 0;">
+            <li>
+                {{vm.dates.begin | date: "longDate"}} - {{vm.dates.end | date: "longDate"}}
+            </li>
+            <li ng-if="vm.userInfo && vm.credit">
+                Bérlet lejárati ideje: {{vm.credit.expiry * 1000 | date: "longDate"}}
+            </li>
+            <li ng-if="vm.userInfo && vm.credit">
+                Szabad: {{ vm.credit.free }} alkalom
+            </li>
+            <li style="width: auto"></li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.nextWeek()">
+                    Következő hét
+                </a>
+            </li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.currentWeek()">
+                    Aktuális hét
+                </a>
+            </li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.perviousWeek()">
+                    Előző hét
+                </a>
+            </li>
+        </ul>
+        <ul class="list-inline hidden-lg hidden-md" style="padding: 15px; margin: 0;">
+            <li>
+                {{vm.dates.begin | date: "MM. dd."}} - {{vm.dates.end | date: "MM. dd."}}
+            </li>
+            <li ng-if="vm.userInfo && vm.credit">
+                Bérlet: {{vm.credit.expiry * 1000 | date: "MM. dd."}} ({{ vm.credit.free }})
+            </li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.nextWeek()">
+                    <i class="fa fa-3x fa-angle-right"></i>
+                </a>
+            </li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.currentWeek()">
+                   <i class="fa fa-3x fa-angle-up"></i>
+               </a>
+            </li>
+            <li class="pull-right">
+                <a href="#" ng-click="vm.perviousWeek()">
+                    <i class="fa fa-3x fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="container">
     <div id="scheduleTable">
-        <div class="row" ng-repeat="week in schedule.weeks">
+        <div class="row" ng-repeat="week in vm.weeks">
             <div class="col-lg-2 scheduleTrainingPanel" ng-repeat="day in week">
                 <div class="panel panel-default" ng-repeat="instance in day">
                     <div class="panel-heading" ng-class="{selected: instance.signedUp}">
@@ -62,17 +74,17 @@
                         <div>
                             <button type="button" class="btn btn-default"
                                     ng-show="instance.showAttendeeList"
-                                    ng-click="schedule.showAttendees(instance)">
+                                    ng-click="vm.showAttendees(instance)">
                                 <i class="fa fa-navicon"></i>
                             </button>
                             <button type="button" class="btn btn-default pull-right animate-if"
-                                    ng-if="schedule.canLeave(instance)"
-                                    ng-click="schedule.leave(instance)">
+                                    ng-if="vm.canLeave(instance)"
+                                    ng-click="vm.leave(instance)">
                                 <i class="fa fa-remove"></i>
                             </button>
                             <button type="button" class="btn btn-default pull-right animate-if"
-                                    ng-if="schedule.canJoin(instance)"
-                                    ng-click="schedule.join(instance)">
+                                    ng-if="vm.canJoin(instance)"
+                                    ng-click="vm.join(instance)">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>

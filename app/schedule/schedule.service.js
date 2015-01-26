@@ -11,7 +11,7 @@
 
         return {
             getSchedule: getSchedule,
-            getCredits: getCredits,
+            getCurrentCredit: getCurrentCredit,
             joinClass: joinClass,
             leaveClass: leaveClass,
             getUsers: getUsers,
@@ -31,8 +31,21 @@
             return httpService.get(url);
         }
 
-        function getCredits() {
-            return httpService.get("/api/my/credits");
+        function getCurrentCredit() {
+            return httpService.get("/api/my/credits")
+                .then(function (results) {
+                    var result = null;
+                    var latest = 0;
+
+                    results.forEach(function (current) {
+                        if (current.expiry > latest) {
+                            result = current;
+                            latest = current.expiry;
+                        }
+                    });
+
+                    return result;
+                });
         }
 
         function joinClass(classId) {

@@ -11,13 +11,13 @@
         $routeProvider
             .when('/orarend/aktualis', {
                 templateUrl: 'schedule/schedule.html',
-                controllerAs: 'schedule',
-                controller: 'Schedule'
+                controllerAs: 'vm',
+                controller: 'ScheduleController'
             })
             .when('/orarend/:begin/:end', {
                 templateUrl: 'schedule/schedule.html',
-                controllerAs: 'schedule',
-                controller: 'Schedule'
+                controllerAs: 'vm',
+                controller: 'ScheduleController'
             });
     }
 
