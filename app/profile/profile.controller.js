@@ -3,27 +3,29 @@
     'use strict';
 
     angular.module('gymassistant.front.profile')
-        .controller('Profile', Profile);
+        .controller('ProfileController', ProfileController);
 
     /* @ngInject */
-    function Profile($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers) {
+    function ProfileController($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
 
-        var profile = this;
+        var vm = this;
 
-        profile.name = '';
-        profile.email = '';
-        profile.newPassword = '';
-        profile.newPasswordAgain = '';
-        profile.passwordChangeError = '';
+        vm.name = '';
+        vm.email = '';
+        vm.newPassword = '';
+        vm.newPasswordAgain = '';
+        vm.passwordChangeError = '';
+        vm.credits = credits;
+        vm.now = moment().unix();
 
         if (client) {
-            profile.addCredit = addCredit;
-            profile.registrationEmail = registrationEmail;
-            profile.changeEmail = changeEmail;
-            profile.allUsers = allUsers;
-            profile.viewUser = viewUser;
+            vm.addCredit = addCredit;
+            vm.registrationEmail = registrationEmail;
+            vm.changeEmail = changeEmail;
+            vm.allUsers = allUsers;
+            vm.viewUser = viewUser;
         } else {
-            profile.changePassword = changePassword;
+            vm.changePassword = changePassword;
         }
 
         fillProfile(client ? client : userInfo);
@@ -36,39 +38,39 @@
 
         function fillProfile(userInfo) {
             if (userInfo) {
-                profile.name = userInfo.name;
-                profile.email = userInfo.email;
-                profile.role = userInfo.roles.indexOf('admin') === -1 ? (userInfo.roles.indexOf('coach') === -1 ? 'Tanítvány' : 'Edző') : 'Adminisztrátor';
-                profile.qr = userInfo.qr;
+                vm.name = userInfo.name;
+                vm.email = userInfo.email;
+                vm.role = userInfo.roles.indexOf('admin') === -1 ? (userInfo.roles.indexOf('coach') === -1 ? 'Tanítvány' : 'Edző') : 'Adminisztrátor';
+                vm.qr = userInfo.qr;
             }
         }
 
         function changePassword() {
 
-            profile.passwordChangeError = '';
+            vm.passwordChangeError = '';
 
-            if (!profile.newPassword) {
-                profile.passwordChangeError = 'Az új jelszót kötelező megadni';
+            if (!vm.newPassword) {
+                vm.passwordChangeError = 'Az új jelszót kötelező megadni';
                 return;
             }
 
-            if (!profile.newPasswordAgain) {
-                profile.passwordChangeError = 'Az ellenőrző jelszót kötelező megadni';
+            if (!vm.newPasswordAgain) {
+                vm.passwordChangeError = 'Az ellenőrző jelszót kötelező megadni';
                 return;
             }
 
-            if (profile.newPassword != profile.newPasswordAgain) {
-                profile.passwordChangeError = 'Az új és ellenőrző jelszó nem egyezik meg';
+            if (vm.newPassword != vm.newPasswordAgain) {
+                vm.passwordChangeError = 'Az új és ellenőrző jelszó nem egyezik meg';
                 return;
             }
 
-            profileService.changePassword(profile.newPassword).then(
+            profileService.changePassword(vm.newPassword).then(
                 function () {
 
-                    authenticationService.login(profile.name, profile.newPassword).then(
+                    authenticationService.login(vm.name, vm.newPassword).then(
                         function () {
-                            profile.newPassword = '';
-                            profile.newPasswordAgain = '';
+                            vm.newPassword = '';
+                            vm.newPasswordAgain = '';
 
                             $modal.open({
                                 templateUrl: 'modal/info.html',
@@ -90,26 +92,26 @@
                         });
                 },
                 function (error) {
-                    profile.passwordChangeError = error;
+                    vm.passwordChangeError = error;
                 });
         }
 
         function viewUser() {
-            $location.path('/profil/' + profile.userToView.name);
+            $location.path('/profil/' + vm.userToView.name);
         }
 
         function addCredit() {
-            return '/berlet/vasarlas?tanitvany=' + encodeURI(profile.name);
+            return '/berlet/vasarlas?tanitvany=' + encodeURI(vm.name);
         }
 
         function registrationEmail() {
-            profileService.sendRegistrationEmail(profile.name)
+            profileService.sendRegistrationEmail(vm.name)
                 .then(function (result) { infoService.modal('Regisztrációs email újraküldése', result); })
                 .catch(errorService.modal);
         }
 
         function changeEmail() {
-            profileService.changeEmail(profile.name, profile.email).then(changeEmailSuccess, errorService.modal);
+            profileService.changeEmail(vm.name, vm.email).then(changeEmailSuccess, errorService.modal);
 
             function changeEmailSuccess (result) {
                 infoService.modal('Email cím változtatás', result);

@@ -12,11 +12,11 @@
             addNewUser: addNewUser,
             getUserInfo: getUserInfo,
             addNewSubscription: addNewSubscription,
-            getSeries: getSeries
+            getSeries: getSeries,
+            getCredits: getCredits
         };
 
         function addNewUser(name, email) {
-
             return httpService.get('/api/add/new/user/with/name/' + name + '/and/email/' + email);
         }
 
@@ -25,12 +25,15 @@
         }
 
         function addNewSubscription(amount, userName, period, series) {
-
             return httpService.get('/api/add/subscription/with/'+ amount + '/credits/to/user/' + userName + '/for/' + period + (series && series.length ? '?series=' + series.join() : ''));
         }
 
         function getSeries() {
             return httpService.get('/api/my/training/series');
+        }
+
+        function getCredits(userName) {
+            return httpService.get('/api/credits/of/user/' + userName);
         }
     }
 

@@ -60,3 +60,7 @@ body {
   padding-left: 5px;
   padding-top: 5px;
 }
+
+div.creditText {
+  margin-bottom: 5px;
+}

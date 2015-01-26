@@ -1,45 +1,55 @@
  <div class="container">
     <div class="row">
-        <div class="col-sm-offset-2 col-sm-4" style="margin-bottom: 20px;">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9" style="margin-bottom: 20px;">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Tanítvány keresése"
-                ng-model="profile.userToView" ga-enter="profile.viewUser()"
-                typeahead="user as user.name for user in profile.allUsers | filter: { name: $viewValue }">
-                <a hef="#" ng-click="profile.viewUser()" class="input-group-addon btn btn-default">Mutasd</a>
+                ng-model="vm.userToView" ga-enter="vm.viewUser()"
+                typeahead="user as user.name for user in vm.allUsers | filter: { name: $viewValue }">
+                <a hef="#" ng-click="vm.viewUser()" class="input-group-addon btn btn-default">Mutasd</a>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-2 col-sm-2 text-center">
-            <div class="fa-stack fa-4x">
-                <i class="fa fa-square fa-stack-2x"></i>
-                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
-            </div>
-            <div>
-                <qr size="100" text="profile.qr"></qr>
-            </div>
-        </div>
-        <div class="col-md-4 col-sm-6">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
             <ul class="list-group">
                 <li class="list-group-item">
                     <div class="input-group">
                         <span class="input-group-addon">Név</span>
-                        <input ng-model="profile.name" class="form-control" id="name">
-                        <a hef="#" ng-click="profile.changeName()" class="input-group-addon btn btn-default" disabled>Módosít</a>
+                        <input ng-model="vm.name" class="form-control" id="name">
+                        <a hef="#" ng-click="vm.changeName()" class="input-group-addon btn btn-default" disabled>Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="input-group">
                         <span class="input-group-addon">Email</span>
-                        <input ng-model="profile.email" class="form-control" id="email">
-                        <a hef="#" ng-click="profile.changeEmail()" class="input-group-addon btn btn-default">Módosít</a>
+                        <input ng-model="vm.email" class="form-control" id="email">
+                        <a hef="#" ng-click="vm.changeEmail()" class="input-group-addon btn btn-default">Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">
-                    <a style="cursor:pointer;" hef="#" ng-click="profile.registrationEmail()">Regisztrációs email kiküldése</a>
+                    <a style="cursor:pointer;" hef="#" ng-click="vm.registrationEmail()">Regisztrációs email kiküldése</a>
                 </li>
                 <li class="list-group-item">
-                    <a ng-href="{{profile.addCredit()}}">Bérletvásárlás</a>
+                    <a ng-href="{{vm.addCredit()}}">Bérletvásárlás</a>
+                </li>
+                <li class="list-group-item">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Bérletek
+                        </div>
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item" ng-repeat="credit in vm.credits | orderBy: 'date':true">
+                                    <div class="creditText">Vásárlás időpontja: {{ credit.date * 1000 | date }}</div>
+                                    <div class="creditText">Érvényesség vége: {{ credit.expiry * 1000 | date }}</div>
+                                    <div class="creditText">Edző: {{ credit.coach }}</div>
+                                    <div class="creditText">Összesen: {{ credit.amount }} alkalom</div>
+                                    <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Szabad: {{ credit.free }} alkalom</div>
+                                     <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Elmulasztott: {{ credit.free }} alkalom</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>

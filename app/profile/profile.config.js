@@ -11,8 +11,8 @@
         $routeProvider
             .when("/profilom", {
                 templateUrl: "profile/my_profile.html",
-                controllerAs: "profile",
-                controller: "Profile",
+                controllerAs: "vm",
+                controller: "ProfileController",
                 resolve: {
                     /* @ngInject */
                     userInfo: function (locationHelper) {
@@ -25,13 +25,17 @@
                     /* @ngInject */
                     allUsers: function ($q) {
                         return $q.when(null);
+                    },
+                    /* @ngInject */
+                    credits: function (profileService) {
+                        return profileService.getCredits();
                     }
                 }
             })
             .when("/profil/:clientName", {
                 templateUrl: "profile/client_profile.html",
-                controllerAs: "profile",
-                controller: "Profile",
+                controllerAs: "vm",
+                controller: "ProfileController",
                 resolve: {
                     /* @ngInject */
                     userInfo: function (locationHelper) {
@@ -55,6 +59,10 @@
                         }
 
                         return deferred.promise;
+                    },
+                    /* @ngInject */
+                    credits: function ($route, coachService) {
+                        return coachService.getCredits($route.current.params.clientName);
                     }
                 }
             });
