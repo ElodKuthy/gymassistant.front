@@ -49,11 +49,17 @@
                     <ul class="list-group">
                         <li class="list-group-item" ng-repeat="credit in vm.credits | orderBy: 'date':true">
                             <div class="creditText">Vásárlás időpontja: {{ credit.date * 1000 | date }}</div>
-                            <div class="creditText">Érvényesség vége: {{ credit.expiry * 1000 | date }}</div>
+                            <div class="creditText">
+                                Érvényesség vége: {{ credit.expiry * 1000 | date }}
+                                <span ng-if="credit.expiry < vm.now">(Lejárt)</span>
+                            </div>
                             <div class="creditText">Edző: {{ credit.coach }}</div>
-                            <div class="creditText">Összesen: {{ credit.amount }} alkalom</div>
-                            <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Szabad: {{ credit.free }} alkalom</div>
-                             <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Elmulasztott: {{ credit.free }} alkalom</div>
+                            <div class="creditText">{{ credit.amount }} alkalmas bérlet</div>
+                            <div ng-if="credit.attended > 0" class="creditText">Feliratkozott {{ credit.attended }} edzésre</div>
+                            <div ng-if="credit.participated > 0" class="creditText">Részt vett {{ credit.participated }} edzésen</div>
+                            <div ng-if="credit.missed > 0" class="creditText">Kihagyott {{ credit.missed }} feliratkozott edzést</div>
+                            <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Még feliratkozhat {{ credit.free }} alkalomra</div>
+                            <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Feliratkozás nélkül elveszett {{ credit.free }} alkalom</div>
                         </li>
                     </ul>
                 </div>

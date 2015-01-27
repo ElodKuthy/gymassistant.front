@@ -36,9 +36,10 @@
                 .then(function (results) {
                     var result = null;
                     var latest = 0;
+                    var now = moment().unix();
 
                     results.forEach(function (current) {
-                        if (current.expiry > latest) {
+                        if (current.date < now && current.expiry > latest) {
                             result = current;
                             latest = current.expiry;
                         }
