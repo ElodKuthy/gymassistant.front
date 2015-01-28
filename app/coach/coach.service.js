@@ -9,16 +9,20 @@
     function CoachSevice(httpService) {
 
         return {
-            addNewUser: addNewUser,
+            addNewClient: addNewClient,
+            addNewCoach: addNewCoach,
             getUserInfo: getUserInfo,
             addNewSubscription: addNewSubscription,
-            addNewSubscriptionTillDate: addNewSubscriptionTillDate,
-            getSeries: getSeries
+            getSeries: getSeries,
+            getCredits: getCredits
         };
 
-        function addNewUser(name, email) {
-
+        function addNewClient(name, email) {
             return httpService.get('/api/add/new/user/with/name/' + name + '/and/email/' + email);
+        }
+
+        function addNewCoach(name, email) {
+            return httpService.get('/api/add/new/coach/with/name/' + name + '/and/email/' + email);
         }
 
         function getUserInfo(name) {
@@ -26,17 +30,15 @@
         }
 
         function addNewSubscription(amount, userName, period, series) {
-
             return httpService.get('/api/add/subscription/with/'+ amount + '/credits/to/user/' + userName + '/for/' + period + (series && series.length ? '?series=' + series.join() : ''));
-        }
-
-        function addNewSubscriptionTillDate(amountPerWeek, userName, date, series) {
-
-            return httpService.get('/api/add/subscription/with/'+ amountPerWeek + '/credits/per/week/to/user/' + userName + '/till/date/' + date + (series && series.length ? '?series=' + series.join() : ''));
         }
 
         function getSeries() {
             return httpService.get('/api/my/training/series');
+        }
+
+        function getCredits(userName) {
+            return httpService.get('/api/credits/of/user/' + userName);
         }
     }
 

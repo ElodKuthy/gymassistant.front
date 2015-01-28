@@ -1,27 +1,21 @@
  <div class="container">
     <div class="row">
-        <div class="col-md-2 col-sm-2 text-center">
-            <span class="fa-stack fa-3x">
-                <i class="fa fa-square fa-stack-2x"></i>
-                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
-            </span>
-        </div>
-        <div class="col-md-4 col-sm-6">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
             <ul class="list-group">
                 <li class="list-group-item">
-                    Név: <span ng-bind="profile.name"></span>
+                    Név: <span ng-bind="vm.name"></span>
                 </li>
                 <li class="list-group-item">
-                    Email: <span ng-bind="profile.email"></span>
+                    Email: <span ng-bind="vm.email"></span>
                 </li>
                 <li class="list-group-item">
-                    Rang: <span ng-bind="profile.role"></span>
+                    Rang: <span ng-bind="vm.role"></span>
                 </li>
             </ul>
         </div>
     </div>
      <div class="row">
-         <div class="col-lg-6 col-md-7 col-sm-9">
+         <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
              <div class="panel panel-default">
                  <div class="panel-heading">
                      Jelszó csere
@@ -31,18 +25,45 @@
                          <div class="form-group">
                              <label class="sr-only" for="newPassword">Új jelszó</label>
                              <input type="password" class="form-control" id="newPassword"
-                                    ng-model="profile.newPassword" placeholder="Új jelszó">
+                                    ng-model="vm.newPassword" placeholder="Új jelszó">
                          </div>
                          <div class="form-group">
                              <label class="sr-only" for="newPasswordAgain">Új jelszó mégegyszer</label>
                              <input type="password" class="form-control" id="newPasswordAgain"
-                                    ng-model="profile.newPasswordAgain" placeholder="Új jelszó mégegyszer">
+                                    ng-model="vm.newPasswordAgain" placeholder="Új jelszó mégegyszer">
                          </div>
-                         <button type="button" class="btn btn-default" ng-click="profile.changePassword()">Mehet</button>
-                         <div class="simple-error-text text-danger text-left" ng-bind="profile.passwordChangeError"></div>
+                         <button type="button" class="btn btn-default" ng-click="vm.changePassword()">Mehet</button>
+                         <div class="simple-error-text text-danger text-left" ng-bind="vm.passwordChangeError"></div>
                      </form>
                  </div>
              </div>
          </div>
      </div>
+    <div class="row">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
+             <div class="panel panel-default">
+                 <div class="panel-heading">
+                    Bérletek
+                 </div>
+                 <div class="panel-body">
+                    <ul class="list-group">
+                        <li class="list-group-item" ng-repeat="credit in vm.credits | orderBy: 'date':true">
+                            <div class="creditText">Vásárlás időpontja: {{ credit.date * 1000 | date }}</div>
+                            <div class="creditText">
+                                Érvényesség vége: {{ credit.expiry * 1000 | date }}
+                                <span ng-if="credit.expiry < vm.now">(Lejárt)</span>
+                            </div>
+                            <div class="creditText">Edző: {{ credit.coach }}</div>
+                            <div class="creditText">{{ credit.amount }} alkalmas bérlet</div>
+                            <div ng-if="credit.attended > 0" class="creditText">Feliratkozott {{ credit.attended }} edzésre</div>
+                            <div ng-if="credit.participated > 0" class="creditText">Részt vett {{ credit.participated }} edzésen</div>
+                            <div ng-if="credit.missed > 0" class="creditText">Kihagyott {{ credit.missed }} feliratkozott edzést</div>
+                            <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Még feliratkozhat {{ credit.free }} alkalomra</div>
+                            <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Feliratkozás nélkül elveszett {{ credit.free }} alkalom</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
  </div>

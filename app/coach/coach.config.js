@@ -11,8 +11,8 @@
         $routeProvider
         .when('/uj/felhasznalo', {
             templateUrl: 'coach/new_user.html',
-            controllerAs: 'newUser',
-            controller: 'NewUser',
+            controllerAs: 'vm',
+            controller: 'NewUserController',
             resolve: {
                 /* @ngInject */
                 userInfo: function (locationHelper) {
@@ -22,8 +22,8 @@
         })
         .when('/berlet/vasarlas', {
             templateUrl: 'coach/add_credit.html',
-            controllerAs: 'addCredit',
-            controller: 'AddCredit',
+            controllerAs: 'vm',
+            controller: 'AddCreditController',
             resolve: {
                 /* @ngInject */
                 userInfo: function (locationHelper) {

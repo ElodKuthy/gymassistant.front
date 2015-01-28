@@ -11,7 +11,8 @@
         return {
             changePassword: changePassword,
             changeEmail: changeEmail,
-            sendRegistrationEmail: sendRegistrationEmail
+            sendRegistrationEmail: sendRegistrationEmail,
+            getCredits: getCredits
         };
 
         function changePassword(newPassword) {
@@ -24,6 +25,10 @@
 
         function sendRegistrationEmail(name) {
             return httpService.get('/api/send/registration/email/to/user/' + name);
+        }
+
+        function getCredits() {
+            return httpService.get("/api/my/credits");
         }
     }
 

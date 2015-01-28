@@ -4,20 +4,20 @@
 
     angular
         .module("gymassistant.front.modal")
-        .factory("infoService", InfoService);
+        .factory("decisionService", DecisionService);
 
     /* @ngInject */
-    function InfoService($modal) {
+    function DecisionService($modal) {
 
         return {
             modal: modal
         };
 
-        function modal(title, message) {
+        function modal(title, message, yesLabel, noLabel) {
 
             return $modal.open({
-                templateUrl: "modal/info.html",
-                controller: "InfoController",
+                templateUrl: "modal/decision.html",
+                controller: "DecisionController",
                 controllerAs: "vm",
                 size: "sm",
                 resolve: {
@@ -26,6 +26,12 @@
                     },
                     message: function () {
                         return message;
+                    },
+                    yesLabel: function () {
+                        return yesLabel;
+                    },
+                    noLabel: function () {
+                        return noLabel;
                     }
                 }
             }).result;

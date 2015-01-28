@@ -11,11 +11,12 @@
 
         return {
             getSchedule: getSchedule,
-            getCredits: getCredits,
+            getCurrentCredit: getCurrentCredit,
             joinClass: joinClass,
             leaveClass: leaveClass,
             getUsers: getUsers,
-            getInstance: getInstance
+            getInstance: getInstance,
+            cancelTraining: cancelTraining
         };
 
         function getSchedule(begin, end) {
@@ -31,8 +32,22 @@
             return httpService.get(url);
         }
 
-        function getCredits() {
-            return httpService.get("/api/my/credits");
+        function getCurrentCredit() {
+            return httpService.get("/api/my/credits")
+                .then(function (results) {
+                    var result = null;
+                    var latest = 0;
+                    var now = moment().unix();
+
+                    results.forEach(function (current) {
+                        if (current.date < now && current.expiry > latest) {
+                            result = current;
+                            latest = current.expiry;
+                        }
+                    });
+
+                    return result;
+                });
         }
 
         function joinClass(classId) {
@@ -49,6 +64,10 @@
 
         function getInstance(id) {
             return httpService.get("/api/training/id/" + id);
+        }
+
+        function cancelTraining(trainingId) {
+            return httpService.get('/api/cancel/training/id/' + trainingId);
         }
     }
 })();

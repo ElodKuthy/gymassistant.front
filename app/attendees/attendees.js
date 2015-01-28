@@ -12,6 +12,7 @@
         var attendees = this;
 
         attendees.userInfo = userInfo;
+        attendees.adminMode = userInfo.roles.indexOf('admin') > -1;
         attendees.training = training;
         attendees.allUsers = allUsers;
         attendees.usersCanBeAdded = [];
@@ -40,11 +41,11 @@
         });
 
         function canUndoCheckedIn(attendee) {
-            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && attendee.checkedIn;
+            return (attendees.adminMode || moment().subtract({ hours: 1 }).isBefore(attendees.training.date)) && attendee.checkedIn;
         }
 
         function canCheckIn(attendee) {
-            return moment().subtract({ hours: 1 }).isBefore(attendees.training.date) && !attendee.checkedIn;
+            return (attendees.adminMode || moment().subtract({ hours: 1 }).isBefore(attendees.training.date)) && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
@@ -67,7 +68,7 @@
                     $.grep(attendees.training.attendees,
                         function(current) {
                             return current.name === attendee.name;
-                        })[0].isParticipant = false;
+                        })[0].checkedIn = false;
                 },
                 function(error) {
                     errorService.modal(error, "sm");
@@ -94,7 +95,7 @@
         function canAdd() {
 
             return attendees.training.attendees.length < 16 &&
-                moment().subtract({hours: 3}).isBefore(attendees.training.date);
+                (attendees.adminMode || moment().subtract({hours: 3}).isBefore(attendees.training.date));
         }
 
         function add() {
