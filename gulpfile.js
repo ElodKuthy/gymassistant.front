@@ -96,8 +96,8 @@ gulp.task("js:vendor", ["clean:dist"], function () {
 
 gulp.task("js:all", ["clean:dist"], function () {
     return gulp.src(["app/**/*.module.js", "app/**/*.js"])
-        .pipe(plugins.concat("all.min.js"))
         .pipe(plugins.ngAnnotate())
+        .pipe(plugins.concat("all.min.js"))
         .pipe(plugins.uglify())
         .pipe(gulp.dest("dist/js"));
 });

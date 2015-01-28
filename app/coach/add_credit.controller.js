@@ -7,7 +7,7 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController(, $filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
+    function AddCreditController($filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
 
         var vm = this;
 
