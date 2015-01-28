@@ -6,7 +6,7 @@
         .controller('ProfileController', ProfileController);
 
     /* @ngInject */
-    function ProfileController($location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits, infoService) {
+    function ProfileController($location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
 
         var vm = this;
 
@@ -41,6 +41,7 @@
                 vm.name = userInfo.name;
                 vm.email = userInfo.email;
                 vm.role = userInfo.roles.indexOf('admin') === -1 ? (userInfo.roles.indexOf('coach') === -1 ? 'Tanítvány' : 'Edző') : 'Adminisztrátor';
+                vm.isClient = userInfo.roles.indexOf('admin') === -1 && userInfo.roles.indexOf('coach') === -1;
                 vm.qr = userInfo.qr;
             }
         }
