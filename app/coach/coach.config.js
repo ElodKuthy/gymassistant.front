@@ -11,8 +11,8 @@
         $routeProvider
         .when('/uj/felhasznalo', {
             templateUrl: 'coach/new_user.html',
-            controllerAs: 'newUser',
-            controller: 'NewUser',
+            controllerAs: 'vm',
+            controller: 'NewUserController',
             resolve: {
                 /* @ngInject */
                 userInfo: function (locationHelper) {

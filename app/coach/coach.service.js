@@ -9,15 +9,20 @@
     function CoachSevice(httpService) {
 
         return {
-            addNewUser: addNewUser,
+            addNewClient: addNewClient,
+            addNewCoach: addNewCoach,
             getUserInfo: getUserInfo,
             addNewSubscription: addNewSubscription,
             getSeries: getSeries,
             getCredits: getCredits
         };
 
-        function addNewUser(name, email) {
+        function addNewClient(name, email) {
             return httpService.get('/api/add/new/user/with/name/' + name + '/and/email/' + email);
+        }
+
+        function addNewCoach(name, email) {
+            return httpService.get('/api/add/new/coach/with/name/' + name + '/and/email/' + email);
         }
 
         function getUserInfo(name) {

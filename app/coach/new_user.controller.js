@@ -4,20 +4,23 @@
 
     angular
         .module('gymassistant.front.coach')
-        .controller('NewUser', NewUser);
+        .controller('NewUserController', NewUserController);
 
     /* @ngInject */
-    function NewUser($modal, $location, coachService, errorService, userInfo) {
+    function NewUserController($modal, $location, coachService, errorService, userInfo) {
 
-        var newUser = this;
+        var vm = this;
 
-        newUser.name = '';
-        newUser.email = '';
-        newUser.save = save;
+        vm.name = '';
+        vm.email = '';
+        vm.save = save;
+        vm.type = 'client';
+        vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
         function reset(form) {
-            newUser.name = '';
-            newUser.email = '';
+            vm.name = '';
+            vm.email = '';
+            vm.type = 'cient';
             if (form) {
                 form.$setPristine();
                 form.$setUntouched();
@@ -30,10 +33,14 @@
                 return;
             }
 
-            coachService.addNewUser(newUser.name, newUser.email).then(newUserSaved, newUserSaveError);
+            if(vm.type == 'coach') {
+                coachService.addNewCoach(vm.name, vm.email).then(newUserSaved, newUserSaveError);
+            } else {
+                coachService.addNewClient(vm.name, vm.email).then(newUserSaved, newUserSaveError);
+            }
 
             function newUserSaved() {
-                var name = newUser.name;
+                var name = vm.name;
 
                 reset(form);
 

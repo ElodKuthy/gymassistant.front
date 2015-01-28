@@ -4,20 +4,35 @@
             <form role="form" name="newUserForm" novalidate>
                 <div class="form-group" ng-class="{ 'has-error': (newUserForm.$submitted || newUserForm.name.$touched) && newUserForm.name.$invalid }">
                     <label for="name">Név</label>
-                    <input type="text" ng-model="newUser.name" class="form-control" id="name" name="name" placeholder="Adja meg az új felhasználó nevét" required>
+                    <input type="text" ng-model="vm.name" class="form-control" id="name" name="name" placeholder="Adja meg az új felhasználó nevét" required>
                     <span ng-show="newUserForm.$submitted || newUserForm.name.$touched">
                         <span class="text-danger" ng-show="newUserForm.name.$error.required">Ezt a mezőt kötelező kitölteni!</span>
                     </span>
                 </div>
                 <div class="form-group" ng-class="{ 'has-error': (newUserForm.$submitted || newUserForm.email.$touched) && newUserForm.email.$invalid }">
                     <label for="email">Email cím</label>
-                    <input type="email" ng-model="newUser.email" class="form-control" id="email" name="email" placeholder="Adja meg az új felhasználó email címét" required>
+                    <input type="email" ng-model="vm.email" class="form-control" id="email" name="email" placeholder="Adja meg az új felhasználó email címét" required>
                     <span ng-show="newUserForm.$submitted || newUserForm.email.$touched">
                         <span class="text-danger" ng-show="newUserForm.email.$error.required">Ezt a mezőt kötelező kitölteni!</span>
                         <span class="text-danger" ng-show="newUserForm.email.$error.email">Érvénytelen email cím formátum!</span>
                     </span>
                 </div>
-                <button type="submit" ng-disabled="newUserForm.name.$invalid || newUserForm.email.$invalid" ng-click="newUser.save(newUserForm)" class="btn btn-default">Mentés</button>
+                <div class="form-group" ng-if="vm.adminMode">
+                    <label for="name">Szerep</label>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="vm.type" value="client">
+                        Tanítvány
+                      </label>
+                    </div>
+                    <div class="radio">
+                      <label>
+                        <input type="radio" ng-model="vm.type" value="coach">
+                        Edző
+                      </label>
+                    </div>
+                </div>
+                <button type="submit" ng-disabled="newUserForm.name.$invalid || newUserForm.email.$invalid" ng-click="vm.save(newUserForm)" class="btn btn-default">Mentés</button>
             </form>
         </div>
     </div>
