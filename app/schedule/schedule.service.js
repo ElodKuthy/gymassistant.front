@@ -15,7 +15,8 @@
             joinClass: joinClass,
             leaveClass: leaveClass,
             getUsers: getUsers,
-            getInstance: getInstance
+            getInstance: getInstance,
+            cancelTraining: cancelTraining
         };
 
         function getSchedule(begin, end) {
@@ -63,6 +64,10 @@
 
         function getInstance(id) {
             return httpService.get("/api/training/id/" + id);
+        }
+
+        function cancelTraining(trainingId) {
+            return httpService.get('/api/cancel/training/id/' + trainingId);
         }
     }
 })();

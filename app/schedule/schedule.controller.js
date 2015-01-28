@@ -7,7 +7,7 @@
         .controller("ScheduleController", ScheduleController);
 
     /* @ngInject */
-    function ScheduleController($modal, $routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService) {
+    function ScheduleController($routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
 
         var vm = this;
 
@@ -23,6 +23,8 @@
         vm.canLeave = canLeave;
         vm.leave = leave;
         vm.showAttendees = showAttendees;
+        vm.canCancelTraining = canCancelTraining;
+        vm.cancelTraining = cancelTraining;
 
         eventHelper.subscribe.authenticationChanged(fetchSchedule);
 
@@ -100,7 +102,7 @@
             return vm.userInfo &&
                     !instance.isFull &&
                     !instance.signedUp &&
-                    vm.credit.free > 0 &&
+                    (vm.userInfo.roles.indexOf('coach') > -1 || (vm.credit && vm.credit.free > 0)) &&
                     moment().isBefore(instance.date);
         }
 
@@ -111,7 +113,7 @@
                     vm.credit.free--;
                     vm.credit.attended++;
                     if (instance.attendees) {
-                        instance.attendees.push(vm.userInfo.userName);
+                        instance.attendees.push(vm.userInfo.name);
                     }
                     calculateInstanceProperties(instance, true);
                 }, function (error) {
@@ -134,7 +136,7 @@
                 scheduleService.leaveClass(instance.id).then(function () {
                     instance.current--;
                     if (instance.attendees) {
-                        var index = instance.attendees.indexOf(vm.userInfo.userName);
+                        var index = instance.attendees.indexOf(vm.userInfo.name);
                         if (index > -1) {
                             instance.attendees.splice(index, 1);
                         }
@@ -179,5 +181,23 @@
             instance.signedUp = signedUp;
         }
 
+        function canCancelTraining (instance) {
+
+            return vm.userInfo && (vm.userInfo.roles.indexOf('admin') > -1 || (vm.userInfo.name == instance.coach && moment().isBefore(instance.date)));
+        }
+
+        function cancelTraining (instance) {
+
+            decisionService.modal('Óra lemondása', 'Biztos vagy benne, hogy le szeretnéd mondani ezt az órát?', 'Biztos', 'Mégsem')
+                .then(function () {
+                    scheduleService.cancelTraining(instance.id)
+                        .then(function () {
+                            infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok email értesítést kaptak, és a bérletükön jóváírásra került egy kredit.')
+                                .then(function () { fetchSchedule(vm.dates.begin, vm.dates.end); });
+                        }, function (err) {
+                            errorService.modal(error);
+                        });
+                });
+        }
     }
 })();

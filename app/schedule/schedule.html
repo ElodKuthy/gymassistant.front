@@ -77,6 +77,11 @@
                                     ng-click="vm.showAttendees(instance)">
                                 <i class="fa fa-navicon"></i>
                             </button>
+                            <button type="button" class="btn btn-default"
+                                    ng-show="vm.canCancelTraining(instance)"
+                                    ng-click="vm.cancelTraining(instance)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
                             <button type="button" class="btn btn-default pull-right animate-if"
                                     ng-if="vm.canLeave(instance)"
                                     ng-click="vm.leave(instance)">
