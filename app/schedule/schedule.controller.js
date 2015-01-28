@@ -110,8 +110,10 @@
             if (canJoin(instance)) {
                 scheduleService.joinClass(instance.id).then(function () {
                     instance.current++;
-                    vm.credit.free--;
-                    vm.credit.attended++;
+                    if (vm.credit) {
+                        vm.credit.free--;
+                        vm.credit.attended++;
+                    }
                     if (instance.attendees) {
                         instance.attendees.push(vm.userInfo.name);
                     }
@@ -141,8 +143,10 @@
                             instance.attendees.splice(index, 1);
                         }
                     }
-                    vm.credit.free++;
-                    vm.credit.attended--;
+                    if (vm.credit) {
+                        vm.credit.free++;
+                        vm.credit.attended--;
+                    }
                     calculateInstanceProperties(instance, false);
                 }, function (error) {
                     errorService.modal(error, "sm");
