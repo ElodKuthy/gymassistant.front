@@ -7,7 +7,7 @@
         .controller('NewUserController', NewUserController);
 
     /* @ngInject */
-    function NewUserController($modal, $location, coachService, errorService, userInfo) {
+    function NewUserController($location, coachService, errorService, userInfo, infoService) {
 
         var vm = this;
 
@@ -44,26 +44,10 @@
 
                 reset(form);
 
-                var modalInstance = $modal.open({
-                    templateUrl: "modal/info.html",
-                    controller: "Info",
-                    controllerAs: "info",
-                    size: "sm",
-                    resolve: {
-                        title: function () {
-                            return "Új felhasználó hozzáadása";
-                        },
-                        message: function () {
-                            return "Az új felhasználót sikeresen létrehoztuk";
-                        }
-                    }
-                });
-
-                modalInstance.result.then(afterInfoDialog);
-
-                function afterInfoDialog() {
-                    $location.path("/profil/" + name);
-                }
+                infoService.modal('Új felhasználó hozzáadása', 'Az új felhasználót sikeresen létrehoztuk')
+                    .then(function () {
+                        $location.path("/profil/" + name);
+                    });
             }
 
             function newUserSaveError(error) {

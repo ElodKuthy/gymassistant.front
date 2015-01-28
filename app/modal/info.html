@@ -1,14 +1,14 @@
 <div class="modal-header">
-    <button type="button" class="close" ng-click="info.close()"><span aria-hidden="true">&times;</span><span
+    <button type="button" class="close" ng-click="vm.close()"><span aria-hidden="true">&times;</span><span
             class="sr-only">Bezárás</span></button>
-    <h4 class="modal-title" ng-bind="info.title"></h4>
+    <h4 class="modal-title" ng-bind="vm.title"></h4>
 </div>
 <div class="modal-body" style="padding-bottom: 20px;">
 
     <i class="fa fa-info-circle fa-3x text-info pull-left"></i>
-    <span ng-bind="info.message"></span>
+    <span ng-bind="vm.message"></span>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-primary" ng-click="info.close()">OK</button>
+        <button type="button" class="btn btn-primary" ng-click="vm.close()">OK</button>
     </div>
 </div>

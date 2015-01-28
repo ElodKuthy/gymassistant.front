@@ -3,10 +3,10 @@
     "use strict";
 
     angular.module("gymassistant.front.modal")
-        .controller("Info", Info);
+        .controller("InfoController", InfoController);
 
     /* @ngInject */
-    function Info($modalInstance, title, message) {
+    function InfoController($modalInstance, title, message) {
 
         var info = this;
 

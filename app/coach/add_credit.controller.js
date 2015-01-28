@@ -7,7 +7,7 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController($modal, $filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService) {
+    function AddCreditController(, $filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
 
         var vm = this;
 
@@ -189,21 +189,8 @@
                 errorService.modal(err, 'sm');
             }
 
-            function subscriptionAdded(result) {
-                $modal.open({
-                    templateUrl: "modal/info.html",
-                    controller: "Info",
-                    controllerAs: "info",
-                    size: "sm",
-                    resolve: {
-                        title: function () {
-                            return "Bérletvásárlás";
-                        },
-                        message: function () {
-                            return "Sikeres bérletvásárlás";
-                        }
-                    }
-                });
+            function subscriptionAdded () {
+                infoService.modal('Bérletvásárlás', 'Sikeres bérletvásárlás');
             }
         }
 

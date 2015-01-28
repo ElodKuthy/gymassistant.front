@@ -6,7 +6,7 @@
         .controller('ProfileController', ProfileController);
 
     /* @ngInject */
-    function ProfileController($location, $modal, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
+    function ProfileController($location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits, infoService) {
 
         var vm = this;
 
@@ -72,20 +72,7 @@
                             vm.newPassword = '';
                             vm.newPasswordAgain = '';
 
-                            $modal.open({
-                                templateUrl: 'modal/info.html',
-                                controller: 'Info',
-                                controllerAs: 'info',
-                                size: 'sm',
-                                resolve: {
-                                    title: function () {
-                                        return 'Jelszó változtatás';
-                                    },
-                                    message: function () {
-                                        return 'A jelszavát sikeresen megváltoztattuk';
-                                    }
-                                }
-                            });
+                            infoService.modal('Jelszó változtatás', 'A jelszavát sikeresen megváltoztattuk');
                         },
                         function () {
                             authenticationService.logout();
