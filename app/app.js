@@ -16,7 +16,8 @@
             'gymassistant.front.schedule',
             'gymassistant.front.profile',
             'gymassistant.front.modal',
-            'gymassistant.front.coach'
+            'gymassistant.front.coach',
+            'gymassistant.front.series'
         ])
         .config(AppConfig)
         .controller('Navbar', Navbar);
@@ -52,8 +53,8 @@
             navbar.welcomeTextLink = userInfo ? '/profilom' : '/belepes';
             navbar.isLoggedIn = userInfo ? true : false;
             navbar.isCoach = userInfo && userInfo.roles.indexOf('coach') > -1;
+            navbar.isAdmin = userInfo && userInfo.roles.indexOf('admin') > -1;
         }
-
     }
 
 })();

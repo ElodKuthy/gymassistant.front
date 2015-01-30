@@ -5,7 +5,7 @@
                 <input type="text" class="form-control" placeholder="Tanítvány keresése"
                 ng-model="vm.userToView" ga-enter="vm.viewUser()"
                 typeahead="user as user.name for user in vm.allUsers | filter: { name: $viewValue }">
-                <a hef="#" ng-click="vm.viewUser()" class="input-group-addon btn btn-default">Mutasd</a>
+                <a hef="" ng-click="vm.viewUser()" class="input-group-addon btn btn-default">Mutasd</a>
             </div>
         </div>
     </div>
@@ -16,14 +16,14 @@
                     <div class="input-group">
                         <span class="input-group-addon">Név</span>
                         <input ng-model="vm.name" class="form-control" id="name">
-                        <a hef="#" ng-click="vm.changeName()" class="input-group-addon btn btn-default" disabled>Módosít</a>
+                        <a hef="" ng-click="vm.changeName()" class="input-group-addon btn btn-default" disabled>Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">
                     <div class="input-group">
                         <span class="input-group-addon">Email</span>
                         <input ng-model="vm.email" class="form-control" id="email">
-                        <a hef="#" ng-click="vm.changeEmail()" class="input-group-addon btn btn-default">Módosít</a>
+                        <a hef="" ng-click="vm.changeEmail()" class="input-group-addon btn btn-default">Módosít</a>
                     </div>
                 </li>
                 <li class="list-group-item">

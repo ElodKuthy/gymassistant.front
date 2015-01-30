@@ -1,0 +1,39 @@
+ <div class="container">
+    <div class="row">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <span class="input-group-addon">Név</span>
+                        <input ng-model="vm.training.name" class="form-control" id="name">
+                        <a hef="" ng-click="vm.changeName()" class="input-group-addon btn btn-default">Módosít</a>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="input-group">
+                        <span class="input-group-addon">Edző</span>
+                        <input ng-model="vm.training.coach" class="form-control" id="coach">
+                        <a hef="" ng-click="vm.changeCoach()" class="input-group-addon btn btn-default">Módosít</a>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="input-group " ng-class="{ 'has-error': maxNumberForm.max.$invalid }" ng-form name="maxNumberForm">
+                        <span class="input-group-addon">Max létszám</span>
+                        <input type="number" min="1" ng-model="vm.training.max" class="form-control" id="max" name="max" required>
+                        <a hef="" ng-disabled="maxNumberForm.$invalid || maxNumberForm.$pristine" ng-click="vm.changeMax(maxNumberForm)" class="input-group-addon btn btn-default">Módosít</a>
+                    </div>
+                    <span class="text-danger" ng-show="maxNumberForm.max.$error.required">
+                            Kötelező kitölteni!</span>
+                    <span style="margin-top: 10px" class="text-danger" ng-show="maxNumberForm.max.$error.number || maxNumberForm.max.$error.min">
+                            Csak pozitv egész számokat használj!</span>
+                </li>
+                <li class="list-group-item">
+                    <label>Időpontok</label>
+                </li>
+                <li class="list-group-item">
+                    <label>Frissítés</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+ </div>
