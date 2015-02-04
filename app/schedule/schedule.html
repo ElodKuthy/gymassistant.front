@@ -7,9 +7,9 @@
                         <a>{{vm.dates.begin | date: "MMMM d."}} - {{vm.dates.end | date: "MMMM d."}}</a>
                     </li>
                     <li ng-if="vm.userInfo && vm.credit">
-                        <a>A bérleted {{vm.credit.expiry * 1000 | date: "MMMM d"}}-ig érvényes<span ng-if="vm.userInfo && vm.credit && vm.credit.attended">, és hátravan még {{ vm.credit.attended }} edzés</span>
+                        <a>A bérleted {{vm.credit.expiry * 1000 | date: "MMMM d"}}-ig érvényes<span ng-if="vm.userInfo && vm.credit && vm.credit.attended">, még {{ vm.credit.attended }} edzés</span>
                         <span ng-if="vm.userInfo && vm.credit && vm.credit.free">
-                            (Még jelentkezhetsz további {{ vm.credit.free }} alkalomra)
+                            ({{ vm.credit.free }} szabad)
                         </span></a>
                     </li>
                 </ul>
