@@ -4,7 +4,7 @@
       <h1>Üdvözöl az edzőterem segéd!</h1>
       <div ng-if="!vm.isLoggedIn">
         <p>Az alábiakban megtekintheted aktuális órarendünket, vagy lépj be a további szolgáltatásaink eléréséhez</p>
-        <p><a class="btn btn-primary btn-lg" href="/orarend/aktualis" role="button">Órarend</a></p>
+        <p><a class="btn btn-primary btn-lg" href="/orarend/heti" role="button">Órarend</a></p>
       </div>
       <div ng-if="vm.isLoggedIn">
         <p>Kedves {{vm.userInfo.name}}, kérlek válasz a fenti menüpontok közül!</p>
@@ -17,13 +17,13 @@
              {{vm.welcomeText}}
         </li>
         <li class="list-group-item" ng-if="vm.isCoach">
-            <a href="">Adminisztráció</a>
+            <a href="/adminisztracio">Adminisztráció</a>
         </li>
         <li class="list-group-item" ng-if="vm.isLoggedIn">
             <a href="/profilom">Profilom</a>
         </li>
         <li class="list-group-item">
-            <a href="/orarend/aktualis">Órarend</a>
+            <a ng-href="{{vm.today}}">Órarend</a>
         </li>
         <li class="list-group-item">
             <a href="/belepes" ng-if="!vm.isLoggedIn">Belépés</a>
