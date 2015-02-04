@@ -9,6 +9,15 @@
     /* @ngInject */
     function CoachConfig($routeProvider) {
         $routeProvider
+        .when('/adminisztracio', {
+            templateUrl: 'coach/admin.html',
+            resolve: {
+                /* @ngInject */
+                userInfo: function (locationHelper) {
+                    return locationHelper.onlyCoach();
+                }
+            }
+        })
         .when('/uj/felhasznalo', {
             templateUrl: 'coach/new_user.html',
             controllerAs: 'vm',
