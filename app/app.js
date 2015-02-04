@@ -46,6 +46,8 @@
             authenticationService.logout();
         }
 
+        vm.today = '/orarend/' + moment().format('YYYY-MM-DD');
+
         function update() {
             vm.userInfo = authenticationService.getUserInfo();
             vm.welcomeText = vm.userInfo ? 'Üdv ' + vm.userInfo.name + '!' : 'Üdv, kérlek lépj be!';

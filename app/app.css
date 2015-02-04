@@ -171,11 +171,15 @@ Schedule view
   background-image: linear-gradient(to bottom, lightgreen 0%, green 100%);
 }
 
-#scheduleTable .panel-body {
-  color: #d9d9d9;
-  height: 144px;
-}
-
 #scheduleTable .trainer {
   text-align: right;
+}
+
+#schedule-bottom-bar-small > div {
+  margin-top: 10px;
+}
+
+#schedule-bottom-bar-small-date {
+  margin-top: 12px;
+  color: #428BCA;
 }

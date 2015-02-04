@@ -32,24 +32,18 @@
                 </ul>
             </div>
         </div>
-        <div id="top-bar-small" class="row visible-xs">
-            <div class="col-xs-12">
-                <!--<div class="col-xs-offset-1 col-xs-2">
-                    <a href="/"><img class="img" src="logo_small.png" alt="TKT" /></a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="/adminisztracio" ng-if="vm.isCoach"><i class="fa fa-2x fa-pencil"></i></a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="/profilom" ng-if="vm.isLoggedIn"><i class="fa fa-2x fa-user"></i></a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="/orarend/aktualis"><i class="fa fa-2x fa-calendar"></i></a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="/belepes" ng-if="!vm.isLoggedIn"><i class="fa fa-2x fa-sign-in"></i></i></a>
-                    <a href="#" ng-if="vm.isLoggedIn" data-ng-click="vm.logout()"><i class="fa fa-2x fa-sign-out"></i></i></a>
-                </div>-->
+        <div id="schedule-bottom-bar-small" class="row visible-xs">
+            <div id="schedule-bottom-bar-small-date" class="col-xs-5 text-center" style="margin-top: 13px;">
+                {{vm.dates.begin | date: "MMM d. EEEE"}}
+            </div>
+            <div class="col-xs-2 text-center">
+                <a href="" ng-click="vm.perviousDay()"><i class="fa fa-2x fa-angle-left"></i></a>
+            </div>
+            <div class="col-xs-2 text-center">
+                <a href="" ng-click="vm.today()"><i class="fa fa-2x fa-calendar-o"></i></a>
+            </div>
+            <div class="col-xs-2 text-center">
+                <a href="" ng-click="vm.nextDay()"><i class="fa fa-2x fa-angle-right"></i></a>
             </div>
         </div>
     </div>

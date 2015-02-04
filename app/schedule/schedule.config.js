@@ -9,7 +9,12 @@
     /* @ngInject */
     function ScheduleConfig($routeProvider) {
         $routeProvider
-            .when('/orarend/aktualis', {
+            .when('/orarend/heti', {
+                templateUrl: 'schedule/schedule.html',
+                controllerAs: 'vm',
+                controller: 'ScheduleController'
+            })
+            .when('/orarend/:day', {
                 templateUrl: 'schedule/schedule.html',
                 controllerAs: 'vm',
                 controller: 'ScheduleController'
