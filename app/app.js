@@ -19,7 +19,7 @@
             'gymassistant.front.coach'
         ])
         .config(AppConfig)
-        .controller('Navbar', Navbar);
+        .controller('NavbarController', NavbarController);
 
     /* @ngInject */
     function AppConfig ($routeProvider, $locationProvider) {
@@ -32,13 +32,13 @@
     }
 
     /* @ngInject */
-    function Navbar(authenticationService, eventHelper) {
+    function NavbarController(authenticationService, eventHelper) {
 
-        var navbar = this;
+        var vm = this;
 
         update();
 
-        navbar.logout = logout;
+        vm.logout = logout;
 
         eventHelper.subscribe.authenticationChanged(update);
 
@@ -47,11 +47,11 @@
         }
 
         function update() {
-            var userInfo = authenticationService.getUserInfo();
-            navbar.welcomeText = userInfo ? 'Üdv ' + userInfo.name + '!' : 'Üdv, kérlek lépj be!';
-            navbar.welcomeTextLink = userInfo ? '/profilom' : '/belepes';
-            navbar.isLoggedIn = userInfo ? true : false;
-            navbar.isCoach = userInfo && userInfo.roles.indexOf('coach') > -1;
+            vm.userInfo = authenticationService.getUserInfo();
+            vm.welcomeText = vm.userInfo ? 'Üdv ' + vm.userInfo.name + '!' : 'Üdv, kérlek lépj be!';
+            vm.welcomeTextLink = vm.userInfo ? '/profilom' : '/belepes';
+            vm.isLoggedIn = vm.userInfo ? true : false;
+            vm.isCoach = vm.userInfo && vm.userInfo.roles.indexOf('coach') > -1;
         }
 
     }

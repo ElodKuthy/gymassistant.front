@@ -1,57 +1,60 @@
-<div id="scheduleBar" class="navbar navbar-default navbar-fixed-bottom">
+<div id="schedule-bottom-bar">
     <div class="container">
-        <ul class="list-inline visible-lg visible-md" style="padding: 15px; margin: 0;">
-            <li>
-                {{vm.dates.begin | date: "MMMM d."}} - {{vm.dates.end | date: "MMMM d."}}
-            </li>
-            <li ng-if="vm.userInfo && vm.credit">
-                A bérleted {{vm.credit.expiry * 1000 | date: "MMMM d"}}-ig érvényes<span ng-if="vm.userInfo && vm.credit && vm.credit.attended">, és hátravan még {{ vm.credit.attended }} edzés</span>
-                <span ng-if="vm.userInfo && vm.credit && vm.credit.free">
-                    (Még jelentkezhetsz további {{ vm.credit.free }} alkalomra)
-                </span>
-            </li>
-            <li style="width: auto"></li>
-            <li class="pull-right">
-                <a href="" ng-click="vm.nextWeek()">
-                    Következő hét
-                </a>
-            </li>
-            <li class="pull-right">
-                <a href="" ng-click="vm.currentWeek()">
-                    Aktuális hét
-                </a>
-            </li>
-            <li class="pull-right">
-                <a href="" ng-click="vm.perviousWeek()">
-                    Előző hét
-                </a>
-            </li>
-        </ul>
-        <ul class="list-inline hidden-lg hidden-md" style="padding: 15px; margin: 0;">
-            <li>
-                {{vm.dates.begin | date: "MMM d."}} - {{vm.dates.end | date: "MMM d."}}
-            </li>
-            <li ng-if="vm.userInfo && vm.credit">
-                <span><i class="fa fa-credit-card"></i> {{vm.credit.expiry * 1000 | date: "MMM d."}}</span>
-                <span><i class="fa fa-file-text-o"></i> {{ vm.credit.attended }}</span>
-                <span><i class="fa fa-database"></i> {{ vm.credit.free }}</span>
-            </li>
-            <li class="pull-right">
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default navbar-btn" ng-click="vm.perviousWeek()">
-                        <i class="fa fa-angle-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default navbar-btn" ng-click="vm.currentWeek()">
-                        <i class="fa fa-angle-up"></i>
-                    </button>
-                    <button type="button" class="btn btn-default navbar-btn" ng-click="vm.nextWeek()">
-                        <i class="fa fa-angle-right"></i>
-                    </button>
+        <div id="top-bar-large" class="row hidden-xs">
+            <div class="col-xs-12">
+                <ul class="nav navbar-nav navbar-left">
+                    <li>
+                        <a>{{vm.dates.begin | date: "MMMM d."}} - {{vm.dates.end | date: "MMMM d."}}</a>
+                    </li>
+                    <li ng-if="vm.userInfo && vm.credit">
+                        <a>A bérleted {{vm.credit.expiry * 1000 | date: "MMMM d"}}-ig érvényes<span ng-if="vm.userInfo && vm.credit && vm.credit.attended">, és hátravan még {{ vm.credit.attended }} edzés</span>
+                        <span ng-if="vm.userInfo && vm.credit && vm.credit.free">
+                            (Még jelentkezhetsz további {{ vm.credit.free }} alkalomra)
+                        </span></a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="" ng-click="vm.perviousWeek()">
+                            Előző hét
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" ng-click="vm.currentWeek()">
+                            Aktuális hét
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" ng-click="vm.nextWeek()">
+                            Következő hét
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="top-bar-small" class="row visible-xs">
+            <div class="col-xs-12">
+                <!--<div class="col-xs-offset-1 col-xs-2">
+                    <a href="/"><img class="img" src="logo_small.png" alt="TKT" /></a>
                 </div>
-            </li>
-        </ul>
+                <div class="col-xs-2">
+                    <a href="/adminisztracio" ng-if="vm.isCoach"><i class="fa fa-2x fa-pencil"></i></a>
+                </div>
+                <div class="col-xs-2">
+                    <a href="/profilom" ng-if="vm.isLoggedIn"><i class="fa fa-2x fa-user"></i></a>
+                </div>
+                <div class="col-xs-2">
+                    <a href="/orarend/aktualis"><i class="fa fa-2x fa-calendar"></i></a>
+                </div>
+                <div class="col-xs-2">
+                    <a href="/belepes" ng-if="!vm.isLoggedIn"><i class="fa fa-2x fa-sign-in"></i></i></a>
+                    <a href="#" ng-if="vm.isLoggedIn" data-ng-click="vm.logout()"><i class="fa fa-2x fa-sign-out"></i></i></a>
+                </div>-->
+            </div>
+        </div>
     </div>
 </div>
+
 <div class="container">
     <div id="scheduleTable">
         <div class="row" ng-repeat="week in vm.weeks">
@@ -72,22 +75,22 @@
                             {{instance.max}}
                         </progressbar>
                         <div>
-                            <button type="button" class="btn btn-default"
+                            <button type="button" class="btn btn-primary"
                                     ng-show="instance.showAttendeeList"
                                     ng-click="vm.showAttendees(instance)">
                                 <i class="fa fa-navicon"></i>
                             </button>
-                            <button type="button" class="btn btn-default"
+                            <button type="button" class="btn btn-primary"
                                     ng-show="vm.canCancelTraining(instance)"
                                     ng-click="vm.cancelTraining(instance)">
                                 <i class="fa fa-trash-o"></i>
                             </button>
-                            <button type="button" class="btn btn-default pull-right animate-if"
+                            <button type="button" class="btn btn-primary pull-right animate-if"
                                     ng-if="vm.canLeave(instance)"
                                     ng-click="vm.leave(instance)">
                                 <i class="fa fa-remove"></i>
                             </button>
-                            <button type="button" class="btn btn-default pull-right animate-if"
+                            <button type="button" class="btn btn-primary pull-right animate-if"
                                     ng-if="vm.canJoin(instance)"
                                     ng-click="vm.join(instance)">
                                 <i class="fa fa-plus"></i>
