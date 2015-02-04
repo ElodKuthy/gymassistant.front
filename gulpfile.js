@@ -44,7 +44,7 @@ gulp.task("clean:dist", function(cb) {
 });
 
 gulp.task("copy:static", ["clean:dist"], function() {
-    return gulp.src(["app/apple-touch-icon.png", "app/favicon.ico", "app/logo_slice.png"], { base: "app"})
+    return gulp.src(["app/apple-touch-icon.png", "app/favicon.ico", "app/logo_slice.png", "app/logo_slice.jpg"], { base: "app"})
         .pipe(gulp.dest("dist"));
 });
 
