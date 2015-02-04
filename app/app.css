@@ -69,15 +69,3 @@ Modal
 #dialog .modal-body {
   overflow: visible;
 }
-
-#scheduleTable .trainer {
-  text-align: right;
-}
-
-#schedule-bottom-bar-small > div {
-  margin-top: 10px;
-}
-
-#schedule-bottom-bar-small-date {
-  margin-top: 12px;
-}
