@@ -183,3 +183,16 @@ Schedule view
   margin-top: 12px;
   color: #428BCA;
 }
+
+#scheduleTable .panel-body {
+  height: 144px;
+}
+
+/* ==================================================
+Modal
+================================================== */
+
+#dialog .modal-body {
+  overflow: visible;
+}
+
