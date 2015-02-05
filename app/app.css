@@ -189,8 +189,9 @@ Schedule view
   margin-top: 10px;
 }
 
-#schedule-bottom-bar-small-date {
-  margin-top: 12px;
+div#schedule-bottom-bar-small-date {
+  font-size: 0.9em;
+  margin-top: 15px;
   color: #428BCA;
 }
 
