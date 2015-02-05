@@ -7,7 +7,7 @@
         .controller("Attendees", Attendees);
 
     /* @ngInject */
-    function Attendees(scheduleService, attendeesService, errorService, eventHelper, locationHelper, userInfo, training, allUsers) {
+    function Attendees($filter, $rootScope, scheduleService, attendeesService, errorService, eventHelper, locationHelper, userInfo, training, allUsers) {
 
         var attendees = this;
 
@@ -28,11 +28,7 @@
         attendees.canAdd = canAdd;
         attendees.add = add;
 
-        eventHelper.subscribe.authenticationChanged(function() {
-            locationHelper.onlyCoach().result(function(userInfo) {
-                attendees.userInfo = userInfo;
-            });
-        });
+        $rootScope.title = "Résztvevők - " + $filter('date')(moment(training.date).toDate(), 'yyyy MMMM d. HH:mm');
 
         attendees.allUsers.forEach(function (user) {
             if ($.grep(attendees.training.attendees, function (current) { return current.name === user.name; }).length === 0) {
