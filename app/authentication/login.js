@@ -7,12 +7,14 @@
         .controller("Login", Login);
 
     /* @ngInject */
-    function Login(locationHelper, authenticationService) {
+    function Login($rootScope, locationHelper, authenticationService) {
 
         var login = this;
 
         login.submit = submit;
         login.remember = false;
+
+        $rootScope.title = 'Belépés';
 
         function clear() {
             login.password = "";

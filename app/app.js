@@ -11,6 +11,7 @@
             'ipCookie',
             'gymassistant.front.common',
             'gymassistant.front.error',
+            'gymassistant.front.home',            
             'gymassistant.front.authentication',
             'gymassistant.front.attendees',
             'gymassistant.front.schedule',
@@ -25,7 +26,8 @@
     function AppConfig ($routeProvider, $locationProvider) {
           $routeProvider.
               when('/', {
-                  templateUrl: 'home/home.html'
+                  templateUrl: 'home/home.html',
+                  controller: 'HomeController'
               }).
           otherwise({redirectTo: '/'});
       $locationProvider.html5Mode(true);

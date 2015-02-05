@@ -7,7 +7,7 @@
         .controller("ScheduleController", ScheduleController);
 
     /* @ngInject */
-    function ScheduleController($routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
+    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
 
         var vm = this;
 
@@ -29,10 +29,10 @@
         vm.canCancelTraining = canCancelTraining;
         vm.cancelTraining = cancelTraining;
 
-        eventHelper.subscribe.authenticationChanged(fetchSchedule);
-
         var begin = $routeParams.day ? $routeParams.day : $routeParams.begin;
         var end = $routeParams.day ? moment($routeParams.day).add({ day: 1}).format('YYYY-MM-DD') : $routeParams.end;
+
+        $rootScope.title = $routeParams.day ? 'Órarend - ' + $filter('date')(moment($routeParams.day).toDate(), 'longDate') : (begin && end) ? 'Órarend - ' + $filter('date')(moment(begin).toDate(), 'longDate') + ' - ' + $filter('date')(moment(end).toDate(), 'longDate') : 'Eheti órarend'; 
 
         fetchSchedule(begin, end);
 
