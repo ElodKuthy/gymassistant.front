@@ -11,6 +11,7 @@
             'ipCookie',
             'gymassistant.front.common',
             'gymassistant.front.error',
+            'gymassistant.front.home',            
             'gymassistant.front.authentication',
             'gymassistant.front.attendees',
             'gymassistant.front.schedule',
@@ -20,26 +21,27 @@
             'gymassistant.front.series'
         ])
         .config(AppConfig)
-        .controller('Navbar', Navbar);
+        .controller('NavbarController', NavbarController);
 
     /* @ngInject */
     function AppConfig ($routeProvider, $locationProvider) {
           $routeProvider.
               when('/', {
-                  templateUrl: 'home/home.html'
+                  templateUrl: 'home/home.html',
+                  controller: 'HomeController'
               }).
           otherwise({redirectTo: '/'});
       $locationProvider.html5Mode(true);
     }
 
     /* @ngInject */
-    function Navbar(authenticationService, eventHelper) {
+    function NavbarController(authenticationService, eventHelper) {
 
-        var navbar = this;
+        var vm = this;
 
         update();
 
-        navbar.logout = logout;
+        vm.logout = logout;
 
         eventHelper.subscribe.authenticationChanged(update);
 
@@ -47,13 +49,16 @@
             authenticationService.logout();
         }
 
+        vm.today = '/orarend/' + moment().format('YYYY-MM-DD');
+
         function update() {
-            var userInfo = authenticationService.getUserInfo();
-            navbar.welcomeText = userInfo ? 'Üdv ' + userInfo.name + '!' : 'Üdv, kérlek lépj be!';
-            navbar.welcomeTextLink = userInfo ? '/profilom' : '/belepes';
-            navbar.isLoggedIn = userInfo ? true : false;
-            navbar.isCoach = userInfo && userInfo.roles.indexOf('coach') > -1;
-            navbar.isAdmin = userInfo && userInfo.roles.indexOf('admin') > -1;
+          
+            vm.userInfo = authenticationService.getUserInfo();
+            vm.welcomeText = vm.userInfo ? 'Üdv ' + vm.userInfo.name + '!' : 'Üdv, kérlek lépj be!';
+            vm.welcomeTextLink = vm.userInfo ? '/profilom' : '/belepes';
+            vm.isLoggedIn = vm.userInfo ? true : false;
+            vm.isCoach = vm.userInfo && vm.userInfo.roles.indexOf('coach') > -1;
+            vm.isAdmin = userInfo && userInfo.roles.indexOf('admin') > -1;
         }
     }
 

@@ -7,7 +7,7 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController($filter, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
+    function AddCreditController($filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
 
         var vm = this;
 
@@ -35,6 +35,8 @@
         vm.amountChoicesDisabled = amountChoicesDisabled;
         vm.periodChoicesDisabled = periodChoicesDisabled;
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
+
+        $rootScope.title = 'Bérletvásárlás';
 
         function calendarToday() {
             vm.calendar.date = $filter('date')(moment().toDate(), 'longDate');

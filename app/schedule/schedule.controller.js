@@ -7,7 +7,7 @@
         .controller("ScheduleController", ScheduleController);
 
     /* @ngInject */
-    function ScheduleController($routeParams, $location, $q, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
+    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
 
         var vm = this;
 
@@ -18,6 +18,9 @@
         vm.perviousWeek = perviousWeek;
         vm.nextWeek = nextWeek;
         vm.currentWeek = currentWeek;
+        vm.perviousDay = perviousDay;
+        vm.today = today;
+        vm.nextDay = nextDay;
         vm.canJoin = canJoin;
         vm.join = join;
         vm.canLeave = canLeave;
@@ -26,9 +29,12 @@
         vm.canCancelTraining = canCancelTraining;
         vm.cancelTraining = cancelTraining;
 
-        eventHelper.subscribe.authenticationChanged(fetchSchedule);
+        var begin = $routeParams.day ? $routeParams.day : $routeParams.begin;
+        var end = $routeParams.day ? moment($routeParams.day).add({ day: 1}).format('YYYY-MM-DD') : $routeParams.end;
 
-        fetchSchedule($routeParams.begin, $routeParams.end);
+        $rootScope.title = $routeParams.day ? 'Órarend - ' + $filter('date')(moment($routeParams.day).toDate(), 'longDate') : (begin && end) ? 'Órarend - ' + $filter('date')(moment(begin).toDate(), 'longDate') + ' - ' + $filter('date')(moment(end).toDate(), 'longDate') : 'Eheti órarend'; 
+
+        fetchSchedule(begin, end);
 
         function fetchSchedule(begin, end) {
 
@@ -44,7 +50,10 @@
             $q.all(promises).then(
                 function (results) {
 
-                    vm.dates = { begin: begin ? moment(begin).format() : moment().startOf('isoWeek').format(), end: end ? moment(end).format() : moment().endOf('isoWeek').format() };
+                    vm.dates = {
+                        begin: begin ? moment(begin).format('YYYY-MM-DD') : moment().startOf('isoWeek').format('YYYY-MM-DD'),
+                        end: end ? moment(end).format('YYYY-MM-DD') : moment().endOf('isoWeek').format('YYYY-MM-DD')
+                    };
                     vm.credit = results.length > 1 ? results[1] : null;
 
                     var currentDate = moment(0);
@@ -85,6 +94,13 @@
             $location.path("/orarend/" + begin + "/" + end);
         }
 
+        function perviousDay() {
+            var day = moment(vm.dates.begin).subtract( {days: 1}).format("YYYY-MM-DD");
+
+
+            $location.path("/orarend/" + day);
+        }
+
         function nextWeek() {
             var begin = moment(vm.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
             var end = moment(vm.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
@@ -92,9 +108,20 @@
             $location.path("/orarend/" + begin + "/" + end);
         }
 
+        function nextDay() {
+            var day = moment(vm.dates.begin).add( {days: 1}).format("YYYY-MM-DD");
+
+            $location.path("/orarend/" + day);
+        }
+
         function currentWeek() {
 
-            $location.path("/orarend/aktualis");
+            $location.path("/orarend/heti");
+        }
+
+
+        function today () {
+            $location.path("/orarend/" + moment().format('YYYY-MM-DD'));
         }
 
         function canJoin(instance) {
@@ -129,7 +156,7 @@
 
         function canLeave(instance) {
             return instance.signedUp &&
-                moment().add({ days: 1}).isBefore(instance.date);
+                moment().add({ hours: 3}).isBefore(instance.date);
         }
 
 
@@ -169,7 +196,9 @@
                 max: data.max,
                 date: data.date,
                 attendees: data.attendees ? data.attendees.slice(0) : undefined,
-                signedUp: data.isAttendee,
+                signedUp: moment().endOf('hour').isBefore(data.date) && data.isAttendee,
+                participated: moment().endOf('hour').isAfter(data.date) && data.isAttendee && data.isParticipant,
+                missed: moment().endOf('hour').isAfter(data.date) && data.isAttendee && !data.isParticipant,
                 showAttendeeList: vm.userInfo ? (( vm.userInfo.roles.indexOf('admin') > -1) || (data.coach === vm.userInfo.name)) : false
             };
 

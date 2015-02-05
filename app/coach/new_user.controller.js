@@ -7,7 +7,7 @@
         .controller('NewUserController', NewUserController);
 
     /* @ngInject */
-    function NewUserController($location, coachService, errorService, userInfo, infoService) {
+    function NewUserController($rootScope, $location, coachService, errorService, userInfo, infoService) {
 
         var vm = this;
 
@@ -16,6 +16,8 @@
         vm.save = save;
         vm.type = 'client';
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
+
+        $rootScope.title = 'Új felhasználó';
 
         function reset(form) {
             vm.name = '';

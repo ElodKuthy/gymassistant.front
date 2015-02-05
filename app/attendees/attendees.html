@@ -1,22 +1,4 @@
-<div class="container">
-    <div id="attendeesBar" class="navbar navbar-default navbar-fixed-bottom">
-        <div class="container">
-            <div class="navbar-header">
-                <div class="navbar-brand" >
-                    {{ attendees.training.name }}
-                </div>
-                <div class="navbar-brand" >
-                    {{ attendees.training.coach }}
-                </div>
-                <span class="navbar-brand visible-lg">
-                    {{attendees.training.date | date: "yyyy. MMMM dd. HH:mm"}}
-                </span>
-                <span class="navbar-brand hidden-lg">
-                    {{attendees.training.date | date: "short"}}
-                </span>
-            </div>
-        </div>
-    </div>
+<div id="attendees-list" class="container">
     <div class="row">
         <ul class="list-group" >
             <li class="list-group-item clearfix"
@@ -25,17 +7,17 @@
                 <span>{{$index + 1}}. </span>
                 <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
                 <span class="pull-right">
-                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
                             ng-click="attendees.undoCheckIn(attendee)">
-                        <i class="fa fa-undo"></i> Visszavonás
+                        <i class="fa fa-undo"></i><span class="hidden-xs"> Visszavonás</span>
                     </button>
-                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.checkIn(attendee)">
-                        <i class="fa fa-check-circle"></i> Bejelentkezés
+                        <i class="fa fa-check-circle"></i><span class="hidden-xs"> Bejelentkezés</span>
                     </button>
-                    <button type="button" class="btn btn-default btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
                             ng-click="attendees.remove(attendee)">
-                        <i class="fa fa-trash"></i> Eltávoítás
+                        <i class="fa fa-trash"></i><span class="hidden-xs"> Eltávoítás</span>
                     </button>
                 </span>
             </li>

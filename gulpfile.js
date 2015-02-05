@@ -115,7 +115,12 @@ gulp.task("html_replace", ["clean:dist"], function () {
 });
 
 gulp.task("deploy:public", ["build"], function () {
-    return gulp.src(["dist/*.*", "dist/css/*", "dist/js/*", "dist/fonts/*", "!dist/*.html"], { base: "dist"})
+    return gulp.src(["dist/*.*", "dist/css/*", "dist/fonts/*", "!dist/*.html"], { base: "dist"})
+        .pipe(gulp.dest(config.deploy.target + "/public"));
+});
+
+gulp.task("deploy:js", ["build"], function () {
+    return gulp.src(["dist/js/*"], { base: "dist"})
         .pipe(plugins.replace(/https:\/\/localhost:8000/g, ""))
         .pipe(gulp.dest(config.deploy.target + "/public"));
 });
@@ -135,4 +140,4 @@ gulp.task("js", ["clean:dist", "js:modernizr", "js:vendor", "js:all"]);
 
 gulp.task("build", ["clean:dist", "copy", "css", "js", "html_replace"]);
 
-gulp.task("deploy", ["build", "deploy:public", "deploy:views"]);
+gulp.task("deploy", ["build", "deploy:public", "deploy:js", "deploy:views"]);

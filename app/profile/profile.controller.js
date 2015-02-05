@@ -6,7 +6,7 @@
         .controller('ProfileController', ProfileController);
 
     /* @ngInject */
-    function ProfileController($location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
+    function ProfileController($rootScope, $location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
 
         var vm = this;
 
@@ -24,8 +24,10 @@
             vm.changeEmail = changeEmail;
             vm.allUsers = allUsers;
             vm.viewUser = viewUser;
+            $rootScope.title = 'Profil - ' + client.name;
         } else {
             vm.changePassword = changePassword;
+            $rootScope.title = 'Profilom';
         }
 
         fillProfile(client ? client : userInfo);
