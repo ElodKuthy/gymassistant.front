@@ -220,6 +220,25 @@ div#schedule-bottom-bar-small-date {
 }
 
 /* ==================================================
+Attendees
+================================================== */
+
+#attendees-list a {
+  color: #d9d9d9;
+  text-decoration: none;
+}
+
+#attendees-list .list-group-item-success {
+  background: green;
+  color: #d9d9d9;
+}
+
+#attendees-list .list-group-item-danger {
+  background: #DE5E60;
+  color: #d9d9d9;
+}
+
+/* ==================================================
 Modal
 ================================================== */
 
