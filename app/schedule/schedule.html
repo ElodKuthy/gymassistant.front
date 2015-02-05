@@ -33,7 +33,7 @@
             </div>
         </div>
         <div id="schedule-bottom-bar-small" class="row visible-xs">
-            <div id="schedule-bottom-bar-small-date" class="col-xs-5 text-center" style="margin-top: 13px;">
+            <div id="schedule-bottom-bar-small-date" class="col-xs-5 text-center">
                 {{vm.dates.begin | date: "MMM d. EEEE"}}
             </div>
             <div class="col-xs-2 text-center">
@@ -54,12 +54,10 @@
         <div class="row" ng-repeat="week in vm.weeks">
             <div class="col-lg-2 scheduleTrainingPanel" ng-repeat="day in week">
                 <div class="panel panel-default" ng-repeat="instance in day">
-                    <div class="panel-heading" ng-class="{selected: instance.signedUp}">
+                    <div class="panel-heading" ng-class="{selected: instance.signedUp, participated: instance.participated, missed: instance.missed }">
                         {{ instance.date | date: "EEEE H:mm" }}
                     </div>
                     <div ng-if="instance.name === 'Placeholder'" class="panel-body placeholder">
-                        Ebben az időpontban jelenleg nem tartunk órát. Szeretnéd, hogy legyen? <a
-                            href="mailto:testkulturamuhely@gmail.com?subject=Új időpont">Írj nekünk!</a>
                     </div>
                     <div ng-if="instance.name != 'Placeholder'" class="panel-body"
                          ng-class="instance.coach.toLowerCase()">

@@ -196,7 +196,9 @@
                 max: data.max,
                 date: data.date,
                 attendees: data.attendees ? data.attendees.slice(0) : undefined,
-                signedUp: data.isAttendee,
+                signedUp: moment().endOf('hour').isBefore(data.date) && data.isAttendee,
+                participated: moment().endOf('hour').isAfter(data.date) && data.isAttendee && data.isParticipant,
+                missed: moment().endOf('hour').isAfter(data.date) && data.isAttendee && !data.isParticipant,
                 showAttendeeList: vm.userInfo ? (( vm.userInfo.roles.indexOf('admin') > -1) || (data.coach === vm.userInfo.name)) : false
             };
 
