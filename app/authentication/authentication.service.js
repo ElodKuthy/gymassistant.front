@@ -7,7 +7,7 @@
         .factory("authenticationService", AuthenticationService);
 
     /* @ngInject */
-    function AuthenticationService($q, $window, httpService, eventHelper, storageHelper) {
+    function AuthenticationService($q, $window, $location, httpService, eventHelper, storageHelper) {
 
         return {
             login: login,
@@ -48,6 +48,7 @@
             storageHelper.setAuth(null);
             storageHelper.setUserInfo(null);
             eventHelper.broadcast.authenticationChanged();
+            $location.path("/");
             deferred.resolve(null);
 
             return deferred.promise;
