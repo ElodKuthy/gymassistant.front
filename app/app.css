@@ -168,7 +168,17 @@ Schedule view
 
 #scheduleTable .panel-default > .panel-heading.selected {
   color: #d9d9d9;
-  background-image: linear-gradient(to bottom, lightgreen 0%, green 100%);
+  background: #0063BE;
+}
+
+#scheduleTable .panel-default > .panel-heading.participated {
+  color: #d9d9d9;
+  background: green;
+}
+
+#scheduleTable .panel-default > .panel-heading.missed {
+  color: #d9d9d9;
+  background: #DE5E60;
 }
 
 #scheduleTable .trainer {
@@ -186,6 +196,26 @@ Schedule view
 
 #scheduleTable .panel-body {
   height: 144px;
+}
+
+#scheduleTable .krisztina {
+  background-color: #269abc;
+}
+
+#scheduleTable .dávid {
+  background-color: #C79665;
+}
+
+#scheduleTable .arnold {
+  background-color: #245269;
+}
+
+#scheduleTable .zsolt {
+  background-color: #608D4E;
+}
+
+#scheduleTable .albert {
+  background-color: #AE5E53;
 }
 
 /* ==================================================
