@@ -156,7 +156,7 @@
 
         function canLeave(instance) {
             return instance.signedUp &&
-                moment().add({ days: 1}).isBefore(instance.date);
+                moment().add({ hours: 3}).isBefore(instance.date);
         }
 
 
