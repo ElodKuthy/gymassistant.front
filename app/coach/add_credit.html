@@ -56,10 +56,16 @@
                 </div>
                 <div class="form-group">
                     <h4>Választott edzések</h4>
+                    <div class="checkbox" ng-hide="vm.adminMode">
+                      <label>
+                        <input type="checkbox" value="true" ng-model="vm.displayAllTrainings" ng-change="vm.cleanUpSelectedSeries()">
+                          Mutasd az összes edzést
+                      </label>
+                    </div>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'firstDate'">
+                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'firstDate'" ng-if="vm.adminMode || vm.displayAllTrainings || series.coach == vm.userInfo.name">
                             <label>
-                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }} <span ng-if="vm.adminMode">({{ series.coach }})</span>
+                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }} <span ng-if="vm.adminMode || vm.displayAllTrainings">({{ series.coach }})</span>
                             </label>
                         </li>
                     </ul>

@@ -7,7 +7,7 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController($filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService) {
+    function AddCreditController($location, $filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService, loadingService) {
 
         var vm = this;
 
@@ -34,7 +34,11 @@
         vm.calendar.opened = false;
         vm.amountChoicesDisabled = amountChoicesDisabled;
         vm.periodChoicesDisabled = periodChoicesDisabled;
-        vm.adminMode = userInfo.roles.indexOf('admin') > -1;
+        vm.userInfo = userInfo
+        vm.adminMode = vm.userInfo.roles.indexOf('admin') > -1;
+        vm.displayAllTrainings = false;
+        vm.cleanUpSelectedSeries = cleanUpSelectedSeries;
+
 
         $rootScope.title = 'Bérletvásárlás';
 
@@ -164,6 +168,7 @@
 
             if (vm.adminMode && !vm.coachName) {
                 setError('Az edző nevének megadása kötelező');
+                return;
             }
 
             if (vm.amount() != vm.selectedAmount()) {
@@ -172,6 +177,8 @@
             }
 
             setError();
+
+            loadingService.startLoading();
 
             var series = [];
 
@@ -188,11 +195,14 @@
             }
 
             function error(err) {
+                loadingSerive.endLoading();
                 errorService.modal(err, 'sm');
             }
 
             function subscriptionAdded () {
-                infoService.modal('Bérletvásárlás', 'Sikeres bérletvásárlás');
+                loadingService.endLoading();
+                infoService.modal('Bérletvásárlás', 'Sikeres bérletvásárlás')
+                  .then(function () { $location.path('/profil/' + vm.userName); });
             }
         }
 
@@ -209,6 +219,16 @@
 
         function selectedAmount() {
             return selectedAmountPerWeek() * period();
+        }
+
+        function cleanUpSelectedSeries () {
+          if (!vm.displayAllTrainings) {
+            vm.series.forEach(function (current) {                    
+                if (current.coach != vm.userInfo.name) {
+                    current.selected = false;
+                }
+            });            
+          }
         }
     }
 

@@ -34,7 +34,7 @@
         }
 
         function getSeries() {
-            return httpService.get('/api/my/training/series');
+            return httpService.get('/api/all/training/series');
         }
 
         function getCredits(userName) {
