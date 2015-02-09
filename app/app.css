@@ -246,3 +246,11 @@ Modal
   overflow: visible;
 }
 
+.modal-body {
+  margin-bottom: 20px;
+}
+
+.modal-content {
+  background: #616265;
+  color: #d9d9d9;
+}
