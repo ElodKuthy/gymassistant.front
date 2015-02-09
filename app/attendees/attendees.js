@@ -22,6 +22,7 @@
         attendees.canCheckIn = canCheckIn;
         attendees.checkIn = checkIn;
         attendees.canUndoCheckedIn = canUndoCheckedIn;
+        attendees.canRemove = canRemove;
         attendees.undoCheckIn = undoCheckIn;
         attendees.missedCheckIn = missedCheckIn;
         attendees.remove = remove;
@@ -41,7 +42,11 @@
         }
 
         function canCheckIn(attendee) {
-            return (attendees.adminMode || moment().subtract({ hours: 1 }).isBefore(attendees.training.date)) && !attendee.checkedIn;
+            return (attendees.adminMode || (moment().isAfter(moment(attendees.training.date).subtract({ hour: 1 })) && moment().isBefore(moment(attendees.training.date).add({ hour: 1 })))) && !attendee.checkedIn;
+        }
+
+        function canRemove(attendee) {
+            return (attendees.adminMode || moment().isBefore(moment(attendees.training.date).add({ hour: 1 }))) && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
