@@ -129,6 +129,7 @@
             return vm.userInfo &&
                     !instance.isFull &&
                     !instance.signedUp &&
+                    vm.userInfo.name != instance.coach &&
                     (vm.userInfo.roles.indexOf('coach') > -1 || (vm.credit && vm.credit.free > 0)) &&
                     moment().isBefore(instance.date);
         }
