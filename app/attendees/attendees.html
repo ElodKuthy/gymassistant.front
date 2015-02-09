@@ -15,7 +15,7 @@
                             ng-click="attendees.checkIn(attendee)">
                         <i class="fa fa-check-circle"></i><span class="hidden-xs"> Bejelentkezés</span>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canRemove(attendee)"
                             ng-click="attendees.remove(attendee)">
                         <i class="fa fa-trash"></i><span class="hidden-xs"> Eltávoítás</span>
                     </button>
