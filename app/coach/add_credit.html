@@ -63,9 +63,9 @@
                       </label>
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'firstDate'" ng-if="vm.adminMode || vm.displayAllTrainings || series.coach == vm.userInfo.name">
+                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'date'" ng-if="vm.adminMode || vm.displayAllTrainings || series.coach == vm.userInfo.name">
                             <label>
-                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} {{ series.dates.join(', ') }} <span ng-if="vm.adminMode || vm.displayAllTrainings">({{ series.coach }})</span>
+                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} / {{ series.dateText }} <span ng-if="vm.adminMode || vm.displayAllTrainings"> / {{ series.coach }}</span>
                             </label>
                         </li>
                     </ul>
