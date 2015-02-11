@@ -80,17 +80,13 @@
         });
 
         series.forEach(function (current) {
-                var dates = [];
-                current.dates.forEach(function (currentDate) {
-                    dates.push($filter('date')(moment({ hours: currentDate.hour }).day(currentDate.day).toDate(), 'EEEE H:mm'));
-                });
 
                 vm.series.push({
                     _id: current._id,
                     name: current.name,
                     coach: current.coach,
-                    firstDate: moment({ days: current.dates[0].day, hours: current.dates[0].hour }).toDate(),
-                    dates: dates,
+                    date: moment({ days: current.date.day, hours: current.date.hour }).toDate(),
+                    dateText: $filter('date')(moment({ hours: current.date.hour }).day(current.date.day).toDate(), 'EEEE H:mm'),
                     selected: false
                 });
         });
@@ -210,7 +206,7 @@
             var result = 0;
             vm.series.forEach(function (current) {
                 if (current.selected) {
-                    result += current.dates.length;
+                    result ++;
                 }
             });
 
@@ -223,11 +219,11 @@
 
         function cleanUpSelectedSeries () {
           if (!vm.displayAllTrainings) {
-            vm.series.forEach(function (current) {                    
+            vm.series.forEach(function (current) {
                 if (current.coach != vm.userInfo.name) {
                     current.selected = false;
                 }
-            });            
+            });
           }
         }
     }
