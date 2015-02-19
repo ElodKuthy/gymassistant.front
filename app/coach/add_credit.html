@@ -1,11 +1,15 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-offset-2 col-lg-5">
-            <form role="form">
+            <form name="addCreditForm" role="form">
                 <h2>Bérlet vásárlás</h2>
                 <div class="form-group">
                     <h4>Tanítvány neve</h4>
-                    <input type="name" ng-model="vm.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue">
+                    <input type="name" ng-model="vm.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" name="userName" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
+                    <span class="text-danger" ng-show="addCreditForm.userName.$error.required && addCreditForm.userName.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Kötelező kitölteni!</span>
+                    <span class="text-danger" ng-show="addCreditForm.userName.$error.isItemOfList && addCreditForm.userName.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű tanítvány!</span>
                 </div>
                 <div class="form-group">
                     <h4>Bérlet típusa</h4>
@@ -19,39 +23,40 @@
                 <div class="form-group">
                     <h4>Alkalmak száma</h4>
                     <div class="btn-group">
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="vm.choicesDisabled()">1</label>
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="2" ng-disabled="vm.choicesDisabled()">2</label>
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="3" ng-disabled="vm.choicesDisabled()">3</label>
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="vm.choicesDisabled()">4</label>
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="5" ng-disabled="vm.choicesDisabled()">5</label>
-                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" ng-model-options="{ getterSetter: true }" btn-radio="7" ng-disabled="vm.choicesDisabled()">Tibi</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="1" ng-disabled="vm.amountChoicesDisabled()">1</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="2" ng-disabled="vm.amountChoicesDisabled()">2</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="3" ng-disabled="vm.amountChoicesDisabled()">3</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="4" ng-disabled="vm.amountChoicesDisabled()">4</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="5" ng-disabled="vm.amountChoicesDisabled()">5</label>
+                        <label class="btn btn-primary" ng-model="vm.amountPerWeek" btn-radio="7" ng-disabled="vm.amountChoicesDisabled()">Tibi</label>
                     </div>
                 <div>
                 <div class="form-group">
                     <h4>Bérlet érvényessége</h4>
                     <div class="btn-group" ng-disabled="vm.periodChoicesDisabled()">
-                        <label class="btn btn-primary" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="1" ng-disabled="vm.periodChoicesDisabled()">Napijegy</label>
-                        <label class="btn btn-primary" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="4" ng-disabled="vm.periodChoicesDisabled()">4 hetes</label>
-                        <label class="btn btn-primary" ng-model="vm.period" ng-model-options="{ getterSetter: true }" btn-radio="12" ng-disabled="vm.periodChoicesDisabled()">12 hetes</label>
+                        <label class="btn btn-primary" ng-model="vm.period" btn-radio="1" ng-disabled="vm.periodChoicesDisabled()">Napijegy</label>
+                        <label class="btn btn-primary" ng-model="vm.period" btn-radio="4" ng-disabled="vm.periodChoicesDisabled()">4 hetes</label>
+                        <label class="btn btn-primary" ng-model="vm.period" btn-radio="12" ng-disabled="vm.periodChoicesDisabled()">12 hetes</label>
                     </div>
                 </div>
                 <div class="form-group" ng-show="vm.adminMode">
                     <h4>Bérlet érvényességének kezdete</h4>
-                    <div class="input-group" style="padding-top: 10px">
-                        <input type="text" class="form-control" datepicker-popup="longDate" ng-model="vm.calendar.date" is-open="vm.calendar.opened" min-date="vm.calendar.minDate" max-date="vm.calendar.maxDate" datepicker-options="vm.calendar.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" current-text="Mai nap" clear-text="Töröl" close-text="Bezárás">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-primary" ng-click="vm.calendar.open($event)"><i class="fa fa-calendar"></i></button>
-                        </span>
-                    </div>
+                    <calendar id="from" model="vm.calendar.date" format="longDate" minDate="vm.calendar.minDate" maxDate="vm.calendar.maxDate"></calendar>
                 </div>
                 <div class="form-group" ng-show="vm.adminMode">
                     <h4>Edző neve</h4>
-                    <input type="name" ng-model="vm.coachName" class="form-control" id="coachName" placeholder="Adja meg az edző nevét" typeahead="user as user for user in vm.coachesCanBeAdded | filter: $viewValue">
+                    <input type="name" ng-model="vm.coachName" class="form-control" id="coachName" placeholder="Adja meg az edző nevét" typeahead="user as user for user in vm.coachesCanBeAdded | filter: $viewValue" name="coachName" required is-item-of-list="{{ vm.coachesCanBeAdded | filter: name }}">
+                    <span class="text-danger" ng-show="addCreditForm.coachName.$error.required && addCreditForm.coachName.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Kötelező kitölteni!</span>
+                    <span class="text-danger" ng-show="addCreditForm.coachName.$error.isItemOfList && addCreditForm.coachName.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű edző!</span>
                 </div>
                 <div class="form-group">
                     <h4>Összesen</h4>
                     <div>
-                        {{ vm.amountPerWeek() }} x {{ vm.period() }} = {{ vm.amount() }} edzés
+                        {{ vm.amountPerWeek }} x {{ vm.period }} = {{ vm.amount() }} edzés
+                        <span class="text-danger" ng-show="vm.isAmountDiff && selectedTrainings.$dirty">
+                            <i class="fa fa-exclamation-triangle"></i> A bérlet alkalmak száma nem egyezik a kiválasztott órák számával!</span>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,10 +67,10 @@
                           Mutasd az összes edzést
                       </label>
                     </div>
-                    <ul class="list-group">
+                    <ul class="list-group" ng-form="selectedTrainings">
                         <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'date'" ng-if="vm.adminMode || vm.displayAllTrainings || series.coach == vm.userInfo.name">
                             <label>
-                                <input type="checkbox" ng-model="series.selected"> {{ series.name }} / {{ series.dateText }} <span ng-if="vm.adminMode || vm.displayAllTrainings"> / {{ series.coach }}</span>
+                                <input type="checkbox" ng-model="series.selected" ng-change="vm.checkAmountDiff()"> {{ series.name }} / {{ series.dateText }} <span ng-if="vm.adminMode || vm.displayAllTrainings"> / {{ series.coach }}</span>
                             </label>
                         </li>
                     </ul>
@@ -73,13 +78,12 @@
                 <div class="form-group">
                     <h4>Összesen kiválasztva</h4>
                     <div>
-                        {{ vm.selectedAmountPerWeek() }} x {{ vm.period() }} = {{ vm.selectedAmount() }} edzés
+                        {{ vm.selectedAmountPerWeek() }} x {{ vm.period }} = {{ vm.selectedAmount() }} edzés
+                        <span class="text-danger" ng-show="vm.isAmountDiff && selectedTrainings.$dirty">
+                            <i class="fa fa-exclamation-triangle"></i> A bérlet alkalmak száma nem egyezik meg a kiválasztott órák számával!</span>
                     </div>
                 </div>
-                <div ng-if="vm.hasError" class="text-danger">
-                    <i class="fa fa-exclamation-triangle"></i> {{ vm.error }}
-                </div>
-                <button type="button" ng-click="vm.addSubscription()" class="btn btn-primary">Mehet</button>
+                <button type="button" ng-click="vm.addSubscription(addCreditForm)" ng-disabled="vm.isAmountDiff || addCreditForm.$invalid || addCreditForm.$pristine" class="btn btn-primary">Mehet</button>
             </form>
         </div>
     </div>
