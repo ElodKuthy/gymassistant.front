@@ -81,7 +81,7 @@
                             <li>
                                 <a href="/belepes" ng-if="!vm.isLoggedIn">Belépés</a>
                                 <a href="#" ng-if="vm.isLoggedIn" data-ng-click="vm.logout()">Kilépés</a>
-                            </li>s
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -132,12 +132,13 @@
         <script src="/app.js"></script>
 
         <script src="/common/common.module.js"></script>
+        <script src="/common/calendar.js"></script>
         <script src="/common/http.service.js"></script>
         <script src="/common/location.helper.js"></script>
         <script src="/common/ga-enter.js"></script>
         <script src="/common/event.helper.js"></script>
         <script src="/common/storage.helper.js"></script>
-
+        <script src="/common/validators.js"></script>
 
         <script src="/home/home.module.js"></script>
         <script src="/home/home.controller.js"></script>
