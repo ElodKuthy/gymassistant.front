@@ -1,5 +1,5 @@
 <div>
-    <a class="btn btn-default" href="/uj/edzes">Új edzés hozzáadása</a>
+    <a class="btn btn-primary" href="/uj/edzes">Új edzés hozzáadása</a>
 </div>
 <div class="table-responsive">
     <table class="table table-striped">
@@ -10,16 +10,17 @@
                 <th>Időpont(ok)</th>
                 <th>Edző neve</th>
                 <th>Maximális létszám</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="instance in vm.series">
+            <tr ng-repeat="instance in vm.series | orderBy : 'dateAsDate'">
                 <th scope="row">{{$index + 1}}.</th>
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.name}}</a></td>
-                <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.datesFormatted}}</a></td>
+                <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.dateAsDate | date : 'EEEE H:mm'}}</a></td>
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.coach}}</a></td>
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.max}}</a></td>
-                <td><button type="button" class="btn btn-default">Törlés</button></td>
+                <td><button type="button" class="btn btn-primary">Törlés</button></td>
             </tr>
         </tbody>
     </table>

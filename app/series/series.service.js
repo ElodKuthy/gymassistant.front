@@ -10,20 +10,24 @@
     function SeriesService(httpService) {
 
         return {
-            getSeries : function () {
+            getAll : function () {
                 return httpService.get('/api/all/series');
             },
 
-            getInstance : function (id) {
+            get : function (id) {
                 return httpService.get('/api/series/'+ id);
             },
 
-            updateInstance : function (instance) {
+            update : function (instance) {
                 return httpService.post('/api/series/'+ instance._id, instance);
             },
 
+            add : function (instance) {
+                return httpService.post('/api/add/new/series', instance);
+            },
+
             getAllCoaches : function () {
-                return httpService.get('');
+                return httpService.get('/api/all/coaches');
             }
         };
 
