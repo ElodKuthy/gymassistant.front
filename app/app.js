@@ -11,13 +11,14 @@
             'ipCookie',
             'gymassistant.front.common',
             'gymassistant.front.error',
-            'gymassistant.front.home',            
+            'gymassistant.front.home',
             'gymassistant.front.authentication',
             'gymassistant.front.attendees',
             'gymassistant.front.schedule',
             'gymassistant.front.profile',
             'gymassistant.front.modal',
-            'gymassistant.front.coach'
+            'gymassistant.front.coach',
+            'gymassistant.front.series'
         ])
         .config(AppConfig)
         .controller('NavbarController', NavbarController);
@@ -56,8 +57,8 @@
             vm.welcomeTextLink = vm.userInfo ? '/profilom' : '/belepes';
             vm.isLoggedIn = vm.userInfo ? true : false;
             vm.isCoach = vm.userInfo && vm.userInfo.roles.indexOf('coach') > -1;
+            vm.isAdmin = vm.userInfo && vm.userInfo.roles.indexOf('admin') > -1;
         }
-
     }
 
 })();

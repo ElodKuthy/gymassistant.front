@@ -1,0 +1,6 @@
+<div class="input-group" style="padding-top: 10px">
+  <input type="text" id="{{vm.id + 'Calendar'}}" name="{{vm.id + 'Calendar'}}" class="form-control" datepicker-popup="{{vm.format}}" ng-model="vm.date" is-open="vm.opened" min-date="vm.minDate" max-date="vm.maxDate" datepicker-options="vm.dateOptions" date-disabled="disabled(date, mode)" ng-required="true" current-text="Mai nap" clear-text="Töröl" close-text="Bezárás" required>
+  <span class="input-group-btn">
+      <button type="button" class="btn btn-primary" ng-click="vm.open($event)"><i class="fa fa-calendar"></i></button>
+  </span>
+</div>

@@ -7,67 +7,39 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController($location, $filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService, loadingService) {
+    function AddCreditController($scope, $location, $filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService, loadingService) {
 
         var vm = this;
 
         vm.userName = clientName ? clientName : '';
-        vm.amountPerWeek = amountPerWeek;
+        vm.amountPerWeek = 2;
+        vm.period = 4;
         vm.amount = amount;
-        vm.period = period;
         vm.type = type;
         vm.choicesDisabled = false;
         vm.addSubscription = addSubscription;
         vm.series = [];
         vm.usersCanBeAdded = [];
         vm.coachesCanBeAdded = [];
-        vm.hasError = false;
-        vm.error = '';
         vm.selectedAmountPerWeek = selectedAmountPerWeek;
         vm.selectedAmount = selectedAmount;
-        vm.calendar = {};
-        vm.calendar.today = calendarToday;
-        vm.calendar.clear = calendarClear;
-        vm.calendar.minDate = moment({ years: 2014 }).toDate();
-        vm.calendar.maxDate = moment().add({ months: 3, weeks: 1}).toDate();
-        vm.calendar.open = calendarOpen;
-        vm.calendar.opened = false;
+        vm.calendar = {
+            minDate: new Date(2014),
+            maxDate: moment().add({ months: 3, weeks: 1}).toDate(),
+            date: new Date()
+        }
         vm.amountChoicesDisabled = amountChoicesDisabled;
         vm.periodChoicesDisabled = periodChoicesDisabled;
         vm.userInfo = userInfo
         vm.adminMode = vm.userInfo.roles.indexOf('admin') > -1;
         vm.displayAllTrainings = false;
         vm.cleanUpSelectedSeries = cleanUpSelectedSeries;
-
+        vm.isAmountDiff = true;
+        vm.checkAmountDiff = checkAmountDiff;
 
         $rootScope.title = 'Bérletvásárlás';
 
-        function calendarToday() {
-            vm.calendar.date = $filter('date')(moment().toDate(), 'longDate');
-        }
-
-        vm.calendar.today();
-
-        function calendarClear() {
-            vm.calendar.date = null;
-        }
-
-        /* @ngInject */
-        function calendarOpen($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            vm.calendar.opened = true;
-        }
-
-        vm.calendar.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1
-        };
-
         var _type = 'normal';
-        var _amount = 2;
-        var _period = 4;
 
         allUsers.forEach(function (user) {
             if (user.roles.indexOf('admin') === -1) {
@@ -91,6 +63,14 @@
                 });
         });
 
+        function checkAmountDiff() {
+            vm.isAmountDiff = (amount() != selectedAmount());
+        }
+
+        function amount () {
+            return vm.amountPerWeek * vm.period;
+        }
+
         function amountChoicesDisabled() {
             return _type === 'first' || _type === 'seminar';
         }
@@ -106,64 +86,23 @@
 
                 } else {
 
-                    amountPerWeek(1);
-                    period(1);
+                    vm.amountPerWeek = 1;
+                    vm.period = 1;
                 }
             }
 
             return _type;
         }
 
-        function amountPerWeek(value) {
-            if (value) {
-                _amount = value;
-            }
-
-            return _amount;
-        }
-
-        function period(value) {
-
-            if (value) {
-                _period = value;
-            }
-
-            return _period;
-        }
-
 
         function periodString() {
 
-            return _period === 1 ? 'today' : _period === 4 ? 'four_weeks' : _period === 12 ? 'twelve_weeks' : '';
+            return vm.period === 1 ? 'today' : vm.period === 4 ? 'four_weeks' : vm.period === 12 ? 'twelve_weeks' : '';
         }
 
-        function amount(value) {
-            if (value) {
-                amountPerWeek(value / period());
-            }
+        function addSubscription (form) {
 
-            return amountPerWeek() * period();
-        }
-
-        function setError(err) {
-            if (err){
-                vm.hasError = true;
-                vm.error = err;
-            } else {
-                vm.hasError = false;
-                vm.error = '';
-            }
-        }
-
-        function addSubscription() {
-
-            if (!vm.userName) {
-                setError('A tanítvány nevének megadása kötelező');
-                return;
-            }
-
-            if (vm.adminMode && !vm.coachName) {
-                setError('Az edző nevének megadása kötelező');
+            if (!form || form.$invalid || vm.isAmountDiff) {
                 return;
             }
 
@@ -171,8 +110,6 @@
                 setError('A bérlet alkalmak száma nem egyezik a kiválasztott órák számával');
                 return;
             }
-
-            setError();
 
             loadingService.startLoading();
 
@@ -191,7 +128,7 @@
             }
 
             function error(err) {
-                loadingSerive.endLoading();
+                loadingService.endLoading();
                 errorService.modal(err, 'sm');
             }
 
@@ -214,18 +151,20 @@
         }
 
         function selectedAmount() {
-            return selectedAmountPerWeek() * period();
+            return selectedAmountPerWeek() * vm.period;
         }
 
         function cleanUpSelectedSeries () {
-          if (!vm.displayAllTrainings) {
-            vm.series.forEach(function (current) {
-                if (current.coach != vm.userInfo.name) {
-                    current.selected = false;
-                }
-            });
-          }
+            if (!vm.displayAllTrainings) {
+                vm.series.forEach(function (current) {
+                    if (current.coach != vm.userInfo.name) {
+                        current.selected = false;
+                    }
+                });
+            }
         }
+
+        $scope.$watch('vm.amountPerWeek', vm.checkAmountDiff);
     }
 
 })();

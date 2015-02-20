@@ -12,7 +12,8 @@
             back: back,
             onlyAuthenticated: onlyAuthenticated,
             onlyNotAuthenticated: onlyNotAuthenticated,
-            onlyCoach: onlyCoach
+            onlyCoach: onlyCoach,
+            onlyAdmin: onlyAdmin
         };
 
         function onlyCoach() {
@@ -21,6 +22,20 @@
 
             if (!userInfo || userInfo.roles.indexOf("coach") === -1) {
                 deferred.reject("Ezt a nézetet csak edzők érhetik el");
+                back();
+            }
+
+            deferred.resolve(userInfo);
+
+            return deferred.promise;
+        }
+
+        function onlyAdmin() {
+            var deferred = $q.defer();
+            var userInfo = authenticationService.getUserInfo();
+
+            if (!userInfo || userInfo.roles.indexOf("admin") === -1) {
+                deferred.reject("Ezt a nézetet csak adminisztrátorok érhetik el");
                 back();
             }
 

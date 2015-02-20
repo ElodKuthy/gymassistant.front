@@ -1,0 +1,78 @@
+ <div class="container">
+    <div class="row">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
+            <form name="seriesForm">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="input-group" ng-class="{ 'has-error': seriesForm.name.$invalid && seriesForm.name.$touched }">
+                            <label for="name">Név</label>
+                            <input type="text" ng-model="vm.training.name" class="form-control" id="name" name="name" required>
+                            <!--<a hef="" ng-disabled="nameForm.$invalid || nameForm.$pristine" ng-click="vm.changeName(nameForm)" class="input-group-addon btn btn-default">Módosít</a>-->
+                        </div>
+                        <span class="text-danger" ng-show="seriesForm.name.$error.required && seriesForm.name.$touched">
+                            <i class="fa fa-exclamation-triangle"></i> Kötelező kitölteni!</span>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="input-group" ng-class="{ 'has-error': seriesForm.coach.$invalid && seriesForm.coach.$touched }">
+                            <label for="coach">Edző</label>
+                            <input type="text" ng-model="vm.training.coach" class="form-control" id="coach" name="coach" required is-item-of-list="{{vm.coaches}}"
+                                typeahead="coach for coach in vm.coaches | filter: $viewValue">
+                        </div>
+                        <span class="text-danger" ng-show="seriesForm.coach.$error.required && seriesForm.coach.$touched ">
+                                Kötelező kitölteni!</span>
+                        <span class="text-danger" ng-show="seriesForm.coach.$error.isItemOfList && seriesForm.coach.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű edző!</span>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="input-group" ng-class="{ 'has-error': seriesForm.max.$invalid && seriesForm.max.$touched }">
+                            <label for="max">Max létszám</label>
+                            <input type="number" min="1" ng-model="vm.training.max" class="form-control" id="max" name="max" required>
+                        </div>
+                        <span class="text-danger" ng-show="seriesForm.max.$error.required && seriesForm.max.$touched">
+                                Kötelező kitölteni!</span>
+                        <span style="margin-top: 10px" class="text-danger" ng-show="(seriesForm.max.$error.number || seriesForm.max.$error.min) && seriesForm.max.$touched">
+                            <i class="fa fa-exclamation-triangle"></i> Csak pozitv egész számokat használj!</span>
+                    </li>
+                    <li class="list-group-item">
+                        <label>Időpont</label>
+                        <div class="container-fluid">
+                            <div class ="row">
+                                <div class="col-sm-6">
+                                    <div class="input-group" style="padding-top: 10px">
+                                        <span class="input-group-addon">Nap</span>
+                                        <select class="form-control" ng-model="vm.selectedDay" ng-model-options="{ getterSetter: true }" ng-options="day for day in vm.days"></select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="input-group" style="padding-top: 10px">
+                                        <span class="input-group-addon">Óra</span>
+                                        <select class="form-control" ng-model="vm.selectedHour" ng-model-options="{ getterSetter: true }" ng-options="hour for hour in vm.hours"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <button type="button" ng-disabled="seriesForm.$invalid || seriesForm.$pristine" class="btn btn-primary pull-right" ng-click="vm.submit(seriesForm)">Mentés</button>
+            </form>
+            <form name="refreshForm" style="padding-top: 20px; clear: both;" ng-hide="vm.isNewTraining">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <label>Frissítés</label>
+                    </li>
+                    <li class="list-group-item">
+                        <label>Kezdő dátum</label>
+                        <calendar id="from" model="vm.refresh.from" format="longDate" minDate="vm.refresh.minDate" maxDate="vm.refresh.maxDate"></calendar>
+                    </li>
+                    <li class="list-group-item">
+                        <label>Befejező dátum</label>
+                        <calendar id="to" model="vm.refresh.to" format="longDate" minDate="vm.refresh.minDate" maxDate="vm.refresh.maxDate"></calendar>
+                    </li>
+                </ul>
+                <span style="margin-top: 10px" class="text-danger" ng-show="vm.refresh.invalid">
+                    <i class="fa fa-exclamation-triangle"></i> A kezdő dátum korábbi kell, hogy legyen, mint a befejezés dátuma!</span>
+                <button type="button" ng-disabled="refreshForm.$invalid || vm.refresh.invalid" class="btn btn-primary pull-right" ng-click="vm.update(refreshForm)">Frissítés</button>
+            </form>
+        </div>
+    </div>
+ </div>
