@@ -2,7 +2,7 @@
     <div class="row">
         <ul class="list-group" >
             <li class="list-group-item clearfix"
-                ng-repeat="attendee in attendees.training.attendees | orderBy: attendee"
+                ng-repeat="attendee in attendees.training.attendees | orderBy: 'name'"
                 ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
                 <span>{{$index + 1}}. </span>
                 <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
