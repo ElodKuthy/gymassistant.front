@@ -75,11 +75,27 @@
             }
         };
 
-        vm.update = function () {
+        vm.updateRefreshDateValidity = function () {
             vm.refresh.invalid = (vm.refresh.from > vm.refresh.to);
         };
 
-        $scope.$watch('vm.refresh.from', vm.update);
-        $scope.$watch('vm.refresh.to', vm.update);
+        $scope.$watch('vm.refresh.from', vm.updateRefreshDateValidity);
+        $scope.$watch('vm.refresh.to', vm.updateRefreshDateValidity);
+
+        vm.update = function(form) {
+
+            if (!form || form.$invalid) {
+                return;
+            }
+
+            seriesService.updateTrainings(moment(vm.refresh.from).format('YYYY-MM-DD'), moment(vm.refresh.to).format('YYYY-MM-DD'), vm.training._id)
+                .then(
+                    function () {
+                        infoService.modal('Edzésalkalmak frissítése', 'Sikeres frissítetted az edzésalkalmakat');
+                    },
+                    function (err) {
+                        errorService.modal(err);
+                    });
+        }
     }
 })();

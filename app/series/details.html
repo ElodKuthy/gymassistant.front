@@ -55,7 +55,7 @@
                 </ul>
                 <button type="button" ng-disabled="seriesForm.$invalid || seriesForm.$pristine" class="btn btn-primary pull-right" ng-click="vm.submit(seriesForm)">Mentés</button>
             </form>
-            <form name="refreshForm" style="padding-top: 20px; clear: both;">
+            <form name="refreshForm" style="padding-top: 20px; clear: both;" ng-hide="vm.isNewTraining">
                 <ul class="list-group">
                     <li class="list-group-item">
                         <label>Frissítés</label>
