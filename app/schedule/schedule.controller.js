@@ -229,7 +229,7 @@
                             infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok email értesítést kaptak, és a bérletükön jóváírásra került egy kredit.')
                                 .then(function () { fetchSchedule(vm.dates.begin, vm.dates.end); });
                         }, function (err) {
-                            errorService.modal(error);
+                            errorService.modal(err);
                         });
                 });
         }
