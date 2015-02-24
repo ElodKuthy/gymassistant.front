@@ -30,7 +30,7 @@
         }
         vm.amountChoicesDisabled = amountChoicesDisabled;
         vm.periodChoicesDisabled = periodChoicesDisabled;
-        vm.userInfo = userInfo
+        vm.userInfo = userInfo;
         vm.adminMode = vm.userInfo.roles.indexOf('admin') > -1;
         vm.displayAllTrainings = false;
         vm.cleanUpSelectedSeries = cleanUpSelectedSeries;
@@ -38,6 +38,10 @@
         vm.checkAmountDiff = checkAmountDiff;
 
         $rootScope.title = 'Bérletvásárlás';
+
+        if (!vm.adminMode) {
+            vm.coachName = vm.userInfo.name;
+        }
 
         var _type = 'normal';
 
