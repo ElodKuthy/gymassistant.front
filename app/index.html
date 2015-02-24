@@ -68,7 +68,7 @@
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/uj/felhasznalo">Új felhasználó</a></li>
                                     <li><a href="/berlet/vasarlas">Bérletvásárlás</a></li>
-                                    <li><a href="/edzesek">Edzések</a></li>
+                                    <li><a ng-if="vm.isAdmin" href="/edzesek">Edzések</a></li>
                                 </ul>
                             </li>
 
