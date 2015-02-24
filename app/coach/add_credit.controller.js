@@ -126,7 +126,7 @@
             });
 
             if (vm.adminMode) {
-                adminService.addNewSubscription(vm.amount(), vm.userName, vm.coachName, moment(vm.calendar.date).unix(), periodString(), series).then(subscriptionAdded, error);
+                adminService.addNewSubscription(vm.amount(), vm.userName, vm.coachName, moment(vm.calendar.date).startOf('day').unix(), periodString(), series).then(subscriptionAdded, error);
             } else {
                 coachService.addNewSubscription(vm.amount(), vm.userName, periodString(), series).then(subscriptionAdded, error);
             }
