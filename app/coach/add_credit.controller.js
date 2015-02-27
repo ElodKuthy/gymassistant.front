@@ -106,12 +106,7 @@
 
         function addSubscription (form) {
 
-            if (!form || form.$invalid || vm.isAmountDiff) {
-                return;
-            }
-
-            if (vm.amount() != vm.selectedAmount()) {
-                setError('A bérlet alkalmak száma nem egyezik a kiválasztott órák számával');
+            if (!form || form.$invalid) {
                 return;
             }
 
