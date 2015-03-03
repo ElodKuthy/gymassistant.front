@@ -2,40 +2,38 @@
     <div class="row">
         <ul class="list-group" >
             <li class="list-group-item clearfix"
-                ng-repeat="attendee in attendees.training.attendees | orderBy: 'name'"
-                ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": attendees.missedCheckIn(attendee) }'>
+                ng-repeat="attendee in vm.training.attendees | orderBy: 'name'"
+                ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": vm.missedCheckIn(attendee) }'>
                 <span>{{$index + 1}}. </span>
                 <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
                 <span class="pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canUndoCheckedIn(attendee)"
-                            ng-click="attendees.undoCheckIn(attendee)">
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canUndoCheckedIn(attendee)"
+                            ng-click="vm.undoCheckIn(attendee)">
                         <i class="fa fa-undo"></i><span class="hidden-xs"> Visszavonás</span>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canCheckIn(attendee)"
-                            ng-click="attendees.checkIn(attendee)">
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canCheckIn(attendee)"
+                            ng-click="vm.checkIn(attendee)">
                         <i class="fa fa-check-circle"></i><span class="hidden-xs"> Bejelentkezés</span>
                     </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="attendees.canRemove(attendee)"
-                            ng-click="attendees.remove(attendee)">
+                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canRemove(attendee)"
+                            ng-click="vm.remove(attendee)">
                         <i class="fa fa-trash"></i><span class="hidden-xs"> Eltávoítás</span>
                     </button>
                 </span>
             </li>
-            <li class="list-group-item clearfix" ng-if="attendees.canAdd()">
-                <span class="input-group" ng-class='{ "has-error": attendees.addAttendeeError }'>
-                    <span class="input-group-addon">
-                        <i class="fa fa-user"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Tanítvány hozzáadása" ng-model="attendees.newAttendee"
-                           typeahead="user as user.name for user in attendees.usersCanBeAdded | filter: { name: $viewValue }">
-
-                    <span class="input-group-addon" ng-click="attendees.add()">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                </span>
-                <span ng-if="attendees.addAttendeeError" class="text-danger">
-                    {{ attendees.addAttendeeError }}
-                </span>
+            <li class="list-group-item clearfix" ng-if="vm.canAdd()">
+                <form name="addClientForm" role="form">
+                    <div class="form-group">
+                        <label for="userName">Tanítvány hozzáadása</label>
+                        <input type="text" id="userName" name="userName" class="form-control" placeholder="Tanítvány neve" ng-model="vm.newAttendee"
+                               typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
+                    </div>
+                        <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.add(addClientForm)" ng-disabled="addClientForm.$invalid || addClientForm.$pristine">
+                            <i class="fa fa-plus"></i><span class="hidden-xs"> Hozzáadás</span>
+                        </button>
+                </form>
+                    <span class="text-danger" ng-show="addClientForm.userName.$error.isItemOfList && addClientForm.userName.$touched ">
+                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű tanítvány!</span>
             </li>
         </ul>
     </div>

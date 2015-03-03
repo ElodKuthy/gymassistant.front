@@ -23,14 +23,14 @@
                  <div class="panel-body text-center">
                      <form class="form-inline" role="form">
                          <div class="form-group">
-                             <label class="sr-only" for="newPassword">Új jelszó</label>
-                             <input type="password" class="form-control" id="newPassword"
-                                    ng-model="vm.newPassword" placeholder="Új jelszó">
+                             <label class="sr-only" for="password">Új jelszó</label>
+                             <input type="password" class="form-control" id="password"
+                                    ng-model="vm.password" placeholder="Új jelszó">
                          </div>
                          <div class="form-group">
-                             <label class="sr-only" for="newPasswordAgain">Új jelszó mégegyszer</label>
-                             <input type="password" class="form-control" id="newPasswordAgain"
-                                    ng-model="vm.newPasswordAgain" placeholder="Új jelszó mégegyszer">
+                             <label class="sr-only" for="passwordAgain">Új jelszó mégegyszer</label>
+                             <input type="password" class="form-control" id="passwordAgain"
+                                    ng-model="vm.passwordAgain" placeholder="Új jelszó mégegyszer">
                          </div>
                          <button type="button" class="btn btn-primary" ng-click="vm.changePassword()">Mehet</button>
                          <div class="simple-error-text text-danger text-left" ng-bind="vm.passwordChangeError"></div>

@@ -7,20 +7,20 @@
         .controller('AddCreditController', AddCreditController);
 
     /* @ngInject */
-    function AddCreditController($scope, $location, $filter, $rootScope, coachService, errorService, clientName, allUsers, series, userInfo, adminService, infoService, loadingService) {
+    function AddCreditController($routeParams, $scope, $location, $filter, $rootScope, coachService, errorService, allUsers, series, userInfo, adminService, infoService, loadingService) {
 
         var vm = this;
 
-        vm.userName = clientName ? clientName : '';
+        vm.userName = $routeParams.tanitvany ? $routeParams.tanitvany : '';
         vm.amountPerWeek = 2;
         vm.period = 4;
         vm.amount = amount;
         vm.type = type;
         vm.choicesDisabled = false;
         vm.addSubscription = addSubscription;
-        vm.series = [];
-        vm.usersCanBeAdded = [];
-        vm.coachesCanBeAdded = [];
+        vm.series = series;
+        vm.usersCanBeAdded = allUsers.usersCanBeAdded;
+        vm.coachesCanBeAdded = allUsers.coachesCanBeAdded;
         vm.selectedAmountPerWeek = selectedAmountPerWeek;
         vm.selectedAmount = selectedAmount;
         vm.calendar = {
@@ -44,28 +44,6 @@
         }
 
         var _type = 'normal';
-
-        allUsers.forEach(function (user) {
-            if (user.roles.indexOf('admin') === -1) {
-                if (user.roles.indexOf('coach') === -1) {
-                    vm.usersCanBeAdded.push(user.name);
-                } else {
-                    vm.coachesCanBeAdded.push(user.name);
-                }
-            }
-        });
-
-        series.forEach(function (current) {
-
-                vm.series.push({
-                    _id: current._id,
-                    name: current.name,
-                    coach: current.coach,
-                    date: moment({ days: current.date.day, hours: current.date.hour }).toDate(),
-                    dateText: $filter('date')(moment({ hours: current.date.hour }).day(current.date.day).toDate(), 'EEEE H:mm'),
-                    selected: false
-                });
-        });
 
         function checkAmountDiff() {
             vm.isAmountDiff = (amount() != selectedAmount());

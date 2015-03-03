@@ -11,7 +11,7 @@
 
         var vm = this;
 
-        vm.name = '';
+        vm.userName = '';
         vm.email = '';
         vm.save = save;
         vm.type = 'client';
@@ -20,7 +20,7 @@
         $rootScope.title = 'Új felhasználó';
 
         function reset(form) {
-            vm.name = '';
+            vm.userName = '';
             vm.email = '';
             vm.type = 'cient';
             if (form) {
@@ -36,13 +36,13 @@
             }
 
             if(vm.type == 'coach') {
-                coachService.addNewCoach(vm.name, vm.email).then(newUserSaved, newUserSaveError);
+                coachService.addNewCoach(vm.userName, vm.email).then(newUserSaved, newUserSaveError);
             } else {
-                coachService.addNewClient(vm.name, vm.email).then(newUserSaved, newUserSaveError);
+                coachService.addNewClient(vm.userName, vm.email).then(newUserSaved, newUserSaveError);
             }
 
             function newUserSaved() {
-                var name = vm.name;
+                var name = vm.userName;
 
                 reset(form);
 

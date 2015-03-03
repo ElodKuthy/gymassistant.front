@@ -10,8 +10,8 @@
     function AttendeesConfig($routeProvider) {
         $routeProvider.when('/resztvevok/:id', {
             templateUrl: 'attendees/attendees.html',
-            controllerAs: 'attendees',
-            controller: 'Attendees',
+            controllerAs: 'vm',
+            controller: 'AttendeesController',
             resolve: {
                 /* @ngInject */
                 userInfo: function (locationHelper) {

@@ -21,9 +21,9 @@
                 controllerAs: "error",
                 size: 'sm',
                 resolve: {
-                    message: function () { return error; }
+                    message: function () { return error.message ? error.message : error; }
                 }
-            });
+            }).result;
         }
 
     }

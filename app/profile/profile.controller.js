@@ -12,8 +12,8 @@
 
         vm.name = '';
         vm.email = '';
-        vm.newPassword = '';
-        vm.newPasswordAgain = '';
+        vm.password = '';
+        vm.passwordAgain = '';
         vm.passwordChangeError = '';
         vm.credits = credits;
         vm.now = moment().unix();
@@ -52,28 +52,28 @@
 
             vm.passwordChangeError = '';
 
-            if (!vm.newPassword) {
+            if (!vm.password) {
                 vm.passwordChangeError = 'Az új jelszót kötelező megadni';
                 return;
             }
 
-            if (!vm.newPasswordAgain) {
+            if (!vm.passwordAgain) {
                 vm.passwordChangeError = 'Az ellenőrző jelszót kötelező megadni';
                 return;
             }
 
-            if (vm.newPassword != vm.newPasswordAgain) {
+            if (vm.password != vm.passwordAgain) {
                 vm.passwordChangeError = 'Az új és ellenőrző jelszó nem egyezik meg';
                 return;
             }
 
-            profileService.changePassword(vm.newPassword).then(
+            profileService.changePassword(vm.password).then(
                 function () {
 
-                    authenticationService.login(vm.name, vm.newPassword).then(
+                    authenticationService.login(vm.name, vm.password).then(
                         function () {
-                            vm.newPassword = '';
-                            vm.newPasswordAgain = '';
+                            vm.password = '';
+                            vm.passwordAgain = '';
 
                             infoService.modal('Jelszó változtatás', 'A jelszavát sikeresen megváltoztattuk');
                         },

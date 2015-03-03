@@ -2,19 +2,15 @@
     "use strict";
     angular
         .module("gymassistant.front.modal")
-        .factory("loadingService", LoadingService);
+        .service("loadingService", LoadingService);
 
     /* @ngInject */
     function LoadingService($modal) {
 
+        var self = this;
         var loadingModal;
 
-        return {
-            startLoading: startLoading,
-            endLoading: endLoading
-        };
-
-        function startLoading() {
+        self.startLoading = function() {
             loadingModal = $modal.open({
                 templateUrl: "modal/loading.html",
                 windowTemplateUrl: "modal/loading_window.html",
@@ -23,7 +19,7 @@
             });
         }
 
-        function endLoading() {
+        self.endLoading = function() {
             if (loadingModal) {
                 loadingModal.dismiss();
                 loadingModal = null;

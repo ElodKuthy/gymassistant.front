@@ -5,7 +5,7 @@
                 <h2>Bérlet vásárlás</h2>
                 <div class="form-group">
                     <h4>Tanítvány neve</h4>
-                    <input type="name" ng-model="vm.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" name="userName" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
+                    <input type="name" ng-model="vm.userName" class="form-control" id="name" placeholder="Adja meg a tanítvány nevét" typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" name="userName" required is-item-of-list="{{ vm.usersCanBeAdded }}">
                     <span class="text-danger" ng-show="addCreditForm.userName.$error.required && addCreditForm.userName.$touched ">
                             <i class="fa fa-exclamation-triangle"></i> Kötelező kitölteni!</span>
                     <span class="text-danger" ng-show="addCreditForm.userName.$error.isItemOfList && addCreditForm.userName.$touched ">
@@ -39,11 +39,11 @@
                         <label class="btn btn-primary" ng-model="vm.period" btn-radio="12" ng-disabled="vm.periodChoicesDisabled()">12 hetes</label>
                     </div>
                 </div>
-                <div class="form-group" ng-show="vm.adminMode">
+                <div class="form-group" ng-if="vm.adminMode">
                     <h4>Bérlet érvényességének kezdete</h4>
                     <calendar id="from" model="vm.calendar.date" format="longDate" minDate="vm.calendar.minDate" maxDate="vm.calendar.maxDate"></calendar>
                 </div>
-                <div class="form-group" ng-show="vm.adminMode">
+                <div class="form-group" ng-if="vm.adminMode">
                     <h4>Edző neve</h4>
                     <input type="name" ng-model="vm.coachName" class="form-control" id="coachName" placeholder="Adja meg az edző nevét" typeahead="user as user for user in vm.coachesCanBeAdded | filter: $viewValue" name="coachName" required is-item-of-list="{{ vm.coachesCanBeAdded | filter: name }}">
                     <span class="text-danger" ng-show="addCreditForm.coachName.$error.required && addCreditForm.coachName.$touched ">

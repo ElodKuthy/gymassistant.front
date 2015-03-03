@@ -12,7 +12,15 @@
         return {
             login: login,
             logout: logout,
-            getUserInfo: getUserInfo
+            getUserInfo: getUserInfo,
+
+            forgottenPassword: function(userName, email) {
+                return httpService.get('/api/reset/password/user/' + userName + '/email/' + email);
+            },
+
+            changePassword: function(userName, email, token, password) {
+                return httpService.post('/api/change/password', { userName: userName, email: email, token: token, password: password });
+            }
         };
 
         function getUserInfo() {
