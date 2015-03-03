@@ -30,6 +30,8 @@
             $rootScope.title = 'Profilom';
         }
 
+        vm.adminMode = userInfo.roles.indexOf('admin') > -1;
+
         fillProfile(client ? client : userInfo);
 
         eventHelper.subscribe.authenticationChanged(checkAuthentication);
