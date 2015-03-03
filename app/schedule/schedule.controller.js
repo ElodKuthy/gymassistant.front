@@ -130,6 +130,7 @@
                     !instance.isFull &&
                     !instance.signedUp &&
                     vm.userInfo.name != instance.coach &&
+                    vm.userInfo.roles.indexOf('admin') == -1 &&
                     (vm.userInfo.roles.indexOf('coach') > -1 || (vm.credit && vm.credit.free > 0)) &&
                     moment().isBefore(instance.date);
         }
@@ -157,6 +158,7 @@
 
         function canLeave(instance) {
             return instance.signedUp &&
+                vm.userInfo.roles.indexOf('admin') == -1 &&
                 moment().add({ hours: 3}).isBefore(instance.date);
         }
 
@@ -217,7 +219,7 @@
 
         function canCancelTraining (instance) {
 
-            return vm.userInfo && (vm.userInfo.roles.indexOf('admin') > -1 || (vm.userInfo.name == instance.coach && moment().isBefore(instance.date)));
+            return vm.userInfo && (vm.userInfo.roles.indexOf('admin') > -1 || (vm.userInfo.name == instance.coach && moment().startOf('day').isBefore(instance.date)));
         }
 
         function cancelTraining (instance) {
@@ -226,7 +228,7 @@
                 .then(function () {
                     scheduleService.cancelTraining(instance.id)
                         .then(function () {
-                            infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok email értesítést kaptak, és a bérletükön jóváírásra került egy kredit.')
+                            infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok bérletén jóváírásra került egy kredit.')
                                 .then(function () { fetchSchedule(vm.dates.begin, vm.dates.end); });
                         }, function (err) {
                             errorService.modal(err);

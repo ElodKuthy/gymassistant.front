@@ -6,7 +6,7 @@
         .factory("httpService", HttpService);
 
     /* @ngInject */
-    function HttpService($http, $q, storageHelper, eventHelper) {
+    function HttpService($location, $http, $q, storageHelper, eventHelper) {
 
         var api = "https://localhost:8000";
 
@@ -28,7 +28,10 @@
                                 deferred.resolve(def);
                             } else {
                             if (result.data.error == "Hibás felhasználónév vagy jelszó") {
-                                storageHelper.setAuth(null);
+                                /*storageHelper.setAuth(null);
+                                storageHelper.setUserInfo(null, false);
+                                eventHelper.broadcast.authenticationChanged();
+                                $location.path("/");*/
                             }
                                 deferred.reject(result.data.error);
                             }
@@ -51,12 +54,14 @@
                 headers: {"Authorization": authorization}
             }).then(function (result) {
                 if (result.data.error) {
-                            if (result.data.error == "Hibás felhasználónév vagy jelszó") {
-                                storageHelper.setAuth(null);
-                                eventHelper.broadcast.authenticationChanged();
-                            }
+                    if (result.data.error == "Hibás felhasználónév vagy jelszó") {
+                        storageHelper.setAuth(null);
+                        storageHelper.setUserInfo(null, false);
+                        eventHelper.broadcast.authenticationChanged();
+                        $location.path("/");
+                    }
 
-                            deferred.reject(result.data.error);
+                    deferred.reject(result.data.error);
                 } else {
                     deferred.resolve(result.data);
                 }

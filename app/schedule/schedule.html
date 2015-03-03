@@ -52,7 +52,7 @@
 <div class="container">
     <div id="scheduleTable">
         <div class="row" ng-repeat="week in vm.weeks">
-            <div class="col-lg-2 scheduleTrainingPanel" ng-repeat="day in week">
+            <div class="col-md-2 scheduleTrainingPanel" ng-repeat="day in week">
                 <div class="panel panel-default" ng-repeat="instance in day">
                     <div class="panel-heading" ng-class="{selected: instance.signedUp, participated: instance.participated, missed: instance.missed }">
                         {{ instance.date | date: "EEEE H:mm" }}
@@ -61,7 +61,7 @@
                     </div>
                     <div ng-if="instance.name != 'Placeholder'" class="panel-body"
                          ng-class="instance.coach.toLowerCase()">
-                        <div ng-bind="instance.name"></div>
+                        <div ng-bind="instance.name" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;"></div>
                         <div class="trainer" ng-bind="instance.coach"></div>
                         <progressbar max="instance.max" value="instance.currentBar">{{instance.current}} /
                             {{instance.max}}

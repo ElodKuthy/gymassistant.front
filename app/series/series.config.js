@@ -30,7 +30,7 @@
                 },
                 /* @ngInject */
                 training: function ($route, seriesService, locationHelper) {
-                    return seriesService.get($route.current.params.id).catch(locationHelper.back);
+                    return seriesService.get($route.current.params.id);
                 },
                 /* @ngInject */
                 coaches: function (seriesService) {
