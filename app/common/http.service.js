@@ -28,10 +28,10 @@
                                 deferred.resolve(def);
                             } else {
                             if (result.data.error == "Hibás felhasználónév vagy jelszó") {
-                                /*storageHelper.setAuth(null);
+                                storageHelper.setAuth(null);
                                 storageHelper.setUserInfo(null, false);
                                 eventHelper.broadcast.authenticationChanged();
-                                $location.path("/");*/
+                                $location.path("/");
                             }
                                 deferred.reject(result.data.error);
                             }
