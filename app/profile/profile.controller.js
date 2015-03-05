@@ -22,8 +22,6 @@
             vm.addCredit = addCredit;
             vm.registrationEmail = registrationEmail;
             vm.changeEmail = changeEmail;
-            vm.allUsers = allUsers;
-            vm.viewUser = viewUser;
             $rootScope.title = 'Profil - ' + client.name;
         } else {
             vm.changePassword = changePassword;
@@ -33,6 +31,11 @@
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
         fillProfile(client ? client : userInfo);
+
+        if (!vm.isClient) {
+            vm.allUsers = allUsers;
+            vm.viewUser = viewUser;
+        }
 
         eventHelper.subscribe.authenticationChanged(checkAuthentication);
 
