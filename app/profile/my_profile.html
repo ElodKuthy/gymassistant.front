@@ -1,4 +1,14 @@
  <div class="container">
+    <div class="row" ng-if="!vm.isClient">
+        <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9" style="margin-bottom: 20px;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Tanítvány keresése"
+                ng-model="vm.userToView" ga-enter="vm.viewUser()"
+                typeahead="user as user.name for user in vm.allUsers | filter: { name: $viewValue }">
+                <a hef="" ng-click="vm.viewUser()" class="input-group-addon btn btn-primary">Mutasd</a>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
             <ul class="list-group">
