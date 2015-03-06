@@ -42,7 +42,7 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="credit in vm.credits | orderBy: 'date':true">
+                                <li class="list-group-item clearfix" ng-repeat="credit in vm.credits | orderBy: 'date':true">
                                     <div class="creditText">Vásárlás időpontja: {{ credit.date * 1000 | date }}</div>
                                     <div class="creditText">Érvényesség vége: {{ credit.expiry * 1000 | date }}</div>
                                     <div class="creditText">Edző: {{ credit.coach }}</div>
@@ -52,6 +52,7 @@
                                     <div ng-if="credit.missed > 0" class="creditText">Kihagyott {{ credit.missed }} feliratkozott edzést</div>
                                     <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Még feliratkozhat {{ credit.free }} alkalomra</div>
                                     <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Feliratkozás nélkül elveszett {{ credit.free }} alkalom</div>
+                                    <a type="button" class="btn btn-primary pull-right" ng-href="/berlet/reszletek/{{vm.name}}/{{credit.id}}">Részletek</a>
                                 </li>
                             </ul>
                         </div>

@@ -10,6 +10,7 @@
             'ja.qr',
             'ipCookie',
             'gymassistant.front.common',
+            'gymassistant.front.credits',
             'gymassistant.front.error',
             'gymassistant.front.home',
             'gymassistant.front.authentication',

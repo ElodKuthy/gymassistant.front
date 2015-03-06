@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-md-offset-2 col-md-8">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              Bérlet - <a ng-href="{{vm.profileLink()}}">{{ vm.userName }}</a>
+          </div>
+          <div class="panel-body">
+            <div class="creditDetailsText">Érvényesség:</div>
+            <div><span class="creditDetailsText">{{ vm.credit.date * 1000 | date }} - {{ vm.credit.expiry * 1000 | date }}</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin" ng-click="vm.increaseValidity()">+1 hét</button></div>
+            <div class="creditDetailsText">Edző: {{ vm.credit.coach }}</div>
+            <div><span class="creditDetailsText">{{ vm.credit.amount }} alkalmas bérlet</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin" ng-click="vm.increaseFreeCredits()">+1 alkalom</button></div>
+            <div ng-if="vm.credit.expiry >= vm.now && vm.credit.free > 0" class="creditDetailsText">Még feliratkozhat {{ vm.credit.free }} alkalomra</div>
+            <div ng-if="vm.credit.expiry < vm.now && vm.credit.free > 0" class="creditDetailsText">Feliratkozás nélkül elveszett {{ vm.credit.free }} alkalom</div>
+            <div ng-if="vm.credit.attended.length > 0">
+              <div class="panel panel-default credit-details-sub-panel">
+                <div class="panel-heading selected">Feliratkozott</div>
+                <div class="panel-body">
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="training in vm.credit.attended | orderBy: 'date'" ng-class="training.coach.toLowerCase()">
+                      <a ng-href="{{vm.trainingLink(training)}}">{{ training.date * 1000 | date :'yyyy. MMMM d. HH:mm' }}: {{ training.name }} </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div ng-if="vm.credit.participated.length > 0">
+              <div class="panel panel-default credit-details-sub-panel">
+                <div class="panel-heading participated">Részt vett</div>
+                <div class="panel-body">
+                  <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="training in vm.credit.participated | orderBy: 'date'" ng-class="training.coach.toLowerCase()">
+                      <a ng-href="{{vm.trainingLink(training)}}">{{ training.date * 1000 | date :'yyyy. MMMM d. HH:mm' }}: {{ training.name }} </a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div ng-if="vm.credit.missed.length > 0">
+              <div class="panel panel-default credit-details-sub-panel">
+                <div class="panel-heading missed">Kihagyott feliratkozások</div>
+                  <div class="panel-body">
+                    <ul class="list-group">
+                      <li class="list-group-item" ng-repeat="training in vm.credit.missed | orderBy: 'date'" ng-class="training.coach.toLowerCase()">
+                        <a ng-href="{{vm.trainingLink(training)}}">{{ training.date * 1000 | date :'yyyy. MMMM d. HH:mm' }}: {{ training.name }} </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
