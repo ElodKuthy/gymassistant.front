@@ -13,7 +13,7 @@
                         </span></a>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul ng-if="vm.userInfo" class="nav navbar-nav navbar-right">
                     <li>
                         <a href="" ng-click="vm.perviousWeek()">
                             Előző hét
@@ -32,7 +32,7 @@
                 </ul>
             </div>
         </div>
-        <div id="schedule-bottom-bar-small" class="row visible-xs">
+        <div ng-if="vm.userInfo" id="schedule-bottom-bar-small" class="row visible-xs">
             <div id="schedule-bottom-bar-small-date" class="col-xs-5 text-center">
                 {{vm.dates.begin | date: "MMM d. EEEE"}}
             </div>

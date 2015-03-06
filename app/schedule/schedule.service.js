@@ -1,10 +1,10 @@
 (function () {
 
-    "use strict";
+    'use strict';
 
     angular
-        .module("gymassistant.front.schedule")
-        .factory("scheduleService", ScheduleService);
+        .module('gymassistant.front.schedule')
+        .factory('scheduleService', ScheduleService);
 
     /* @ngInject */
     function ScheduleService(httpService) {
@@ -21,19 +21,23 @@
 
         function getSchedule(begin, end) {
 
-            var url = "/api/schedule";
+            var url = '/api/schedule';
 
             if (begin && end) {
-                url = url + "/from/" + begin + "/to/" + end;
+                if (moment(begin, 'YYYY-MM-DD').isSame(moment(), 'day') && moment(end, 'YYYY-MM-DD').isSame(moment().add({day: 1}), 'day')) {
+                    url = url + '/today';
+                } else {
+                    url = url + '/from/' + begin + '/to/' + end;
+                }
             } else {
-                url = url + "/this/week";
+                url = url + '/this/week';
             }
 
             return httpService.get(url);
         }
 
         function getCurrentCredit() {
-            return httpService.get("/api/my/credits")
+            return httpService.get('/api/my/credits')
                 .then(function (results) {
                     var result = null;
                     var latest = 0;
@@ -51,19 +55,19 @@
         }
 
         function joinClass(classId) {
-            return httpService.get("/api/join/training/id/" + classId);
+            return httpService.get('/api/join/training/id/' + classId);
         }
 
         function leaveClass(classId) {
-            return httpService.get("/api/leave/training/id/" + classId);
+            return httpService.get('/api/leave/training/id/' + classId);
         }
 
         function getUsers() {
-            return httpService.get("/api/all/users");
+            return httpService.get('/api/all/users');
         }
 
         function getInstance(id) {
-            return httpService.get("/api/training/id/" + id);
+            return httpService.get('/api/training/id/' + id);
         }
 
         function cancelTraining(trainingId) {
