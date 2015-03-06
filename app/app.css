@@ -216,23 +216,23 @@ div#schedule-bottom-bar-small-date {
   height: 144px;
 }
 
-#scheduleTable .krisztina {
+.krisztina, #scheduleTable .krisztina {
   background-color: #269abc;
 }
 
-#scheduleTable .dávid {
+.dávid, #scheduleTable .dávid {
   background-color: #C79665;
 }
 
-#scheduleTable .arnold {
+.arnold, #scheduleTable .arnold {
   background-color: #245269;
 }
 
-#scheduleTable .zsolt {
+.zsolt, #scheduleTable .zsolt {
   background-color: #608D4E;
 }
 
-#scheduleTable .albert {
+.albert, #scheduleTable .albert {
   background-color: #AE5E53;
 }
 
@@ -270,4 +270,40 @@ Modal
 .modal-content {
   background: #616265;
   color: #d9d9d9;
+}
+
+/* ==================================================
+Credit details
+================================================== */
+
+.creditDetailsText {
+    height: 32px;
+    padding-top: 6px;
+}
+
+span.creditDetailsText {
+    margin-right: 12px;
+}
+
+.credit-details-sub-panel {
+  margin-top: 20px;
+}
+
+.credit-details-sub-panel a, .panel-heading a {
+  color: #d9d9d9;
+}
+
+.credit-details-sub-panel .selected {
+  color: #d9d9d9;
+  background: #0063BE;
+}
+
+.credit-details-sub-panel .participated {
+  color: #d9d9d9;
+  background: green;
+}
+
+.credit-details-sub-panel .missed {
+  color: #d9d9d9;
+  background: #DE5E60;
 }
