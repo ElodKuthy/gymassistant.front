@@ -32,7 +32,7 @@
 
         fillProfile(client ? client : userInfo);
 
-        if (!vm.isClient) {
+        if (userInfo.roles.indexOf('coach') > -1) {
             vm.allUsers = allUsers;
             vm.viewUser = viewUser;
         }
