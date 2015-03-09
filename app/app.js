@@ -19,7 +19,8 @@
             'gymassistant.front.profile',
             'gymassistant.front.modal',
             'gymassistant.front.coach',
-            'gymassistant.front.series'
+            'gymassistant.front.series',
+            'gymassistant.front.stats'
         ])
         .config(AppConfig)
         .controller('NavbarController', NavbarController);
