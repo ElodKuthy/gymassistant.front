@@ -23,8 +23,10 @@ Panels
   border-bottom: 1px solid #888;
 }
 
-.panel-default > .panel-body {
+.panel-default > .panel-body,
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
   background: #616265;
+  border-top: none;
 }
 
 /* ==================================================
@@ -49,7 +51,7 @@ Errors
 Lists
 ================================================== */
 
-#home-small a, #admin-small a {
+#home-small a, #admin-small a, #stats-small a {
   color: #d9d9d9;
   text-decoration: none;
 }
