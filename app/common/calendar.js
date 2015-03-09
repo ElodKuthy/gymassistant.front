@@ -52,8 +52,6 @@
 
             vm.opened = true;
           };
-
-          vm.today();
         },
         controllerAs: 'vm',
         templateUrl: '/common/calendar.html'
