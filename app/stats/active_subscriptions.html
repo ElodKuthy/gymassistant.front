@@ -36,12 +36,12 @@
     <accordion>
         <accordion-group ng-if="coach.selected" ng-repeat="coach in vm.coaches" is-open="coach.opened">
             <accordion-heading>
-                {{ coach.name }} <i class="fa fa-users"></i> {{ vm.subscriptions[coach.name].distinct }} <i class="fa fa-credit-card"></i> {{ vm.subscriptions[coach.name].all }}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': coach.opened, 'glyphicon-chevron-right': !coach.opened}"></i>
+                {{ coach.name }} <i class="fa fa-users"></i> {{ vm.subscriptions[coach.name].distinct }} <i class="fa fa-credit-card"></i> {{ vm.subscriptions[coach.name].all }}<i class="pull-right fa" ng-class="{'fa-chevron-down': coach.opened, 'fa-chevron-right': !coach.opened}"></i>
             </accordion-heading>
             <accordion>
                 <accordion-group ng-repeat="credit in vm.subscriptions[coach.name].subscriptions" is-open="credit.opened">
                     <accordion-heading>
-                        {{ credit.client }}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': credit.opened, 'glyphicon-chevron-right': !credit.opened}"></i>
+                        {{ credit.client }}<i class="pull-right fa" ng-class="{'fa-chevron-down': credit.opened, 'fa-chevron-right': !credit.opened}"></i>
                     </accordion-heading>
                     <div class="creditText">Vásárlás időpontja: {{ credit.date * 1000 | date }}</div>
                     <div class="creditText">
