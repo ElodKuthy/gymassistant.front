@@ -14,10 +14,11 @@
         $rootScope.title = 'Aktív bérletek' + $routeParams.from && $routeParams.to ? ' - ' + $routeParams.from + '-tól ' + $routeParams.to + '-ig' : '';
 
         vm.dates = {
-            from: moment().startOf('month').toDate(),
-            to: moment().endOf('month').toDate(),
+            from: $routeParams.from ? moment($routeParams.from).toDate() : moment().startOf('month').toDate(),
+            to: $routeParams.to ? moment($routeParams.to).toDate() : moment().endOf('month').toDate(),
             min: new Date(2014),
             max: new Date(2020),
+            opened: !($routeParams.from && $routeParams.to),
             invalid: false
         }
 

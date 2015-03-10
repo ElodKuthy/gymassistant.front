@@ -32,7 +32,7 @@
             var deferred = $q.defer();
             var authorization = "Basic " + window.btoa(encodeURIComponent(escape(userName + ":" + password)));
 
-            httpService.get("/api/login", null, authorization).then(
+            httpService.get("/api/login", { error: 'Hibás felhasználónév vagy jelszó' }, authorization).then(
                 function (result) {
                     if (!result.error) {
                         storageHelper.setAuth(authorization, remember);
