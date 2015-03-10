@@ -12,9 +12,9 @@
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
                         <input  type="password" class="form-control" name="password" placeholder="Jelszó" ng-model="vm.password" ga-enter="vm.submit()">
                     </div>
-                    <span class="help-block text-danger" data-ng-bind="vm.error"></span>
+                    <span class="help-block text-danger"><i class="fa fa-exclamation-triangle" ng-hide="!vm.error"></i> {{vm.error}}</span>
 
-                    <button type="button" class="btn btn-lg btn-primary btn-block" ng-click="vm.submit()" >Belépés</button>
+                    <button type="button" class="btn btn-lg btn-primary btn-block" ng-click="vm.submit()">Belépés</button>
             </div>
         </div>
         <div class="row">
