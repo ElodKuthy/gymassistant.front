@@ -30,15 +30,16 @@
 
             authenticationService.forgottenPassword(vm.userName, vm.email)
                 .then(function () {
-                    return infoService.modal('Elfelejtett jelszó', 'Elküldtük az e-mailt, kövesd az abban leírtakat az új jelszó megadásához');
+                    loadingService.endLoading();
+                    return infoService.modal('Elfelejtett jelszó', 'Amennyiben a megadott adatok helyesek, hamarosan kapsz egy e-mailt, kövesd az abban leírtakat az új jelszó megadásához!');
                 })
                 .then(function () {
                     locationHelper.back();
                 })
                 .catch(function (error) {
+                    loadingService.endLoading();
                     vm.error = error.message ? error.message : error;
-                })
-                .finally(loadingService.endLoading);
+                });
         };
     }
 
