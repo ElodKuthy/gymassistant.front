@@ -49,6 +49,24 @@ Errors
 }
 
 /* ==================================================
+Footer
+================================================== */
+
+footer {
+  text-align: center
+}
+
+footer a {
+  color: #4a9bdb;
+  text-decoration: underline;
+}
+
+footer a:hover, footer a:active, footer a:active {
+  color: #8abee8;
+  text-decoration: underline;
+}
+
+/* ==================================================
 Lists
 ================================================== */
 
