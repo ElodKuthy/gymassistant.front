@@ -13,10 +13,14 @@
         <div class="col-sm-offset-1 col-lg-6 col-md-7 col-sm-9">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <div class="input-group">
+                    <div ng-if="vm.adminMode" class="input-group">
                         <span class="input-group-addon">Név</span>
-                        <input ng-model="vm.name" class="form-control" id="name">
-                        <a hef="" ng-click="vm.changeName()" class="input-group-addon btn btn-primary" disabled>Módosít</a>
+                        <input ng-model="vm.newName" class="form-control" id="name">
+                        <a hef="" ng-click="vm.changeName()" class="input-group-addon btn btn-primary" >Módosít</a>
+                    </div>
+                    <div ng-if="!vm.adminMode">
+                        <label>Név: </label>
+                        <span>{{vm.name}}</span>
                     </div>
                 </li>
                 <li class="list-group-item">
