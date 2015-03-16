@@ -62,13 +62,6 @@
         function getUserInfo() {
             try {
                 var userInfo = $window.sessionStorage.userInfo;
-                if (!userInfo) {
-                    userInfo = ipCookie(userInfoCookieKey);
-                    if (userInfo) {
-                        userInfo = JSON.stringify(userInfo);
-                        $window.sessionStorage.userInfo = userInfo;
-                    }
-                }
 
                 return userInfo ? JSON.parse(userInfo) : null;
             } catch (err) {
@@ -80,12 +73,8 @@
             try {
                 if (userInfo) {
                     $window.sessionStorage.userInfo = JSON.stringify(userInfo);
-                    if (remember) {
-                        ipCookie(userInfoCookieKey, JSON.stringify(userInfo), { expires: 1000 });
-                    }
                 } else {
                     $window.sessionStorage.removeItem('userInfo');
-                    ipCookie.remove(userInfoCookieKey);
                 }
             } catch (err) {
                 checkPrivateMode(err);

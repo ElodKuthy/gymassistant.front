@@ -12,7 +12,13 @@
             .when('/orarend/heti', {
                 templateUrl: 'schedule/schedule.html',
                 controllerAs: 'vm',
-                controller: 'ScheduleController'
+                controller: 'ScheduleController',
+                resolve: {
+                    /* @ngInject */
+                    userInfo: function (authenticationService) {
+                        return authenticationService.getUserInfo();
+                    }
+                }
             })
             .when('/orarend/:day', {
                 templateUrl: 'schedule/schedule.html',

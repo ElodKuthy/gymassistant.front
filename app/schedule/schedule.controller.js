@@ -7,11 +7,11 @@
         .controller("ScheduleController", ScheduleController);
 
     /* @ngInject */
-    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService) {
+    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService, userInfo) {
 
         var vm = this;
 
-        vm.userInfo = null;
+        vm.userInfo = userInfo;
         vm.credit = {};
         vm.showAttendeeList = false;
 
@@ -42,7 +42,6 @@
 
             var promises = [];
             promises.push(scheduleService.getSchedule(begin, end));
-            vm.userInfo = authenticationService.getUserInfo();
             if (vm.userInfo) {
                promises.push(scheduleService.getCurrentCredit());
             }
@@ -137,23 +136,45 @@
 
         function join(instance) {
             if (canJoin(instance)) {
-                scheduleService.joinClass(instance.id).then(function () {
-                    instance.current++;
-                    if (vm.credit) {
-                        vm.credit.free--;
-                        vm.credit.attended++;
-                    }
-                    if (instance.attendees) {
-                        instance.attendees.push(vm.userInfo.name);
-                    }
-                    calculateInstanceProperties(instance, true);
-                }, function (error) {
-                    errorService.modal(error, "sm");
-                });
+                if (vm.userInfo.preferences.askIrreversibleJoining &&
+                    vm.userInfo.roles.indexOf('admin') == -1 &&
+                    moment().add({ hours: 3}).isAfter(instance.date)) {
+                    decisionService.modal(
+                        'Feliratkozás',
+                        'Biztos, hogy jelenkezni szertnél erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet lemondani a részvételt, ha egyszer jelentkeztél!',
+                        'Biztos',
+                        'Mégsem',
+                        { title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!', value: false })
+                        .then(function (result) {
+                            if (result.checkbox) {
+                                vm.userInfo.preferences.askIrreversibleJoining = false;
+                                authenticationService.updatePreferences(vm.userInfo.preferences).then(function (userInfo) { vm.userInfo = userInfo; });
+                            }
+                            doJoin(instance);
+                        });
+                } else {
+                    doJoin(instance);
+                }
 
             } else if (!vm.userInfo) {
                 $location.path("/belepes");
             }
+        }
+
+        function doJoin(instance) {
+            scheduleService.joinClass(instance.id).then(function () {
+                instance.current++;
+                if (vm.credit) {
+                    vm.credit.free--;
+                    vm.credit.attended++;
+                }
+                if (instance.attendees) {
+                    instance.attendees.push(vm.userInfo.name);
+                }
+                calculateInstanceProperties(instance, true);
+            }, function (error) {
+                errorService.modal(error);
+            });
         }
 
         function canLeave(instance) {

@@ -7,7 +7,7 @@
         .controller("AttendeesController", AttendeesController);
 
     /* @ngInject */
-    function AttendeesController($routeParams, $filter, $rootScope, $q, scheduleService, attendeesService, errorService, eventHelper, locationHelper, loadingService, userInfo, training, allUsers) {
+    function AttendeesController($routeParams, $filter, $rootScope, $q, scheduleService, attendeesService, errorService, eventHelper, locationHelper, loadingService, userInfo, training, allUsers, decisionService, authenticationService) {
 
         var vm = this;
 
@@ -51,7 +51,7 @@
         }
 
         function canRemove(attendee) {
-            return (vm.adminMode || moment().isBefore(moment(vm.training.date).add({ hour: 1 }))) && !attendee.checkedIn;
+            return (vm.adminMode || moment().isBefore(moment(vm.training.date).subtract({ hour: 3 }))) && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
@@ -114,6 +114,29 @@
                 return;
             }
 
+            if (vm.userInfo.preferences.askIrreversibleJoining &&
+                vm.userInfo.roles.indexOf('admin') == -1 &&
+                moment().add({ hours: 3}).isAfter(vm.training.date)) {
+
+                decisionService.modal(
+                    'Hozzáadás',
+                    'Biztos, hogy fel szertnél írni ' + vm.newAttendee + '-t erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet visszavonni a részvételt, ha már egyszer felírtad!',
+                    'Biztos',
+                    'Mégsem',
+                    { title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!', value: false })
+                    .then(function (result) {
+                        if (result.checkbox) {
+                            vm.userInfo.preferences.askIrreversibleJoining = false;
+                            authenticationService.updatePreferences(vm.userInfo.preferences).then(function (userInfo) { vm.userInfo = userInfo; });
+                        }
+                        doAdd();
+                    });
+            } else {
+                doAdd();
+            }
+        }
+
+        function doAdd() {
             $q.when(loadingService.startLoading())
                 .then(function () {
                     return attendeesService.addToTraining(vm.training._id, vm.newAttendee);

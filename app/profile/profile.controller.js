@@ -6,7 +6,7 @@
         .controller('ProfileController', ProfileController);
 
     /* @ngInject */
-    function ProfileController($rootScope, $location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits) {
+    function ProfileController($rootScope, $location, profileService, authenticationService, errorService, infoService, eventHelper, userInfo, locationHelper, client, allUsers, credits, loadingService) {
 
         var vm = this;
 
@@ -18,6 +18,13 @@
         vm.credits = credits;
         vm.now = moment().unix();
 
+        vm.opened = {
+            basic: true,
+            password: true,
+            preferences: true,
+            credits: true
+        };
+
         if (client) {
             vm.addCredit = addCredit;
             vm.registrationEmail = registrationEmail;
@@ -28,6 +35,7 @@
             $rootScope.title = 'Profilom';
         }
 
+        vm.userInfo = userInfo;
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
         fillProfile(client ? client : userInfo);
@@ -111,6 +119,12 @@
             function changeEmailSuccess (result) {
                 infoService.modal('Email cím változtatás', result);
             }
+        }
+
+        vm.updatePreferences = function() {
+            loadingService.startLoading();
+            return authenticationService.updatePreferences(vm.userInfo.preferences)
+                .then(loadingService.endLoading);
         }
     }
 })();
