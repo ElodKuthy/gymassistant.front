@@ -12,7 +12,8 @@
             changePassword: changePassword,
             changeEmail: changeEmail,
             sendRegistrationEmail: sendRegistrationEmail,
-            getCredits: getCredits
+            getCredits: getCredits,
+            changeName: changeName
         };
 
         function changePassword(newPassword) {
@@ -29,6 +30,10 @@
 
         function getCredits() {
             return httpService.get("/api/my/credits");
+        }
+
+        function changeName(name, newName) {
+            return httpService.post('/api/change/name', { name: name, userName: newName });
         }
     }
 

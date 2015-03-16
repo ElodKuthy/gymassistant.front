@@ -11,6 +11,7 @@
         var vm = this;
 
         vm.name = '';
+        vm.newName = '';
         vm.email = '';
         vm.password = '';
         vm.passwordAgain = '';
@@ -38,6 +39,20 @@
         vm.userInfo = userInfo;
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
+        if (vm.adminMode) {
+            vm.changeName = function() {
+                if (vm.name != vm.newName) {
+                    profileService.changeName(vm.name, vm.newName)
+                        .then(function () {
+                            vm.name = vm.newName;
+                            infoService.modal('Névváltoztatás', 'A tanítvány nevét sikeresen megváltoztattuk');
+                        }, function(error) {
+                            errorService.modal(error);
+                        })
+                }
+            }
+        }
+
         fillProfile(client ? client : userInfo);
 
         if (userInfo.roles.indexOf('coach') > -1) {
@@ -54,6 +69,7 @@
         function fillProfile(userInfo) {
             if (userInfo) {
                 vm.name = userInfo.name;
+                vm.newName = vm.name;
                 vm.email = userInfo.email;
                 vm.role = userInfo.roles.indexOf('admin') === -1 ? (userInfo.roles.indexOf('coach') === -1 ? 'Tanítvány' : 'Edző') : 'Adminisztrátor';
                 vm.isClient = userInfo.roles.indexOf('admin') === -1 && userInfo.roles.indexOf('coach') === -1;
