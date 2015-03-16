@@ -20,11 +20,33 @@
 
             changePassword: function(userName, email, token, password) {
                 return httpService.post('/api/change/password', { userName: userName, email: email, token: token, password: password });
-            }
+            },
+
+            updatePreferences: function(preferences) {
+                return httpService.post('/api/my/preferences', { preferences: preferences })
+                    .then(function() { return refreshUserInfo(); });
+            },
         };
 
+        function refreshUserInfo() {
+            storageHelper.setUserInfo(null);
+            return getUserInfo();
+        }
+
         function getUserInfo() {
-            return storageHelper.getUserInfo();
+            var userInfo = storageHelper.getUserInfo();
+
+            if (!userInfo && storageHelper.getAuth()) {
+                return httpService.get("/api/login").then(function (result) {
+                    if (!result.error) {
+                        storageHelper.setUserInfo(result);
+                        userInfo = storageHelper.getUserInfo();
+                        return userInfo;
+                    }
+                });
+            }
+
+            return $q.when(userInfo);
         }
 
         function login(userName, password, remember) {
@@ -36,7 +58,7 @@
                 function (result) {
                     if (!result.error) {
                         storageHelper.setAuth(authorization, remember);
-                        storageHelper.setUserInfo(result, remember);
+                        storageHelper.setUserInfo(result);
                         deferred.resolve(result);
                         eventHelper.broadcast.authenticationChanged();
                     } else {

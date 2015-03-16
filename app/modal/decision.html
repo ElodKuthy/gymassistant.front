@@ -3,10 +3,18 @@
             class="sr-only">Bezárás</span></button>
     <h4 class="modal-title" ng-bind="vm.title"></h4>
 </div>
-<div class="modal-body" style="padding-bottom: 20px;">
+<div class="modal-body" style="text-align: justify; margin-bottom: 0px;">
 
     <i class="fa fa-warning fa-3x pull-left"></i>
     <span ng-bind="vm.message"></span>
+    <div ng-if="vm.checkbox">
+      <hr>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" ng-model="vm.checkbox.value"> {{ vm.checkbox.title }}
+        </label>
+      </div>
+    </div>
 </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" ng-click="vm.yes()">{{ vm.yesButtonLabel }}</button>

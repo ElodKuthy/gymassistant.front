@@ -6,7 +6,7 @@
         .controller("DecisionController", DecisionController);
 
     /* @ngInject */
-    function DecisionController($modalInstance, title, message, yesLabel, noLabel) {
+    function DecisionController($modalInstance, title, message, yesLabel, noLabel, checkbox) {
 
         var vm = this;
 
@@ -16,13 +16,14 @@
         vm.noButtonLabel = noLabel;
         vm.yes = yes;
         vm.no = no;
+        vm.checkbox = checkbox;
 
         function yes () {
-            $modalInstance.close();
+            $modalInstance.close({ checkbox: vm.checkbox.value });
         }
 
         function no () {
-            $modalInstance.dismiss('no');
+            $modalInstance.dismiss({ checkbox: vm.checkbox.value });
         }
     }
 })();

@@ -13,7 +13,7 @@
             modal: modal
         };
 
-        function modal(title, message, yesLabel, noLabel) {
+        function modal(title, message, yesLabel, noLabel, checkbox) {
 
             return $modal.open({
                 templateUrl: "modal/decision.html",
@@ -32,6 +32,9 @@
                     },
                     noLabel: function () {
                         return noLabel;
+                    },
+                    checkbox: function() {
+                        return checkbox;
                     }
                 }
             }).result;

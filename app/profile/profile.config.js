@@ -23,14 +23,15 @@
                         return $q.when(null);
                     },
                     /* @ngInject */
-                    allUsers: function ($q, storageHelper, scheduleService) {
-                        var user = storageHelper.getUserInfo();
-                        if (user && user.roles.indexOf('coach') > -1) {
-                            return scheduleService.getUsers();
-                        }
-                        else {
-                            return $q.when(null);
-                        }
+                    allUsers: function ($q, authenticationService, scheduleService) {
+                        return authenticationService.getUserInfo()
+                            .then(function (userInfo) {
+                                if (userInfo && userInfo.roles.indexOf('coach') > -1) {
+                                    return scheduleService.getUsers();
+                                } else {
+                                    return null;
+                                }
+                            });
                     },
                     /* @ngInject */
                     credits: function (profileService) {
