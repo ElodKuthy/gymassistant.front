@@ -26,8 +26,8 @@
                 controller: 'ScheduleController',
                 resolve: {
                     /* @ngInject */
-                    userInfo: function ($route, locationHelper) {
-                        return moment($route.current.params.day, 'YYYY-MM-DD').isSame(moment(), 'day') ? null : locationHelper.onlyAuthenticated();
+                    userInfo: function ($route, locationHelper, authenticationService) {
+                        return moment($route.current.params.day, 'YYYY-MM-DD').isSame(moment(), 'day') ? authenticationService.getUserInfo() : locationHelper.onlyAuthenticated();
                     }
                 }
             })
