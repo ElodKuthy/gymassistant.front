@@ -9,6 +9,8 @@
             'angularMoment',
             'ja.qr',
             'ipCookie',
+            'ngSanitize',
+            'ngCsv',
             'gymassistant.front.common',
             'gymassistant.front.credits',
             'gymassistant.front.error',

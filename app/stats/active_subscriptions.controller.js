@@ -80,5 +80,20 @@
             $location.path('/statisztikak/aktiv/berletek/' + moment(vm.dates.from).format('YYYY-MM-DD') + '/' + moment(vm.dates.to).format('YYYY-MM-DD'));
         }
 
+        vm.exportClients = function(coachName) {
+
+            var results = [];
+            var counted = {};
+
+            vm.subscriptions[coachName].subscriptions.forEach(function (credit) {
+                if (!counted[credit.client]) {
+                    counted[credit.client] = true;
+                    results.push({ 'Név': credit.client, 'Email': credit.email });
+                }
+            });
+
+            return results;
+        }
+
     }
 })();
