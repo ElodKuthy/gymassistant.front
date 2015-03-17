@@ -89,7 +89,9 @@ gulp.task("js:vendor", ["clean:dist"], function () {
         "bower_components/angular-cookie/angular-cookie.min.js",
         "bower_components/qcode-decoder/build/qrcode.js",
         "bower_components/qrcode/lib/qrcode.min.js",
-        "bower_components/angular-qr/angular-qr.min.js"])
+        "bower_components/angular-qr/angular-qr.min.js",
+        "bower_components/angular-sanitize/angular-sanitize.min.js",
+        "bower_components/ng-csv/build/ng-csv.min.js"])
         .pipe(plugins.concat("vendor.min.js"))
         .pipe(gulp.dest("dist/js"));
 });

@@ -40,8 +40,9 @@
     <accordion>
         <accordion-group ng-if="coach.selected" ng-repeat="coach in vm.coaches" is-open="coach.opened">
             <accordion-heading>
-                {{ coach.name }} <i class="fa fa-users"></i> {{ vm.subscriptions[coach.name].distinct }} <i class="fa fa-credit-card"></i> {{ vm.subscriptions[coach.name].all }}<i class="pull-right fa" ng-class="{'fa-chevron-down': coach.opened, 'fa-chevron-right': !coach.opened}"></i>
+                {{ coach.name }} <i class="fa fa-users"></i> {{ vm.subscriptions[coach.name].distinct }} <i class="fa fa-credit-card"></i> {{ vm.subscriptions[coach.name].all }} <a href=""></a> <span class="pull-right"><i class="fa" ng-class="{'fa-chevron-down': coach.opened, 'fa-chevron-right': !coach.opened}"></i></span>
             </accordion-heading>
+            <a href="" ng-csv="vm.exportClients(coach.name)" csv-header="['Név', 'Email']" filename="nevsor.csv" field-separator=";"><i class="fa fa-file-excel-o" style="margin-left: 10px; margin-bottom: 15px;"></i><span class="xs-hidden"> Exportálás</span></a>
             <accordion>
                 <accordion-group ng-repeat="credit in vm.subscriptions[coach.name].subscriptions" is-open="credit.opened">
                     <accordion-heading>
