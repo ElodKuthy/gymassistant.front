@@ -19,11 +19,11 @@
         vm.checkbox = checkbox;
 
         function yes () {
-            $modalInstance.close({ checkbox: vm.checkbox.value });
+            $modalInstance.close({ checkbox: vm.checkbox ? vm.checkbox.value : undefined });
         }
 
         function no () {
-            $modalInstance.dismiss({ checkbox: vm.checkbox.value });
+            $modalInstance.dismiss({ checkbox:  vm.checkbox ? vm.checkbox.value : undefined });
         }
     }
 })();
