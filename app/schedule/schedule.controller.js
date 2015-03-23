@@ -247,11 +247,14 @@
 
             decisionService.modal('Óra lemondása', 'Biztos vagy benne, hogy le szeretnéd mondani ezt az órát?', 'Biztos', 'Mégsem')
                 .then(function () {
+                    loadingService.startLoading();
                     scheduleService.cancelTraining(instance.id)
                         .then(function () {
+                            loadingService.endLoading();
                             infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok bérletén jóváírásra került egy kredit.')
                                 .then(function () { fetchSchedule(vm.dates.begin, vm.dates.end); });
                         }, function (err) {
+                            loadingService.endLoading();
                             errorService.modal(err);
                         });
                 });
