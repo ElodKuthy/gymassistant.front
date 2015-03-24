@@ -12,7 +12,8 @@
             addToTraining: addToTraining,
             removeFromTraining: removeFromTraining,
             checkIn: checkIn,
-            undoCheckIn: undoCheckIn
+            undoCheckIn: undoCheckIn,
+            changeCoach: changeCoach
         };
 
         function addToTraining(id, userName) {
@@ -33,6 +34,11 @@
         function undoCheckIn(id, userName) {
 
             return httpService.get("/api/undo/check/in/user/" + userName + "/for/training/id/" + id);
+        }
+
+        function changeCoach(id, coach) {
+
+            return httpService.post('/api/training/' + id, { coach: coach });
         }
     }
 

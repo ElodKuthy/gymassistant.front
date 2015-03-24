@@ -1,40 +1,59 @@
 <div id="attendees-list" class="container">
     <div class="row">
-        <ul class="list-group" >
-            <li class="list-group-item clearfix"
-                ng-repeat="attendee in vm.training.attendees | orderBy: 'name'"
-                ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": vm.missedCheckIn(attendee) }'>
-                <span>{{$index + 1}}. </span>
-                <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
-                <span class="pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canUndoCheckedIn(attendee)"
-                            ng-click="vm.undoCheckIn(attendee)">
-                        <i class="fa fa-undo"></i><span class="hidden-xs"> Visszavonás</span>
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canCheckIn(attendee)"
-                            ng-click="vm.checkIn(attendee)">
-                        <i class="fa fa-check-circle"></i><span class="hidden-xs"> Bejelentkezés</span>
-                    </button>
-                    <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canRemove(attendee)"
-                            ng-click="vm.remove(attendee)">
-                        <i class="fa fa-trash"></i><span class="hidden-xs"> Eltávoítás</span>
-                    </button>
-                </span>
-            </li>
-            <li class="list-group-item clearfix" ng-if="vm.canAdd()">
-                <form name="addClientForm" role="form">
-                    <div class="form-group">
-                        <label for="userName">Tanítvány hozzáadása</label>
-                        <input type="text" id="userName" name="userName" class="form-control" placeholder="Tanítvány neve" ng-model="vm.newAttendee"
-                               typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
-                    </div>
-                        <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.add(addClientForm)" ng-disabled="addClientForm.$invalid || addClientForm.$pristine">
-                            <i class="fa fa-plus"></i><span class="hidden-xs"> Hozzáadás</span>
+        <div class="col-sm-10 col-sm-offset-1">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    {{vm.training.name}} ({{vm.training.coach}}) <span style="white-space: nowrap;">{{vm.formattedTrainingDate}}</span>
+                </li>
+                <li class="list-group-item clearfix"
+                    ng-repeat="attendee in vm.training.attendees | orderBy: 'name'"
+                    ng-class='{ "list-group-item-success": attendee.checkedIn, "list-group-item-danger": vm.missedCheckIn(attendee) }'>
+                    <span>{{$index + 1}}. </span>
+                    <span><a ng-href="/profil/{{attendee.name}}">{{ attendee.name }}</a></span>
+                    <span class="pull-right">
+                        <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canUndoCheckedIn(attendee)"
+                                ng-click="vm.undoCheckIn(attendee)">
+                            <i class="fa fa-undo"></i><span class="hidden-xs"> Visszavonás</span>
                         </button>
-                </form>
-                    <span class="text-danger" ng-show="addClientForm.userName.$error.isItemOfList && addClientForm.userName.$touched ">
-                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű tanítvány!</span>
-            </li>
-        </ul>
+                        <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canCheckIn(attendee)"
+                                ng-click="vm.checkIn(attendee)">
+                            <i class="fa fa-check-circle"></i><span class="hidden-xs"> Bejelentkezés</span>
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" ng-if="vm.canRemove(attendee)"
+                                ng-click="vm.remove(attendee)">
+                            <i class="fa fa-trash"></i><span class="hidden-xs"> Eltávoítás</span>
+                        </button>
+                    </span>
+                </li>
+                <li class="list-group-item clearfix" ng-if="vm.canAdd()">
+                    <form name="addClientForm" role="form">
+                        <div class="form-group">
+                            <label for="userName">Tanítvány hozzáadása</label>
+                            <input type="text" id="userName" name="userName" class="form-control" placeholder="Tanítvány neve" ng-model="vm.newAttendee"
+                                   typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
+                        </div>
+                            <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.add(addClientForm)" ng-disabled="addClientForm.$invalid || addClientForm.$pristine">
+                                <i class="fa fa-plus"></i><span class="hidden-xs"> Hozzáadás</span>
+                            </button>
+                    </form>
+                        <span class="text-danger" ng-show="addClientForm.userName.$error.isItemOfList && addClientForm.userName.$touched ">
+                                <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű tanítvány!</span>
+                </li>
+                <li class="list-group-item clearfix" ng-if="vm.canChangeCoach()">
+                    <form name="changeCoachForm" role="form">
+                        <div class="form-group">
+                            <label for="coachName">Edző cseréje</label>
+                            <input type="text" id="coachName" name="coachName" class="form-control" placeholder="Edző neve" ng-model="vm.newCoach"
+                                   typeahead="coach as coach for coach in vm.coachesCanBeSelected | filter: $viewValue" required is-item-of-list="{{ vm.coachesCanBeSelected | filter: name }}">
+                        </div>
+                            <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.change(changeCoachForm)" ng-disabled="changeCoachForm.$invalid || changeCoachForm.$pristine">
+                                <i class="fa fa-refresh"></i></i><span class="hidden-xs"> Csere</span>
+                            </button>
+                    </form>
+                        <span class="text-danger" ng-show="changeCoachForm.coachName.$error.isItemOfList && changeCoachForm.coachName.$touched ">
+                                <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű edző!</span>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
