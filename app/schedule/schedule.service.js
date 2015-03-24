@@ -67,7 +67,7 @@
         }
 
         function getInstance(id) {
-            return httpService.get('/api/training/id/' + id);
+            return httpService.get('/api/training/' + id);
         }
 
         function cancelTraining(trainingId) {

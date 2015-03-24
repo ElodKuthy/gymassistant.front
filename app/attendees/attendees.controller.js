@@ -7,7 +7,7 @@
         .controller("AttendeesController", AttendeesController);
 
     /* @ngInject */
-    function AttendeesController($routeParams, $filter, $rootScope, $q, scheduleService, attendeesService, errorService, eventHelper, locationHelper, loadingService, userInfo, training, allUsers, decisionService, authenticationService) {
+    function AttendeesController($routeParams, $filter, $rootScope, $q, scheduleService, attendeesService, errorService, eventHelper, locationHelper, loadingService, userInfo, training, allUsers, decisionService, authenticationService, infoService) {
 
         var vm = this;
 
@@ -16,6 +16,7 @@
         vm.training = training;
         vm.allUsers = allUsers;
         vm.usersCanBeAdded = [];
+        vm.coachesCanBeSelected = [];
         vm.newAttendee = "";
         vm.addAttendeeError = null;
 
@@ -29,15 +30,26 @@
         vm.canAdd = canAdd;
         vm.add = add;
 
-        $rootScope.title = "Résztvevők - " + $filter('date')(moment(vm.training.date).toDate(), 'yyyy MMMM d. HH:mm');
+        vm.formattedTrainingDate = $filter('date')(moment(vm.training.date).toDate(), 'yyyy. MMMM d. HH:mm');
+        $rootScope.title = "Résztvevők - " + vm.formattedTrainingDate;
 
         refreshUsersCanBeAdded();
+        refreshCoachesCanBeSelected();
 
         function refreshUsersCanBeAdded() {
             vm.usersCanBeAdded = [];
             vm.allUsers.forEach(function (user) {
                 if ($.grep(vm.training.attendees, function (current) { return current.name === user.name; }).length === 0) {
                     vm.usersCanBeAdded.push(user.name);
+                }
+            });
+        }
+
+        function refreshCoachesCanBeSelected() {
+            vm.coachesCanBeSelected = [];
+            vm.allUsers.forEach(function (user) {
+                if (user.roles.indexOf('coach') > -1 && training.coach != user.name) {
+                    vm.coachesCanBeSelected.push(user.name);
                 }
             });
         }
@@ -154,6 +166,37 @@
                 })
                 .finally(function () {
                     loadingService.endLoading();
+                });
+        }
+
+        vm.canChangeCoach = function () {
+            return vm.adminMode  || vm.userInfo.name == vm.training.coach;
+        }
+
+        vm.change = function(form) {
+
+            if (!form || form.$invalid || vm.isAmountDiff) {
+                return;
+            }
+
+            loadingService.startLoading();
+
+            attendeesService.changeCoach(vm.training._id, vm.newCoach)
+                .then(function () {
+                    loadingService.endLoading();
+                    infoService.modal('Edző váltás', 'Sikeresen megváltoztattad az óratartó edző személyét.')
+                        .then(function () {
+                            if (!vm.adminMode) {
+                                locationHelper.back();
+                            } else {
+                                vm.training.coach = vm.newCoach;
+                                vm.newCoach = '';
+                                refreshCoachesCanBeSelected();
+                            }
+                        });
+                }, function (error) {
+                    loadingService.endLoading();
+                    errorService.modal(error);
                 });
         }
     }
