@@ -14,7 +14,8 @@
             getUserInfo: getUserInfo,
             addNewSubscription: addNewSubscription,
             getSeries: getSeries,
-            getCredits: getCredits
+            getCredits: getCredits,
+            addFirstTime: addFirstTime
         };
 
         function addNewClient(name, email) {
@@ -27,6 +28,10 @@
 
         function getUserInfo(name) {
             return httpService.get('/api/user/' + name);
+        }
+
+        function addFirstTime(userName, series) {
+            return httpService.post('/api/add/first/time', { userName: userName, series: series });
         }
 
         function addNewSubscription(amount, userName, period, series) {

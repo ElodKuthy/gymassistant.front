@@ -65,7 +65,7 @@
                                     _id: current._id,
                                     name: current.name,
                                     coach: current.coach,
-                                    date: moment({ days: current.date.day, hours: current.date.hour }).toDate(),
+                                    date: moment({ hours: current.date.hour }).day(current.date.day).toDate(),
                                     dateText: $filter('date')(moment({ hours: current.date.hour }).day(current.date.day).toDate(), 'EEEE H:mm'),
                                     selected: false
                                 });

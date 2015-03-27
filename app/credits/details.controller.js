@@ -15,7 +15,7 @@
 
         vm.userName = $routeParams.name ? $routeParams.name : userInfo.name;
         vm.credit = credit;
-        vm.isAdmin = userInfo.roles.indexOf('coach') > -1;
+        vm.isAdmin = userInfo.roles.indexOf('admin') > -1;
         vm.now = moment().unix();
 
         vm.profileLink = function() {

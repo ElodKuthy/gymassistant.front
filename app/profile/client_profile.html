@@ -56,6 +56,7 @@
                                     <div ng-if="credit.missed > 0" class="creditText">Kihagyott {{ credit.missed }} feliratkozott edzést</div>
                                     <div ng-if="credit.expiry >= vm.now && credit.free > 0" class="creditText">Még feliratkozhat {{ credit.free }} alkalomra</div>
                                     <div ng-if="credit.expiry < vm.now && credit.free > 0" class="creditText">Feliratkozás nélkül elveszett {{ credit.free }} alkalom</div>
+                                    <div ng-if="credit.firstTime" class="creditText">(Első, ingyenes alkalom)</div>
                                     <a type="button" class="btn btn-primary pull-right" ng-href="/berlet/reszletek/{{vm.name}}/{{credit.id}}">Részletek</a>
                                 </li>
                             </ul>

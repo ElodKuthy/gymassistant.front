@@ -98,10 +98,18 @@
                 }
             });
 
-            if (vm.adminMode) {
-                adminService.addNewSubscription(vm.amount(), vm.userName, vm.coachName, moment(vm.calendar.date).startOf('day').unix(), periodString(), series).then(subscriptionAdded, error);
+            if (vm.type() === 'first') {
+                if (vm.adminMode) {
+                   adminService.addFirstTime(vm.userName, moment(vm.calendar.date).startOf('day').unix(), vm.coachName, series).then(subscriptionAdded, error);
+                } else {
+                    coachService.addFirstTime(vm.userName, series).then(subscriptionAdded, error);
+                }
             } else {
-                coachService.addNewSubscription(vm.amount(), vm.userName, periodString(), series).then(subscriptionAdded, error);
+                if (vm.adminMode) {
+                    adminService.addNewSubscription(vm.amount(), vm.userName, vm.coachName, moment(vm.calendar.date).startOf('day').unix(), periodString(), series).then(subscriptionAdded, error);
+                } else {
+                    coachService.addNewSubscription(vm.amount(), vm.userName, periodString(), series).then(subscriptionAdded, error);
+                }
             }
 
             function error(err) {
@@ -132,7 +140,11 @@
         }
 
         function cleanUpSelectedSeries () {
-            if (!vm.displayAllTrainings) {
+            if (vm.amount() == 1) {
+                vm.series.forEach(function (current) {
+                    current.selected = false;
+                });
+            } else if (!vm.displayAllTrainings) {
                 vm.series.forEach(function (current) {
                     if (current.coach != vm.userInfo.name) {
                         current.selected = false;
@@ -142,6 +154,37 @@
         }
 
         $scope.$watch('vm.amountPerWeek', vm.checkAmountDiff);
+
+        vm.showCurrentSeries = function (currentSeries) {
+            if (vm.adminMode) {
+                return true;
+            }
+
+            if (vm.displayAllTrainings || currentSeries.coach == vm.userInfo.name) {
+                if (vm.period > 1) {
+                    return true;
+                } else if (moment(currentSeries.date).weekday() == moment().weekday()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        var _chosenIndex = -1;
+        vm.chosen = function (index) {
+            if (index) {
+                if (_chosenIndex > -1) {
+                    vm.series[_chosenIndex].selected = false;
+                }
+                if (index < vm.series.length) {
+                    vm.series[index].selected = true;
+                    _chosenIndex = index;
+                }
+            }
+
+            return _chosenIndex;
+        }
     }
 
 })();
