@@ -15,7 +15,7 @@
                     <h4>Bérlet típusa</h4>
                     <div class="btn-group">
                         <label class="btn btn-primary" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'normal'">Normál</label>
-                        <label class="btn btn-primary" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'first'" disabled>Első alkalom</label>
+                        <label class="btn btn-primary" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'first'">Első alkalom</label>
                         <label class="btn btn-primary" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'seminar'" disabled>Szeminárium</label>
                         <label class="btn btn-primary" ng-model="vm.type" ng-model-options="{ getterSetter: true }" btn-radio="'private'" disabled>Személyi edzés</label>
                     </div>
@@ -61,14 +61,21 @@
                 </div>
                 <div class="form-group">
                     <h4>Választott edzések</h4>
-                    <div class="checkbox" ng-hide="vm.adminMode">
+                    <div class="checkbox" ng-if="!vm.adminMode">
                       <label>
                         <input type="checkbox" value="true" ng-model="vm.displayAllTrainings" ng-change="vm.cleanUpSelectedSeries()">
                           Mutasd az összes edzést
                       </label>
                     </div>
-                    <ul class="list-group" ng-form="selectedTrainings">
-                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'date'" ng-if="vm.adminMode || vm.displayAllTrainings || series.coach == vm.userInfo.name">
+                    <ul class="list-group" ng-form="chosenTraining" ng-show="vm.amount() == 1">
+                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'date'" ng-if="vm.showCurrentSeries(series)">
+                            <label>
+                                <input type="radio" ng-model="vm.chosen" ng-model-options="{ getterSetter: true }" ng-change="vm.checkAmountDiff()" ng-value="$index"> {{ series.name }} / {{ series.dateText }} <span ng-if="vm.adminMode || vm.displayAllTrainings"> / {{ series.coach }}</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-form="selectedTrainings" ng-show="vm.amount() > 1">
+                        <li class="list-group-item" ng-repeat="series in vm.series | orderBy: 'date'" ng-if="vm.showCurrentSeries(series)">
                             <label>
                                 <input type="checkbox" ng-model="series.selected" ng-change="vm.checkAmountDiff()"> {{ series.name }} / {{ series.dateText }} <span ng-if="vm.adminMode || vm.displayAllTrainings"> / {{ series.coach }}</span>
                             </label>

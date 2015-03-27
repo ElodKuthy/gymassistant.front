@@ -7,11 +7,12 @@
           </div>
           <div class="panel-body">
             <div class="creditDetailsText">Érvényesség:</div>
-            <div><span class="creditDetailsText">{{ vm.credit.date * 1000 | date }} - {{ vm.credit.expiry * 1000 | date }}</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin" ng-click="vm.increaseValidity()">+1 hét</button></div>
+            <div><span class="creditDetailsText">{{ vm.credit.date * 1000 | date }} - {{ vm.credit.expiry * 1000 | date }}</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin && !vm.credit.firstTime" ng-click="vm.increaseValidity()">+1 hét</button></div>
             <div class="creditDetailsText">Edző: {{ vm.credit.coach }}</div>
-            <div><span class="creditDetailsText">{{ vm.credit.amount }} alkalmas bérlet</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin" ng-click="vm.increaseFreeCredits()">+1 alkalom</button></div>
+            <div><span class="creditDetailsText">{{ vm.credit.amount }} alkalmas bérlet</span><button type="button" class="btn btn-primary" ng-if="vm.isAdmin && !vm.credit.firstTime" ng-click="vm.increaseFreeCredits()">+1 alkalom</button></div>
             <div ng-if="vm.credit.expiry >= vm.now && vm.credit.free > 0" class="creditDetailsText">Még feliratkozhat {{ vm.credit.free }} alkalomra</div>
             <div ng-if="vm.credit.expiry < vm.now && vm.credit.free > 0" class="creditDetailsText">Feliratkozás nélkül elveszett {{ vm.credit.free }} alkalom</div>
+            <div ng-if="vm.credit.firstTime" class="creditDetailsText">(Első, ingyenes alkalom)</div>
             <div ng-if="vm.credit.attended.length > 0">
               <div class="panel panel-default credit-details-sub-panel">
                 <div class="panel-heading selected">Feliratkozott</div>
