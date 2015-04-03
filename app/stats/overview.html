@@ -1,0 +1,50 @@
+<div class="container">
+<div class="row" style="max-width: 500px; margin: auto;">
+
+<form name="datesForm" style="padding-top: 20px; clear: both;">
+    <accordion>
+        <accordion-group is-open="vm.dates.opened">
+            <accordion-heading>
+                <label>Intervallum</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.dates.opened, 'fa-chevron-right': !vm.dates.opened}"></i>
+            </accordion-heading>
+            <ul class="list-group">
+                <li ng-if="vm.adminMode" class="list-group-item">
+                    <label>Edző</label>
+                    <input type="text" ng-model="vm.coach" name="coach" class="form-control" placeholder="Edző neve" ga-enter=""
+                      typeahead="coach as coach.name for coach in vm.coaches | filter: { name: $viewValue }" is-item-of-list="{{ vm.coachNames | filter: name }}">
+                    <span class="text-danger" ng-show="datesForm.coach.$error.required && datesForm.coach.$touched">
+                            <i class="fa fa-exclamation-triangle"></i> Kötelező kitölteni!</span>
+                    <span class="text-danger" ng-show="datesForm.coach.$error.isItemOfList && datesForm.coach.$touched">
+                            <i class="fa fa-exclamation-triangle"></i> Nincs ilyen nevű edző!</span>
+                </li>
+                <li class="list-group-item">
+                    <label>Kezdő dátum</label>
+                    <calendar id="from" model="vm.dates.from" format="longDate" minDate="vm.dates.minDate" maxDate="vm.dates.maxDate"></calendar>
+                </li>
+                <li class="list-group-item">
+                    <label>Befejező dátum</label>
+                    <calendar id="to" model="vm.dates.to" format="longDate" minDate="vm.dates.minDate" maxDate="vm.dates.maxDate"></calendar>
+                </li>
+                <li class="list-group-item clearfix">
+                    <span style="margin-top: 10px" class="text-danger" ng-show="vm.dates.invalid">
+                        <i class="fa fa-exclamation-triangle"></i> A kezdő dátum korábbi kell, hogy legyen, mint a befejezés dátuma!</span>
+                    <button type="button" class="btn btn-primary" ng-click="vm.setLastMonth()">
+                      <i class="fa fa-history"></i>
+                      <span class="hidden-xs">Előző hónap</span>
+                    </button>
+                    <button type="button" class="btn btn-primary" ng-click="vm.setCurrentMonth()">
+                      <i class="fa fa-star"></i>
+                      <span class="hidden-xs">Aktuális hónap</span>
+                    </button>
+                    <button type="button" ng-disabled="datesForm.$invalid || vm.dates.invalid" class="btn btn-primary pull-right" ng-click="vm.show(datesForm)">
+                      <i class="fa fa-bar-chart"></i>
+                      <span class="hidden-xs">Mutasd</span>
+                    </button>
+                </li>
+            </ul>
+        </accordion-group>
+    </accordion>
+</form>
+
+</div>
+</div>

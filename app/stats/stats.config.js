@@ -11,6 +11,51 @@
         $routeProvider.when('/statisztikak', {
             templateUrl: 'stats/stats.html'
         }),
+        $routeProvider.when('/statisztikak/attekintes', {
+            templateUrl: 'stats/overview.html',
+            controllerAs: 'vm',
+            controller: 'OverviewController',
+            resolve: {
+                /* @ngInject */
+                userInfo: function(locationHelper) {
+                    return locationHelper.onlyCoach();
+                },
+                /* @ngInject */
+                coaches: function(statsService) {
+                    return statsService.getAllCoaches();
+                }
+            }
+        }),
+        $routeProvider.when('/statisztikak/attekintes/:from/:to', {
+            templateUrl: 'stats/overview.html',
+            controllerAs: 'vm',
+            controller: 'OverviewController',
+            resolve: {
+                /* @ngInject */
+                userInfo: function(locationHelper) {
+                    return locationHelper.onlyCoach();
+                },
+                /* @ngInject */
+                coaches: function() {
+                    return null;
+                }
+            }
+        }),
+        $routeProvider.when('/statisztikak/attekintes/:coach/:from/:to', {
+            templateUrl: 'stats/overview.html',
+            controllerAs: 'vm',
+            controller: 'OverviewController',
+            resolve: {
+                /* @ngInject */
+                userInfo: function(locationHelper) {
+                    return locationHelper.onlyAdmin();
+                },
+                /* @ngInject */
+                coaches: function(statsService) {
+                    return statsService.getAllCoaches();
+                }
+            }
+        }),
         $routeProvider.when('/statisztikak/aktiv/berletek', {
             templateUrl: 'stats/active_subscriptions.html',
             controllerAs: 'vm',
