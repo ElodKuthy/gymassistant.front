@@ -7,7 +7,7 @@
         .controller('OverviewController', OverviewController);
 
     /* @ngInject */
-    function OverviewController($rootScope, $scope, $location, $routeParams, userInfo, coaches) {
+    function OverviewController($rootScope, $scope, $location, $routeParams, userInfo, coaches, stats) {
 
         var vm = this;
 
@@ -32,12 +32,24 @@
 
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
-        vm.coach = vm.adminMode && $routeParams.coach ? $routeParams.coach : userInfo.name;
+        vm.coach = {
+          name: vm.adminMode && $routeParams.coach ? $routeParams.coach : userInfo.name
+        };
 
         vm.coaches = coaches;
 
         vm.coachNames = [];
-        vm.coaches.forEach(function (coach) { vm.coachNames.push(coach.name) });
+        vm.coaches.forEach(function (coach) { vm.coachNames.push(coach.name); });
+
+        vm.statsIsOpen = true;
+        vm.attendeesStatsIsOpen = true;
+        vm.subscriptionsStatsIsOpen = true;
+
+        vm.stats = stats;
+
+        vm.stats.series.forEach(function (instance) {
+          instance.date = moment().isoWeekday(instance.day).hour(instance.hour).minute(0);
+        });
 
         vm.updateDatesValidity = function () {
             vm.dates.invalid = (vm.dates.from > vm.dates.to);
@@ -50,13 +62,13 @@
 
           vm.dates.from = moment().startOf('month').subtract({month: 1}).toDate();
           vm.dates.to = moment().endOf('month').subtract({month: 1}).toDate();
-        }
+        };
 
         vm.setCurrentMonth = function() {
 
           vm.dates.from = moment().startOf('month').toDate();
           vm.dates.to = moment().endOf('month').toDate();
-        }
+        };
 
         vm.show = function(form) {
 
@@ -64,8 +76,8 @@
             return;
           }
 
-          $location.path('/statisztikak/attekintes/' + (vm.adminMode ? (vm.coach + '/') : '') + moment(vm.dates.from).format('YYYY-MM-DD') + '/' + moment(vm.dates.to).format('YYYY-MM-DD'));
-        }
+          $location.path('/statisztikak/attekintes/' + (vm.adminMode ? (vm.coach.name + '/') : '') + moment(vm.dates.from).format('YYYY-MM-DD') + '/' + moment(vm.dates.to).format('YYYY-MM-DD'));
+        };
     }
 
 })();

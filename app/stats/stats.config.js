@@ -23,6 +23,12 @@
                 /* @ngInject */
                 coaches: function(statsService) {
                     return statsService.getAllCoaches();
+                },
+                /* @ngInject */
+                stats: function (statsService) {
+                    var from = moment().startOf('month').subtract({month: 1}).format('YYYY-MM-DD');
+                    var to = moment().endOf('month').subtract({month: 1}).format('YYYY-MM-DD');
+                    return statsService.getOwnOveriew(from, to);
                 }
             }
         }),
@@ -38,6 +44,10 @@
                 /* @ngInject */
                 coaches: function() {
                     return null;
+                },
+                /* @ngInject */
+                stats: function ($route, statsService) {
+                    return statsService.getOwnOveriew($route.current.params.from, $route.current.params.to);
                 }
             }
         }),
@@ -53,6 +63,10 @@
                 /* @ngInject */
                 coaches: function(statsService) {
                     return statsService.getAllCoaches();
+                },
+                /* @ngInject */
+                stats: function ($route, statsService) {
+                    return statsService.getOthersOveriew($route.current.params.from, $route.current.params.to, $route.current.params.coach);
                 }
             }
         }),

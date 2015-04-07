@@ -46,5 +46,59 @@
     </accordion>
 </form>
 
+<accordion>
+    <accordion-group is-open="vm.statsIsOpen">
+        <accordion-heading>
+            <label>Statisztikák</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.statsIsOpen, 'fa-chevron-right': !vm.statsIsOpen}"></i>
+        </accordion-heading>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <label>Összesen</label>
+               <div>Megtartott edzés: {{vm.stats.trainings}}</div>
+               <div>Résztvevő: {{vm.stats.allAttendees}}</div>
+            </li>
+            <li class="list-group-item">
+                <label>Átjárások</label>
+                <div ng-repeat="guests in vm.stats.guestCredits">{{guests.coach}}: {{guests.sum}}</div>
+            </li>
+            <li class="list-group-item">
+                <accordion>
+                    <accordion-group is-open="vm.subscriptionsStatsIsOpen">
+                        <accordion-heading>
+                            <label>Értékesített bérletek</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
+                        </accordion-heading>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="subscription in vm.stats.subscriptions">
+                                <div>Tanítány: {{subscription.name}}</div>
+                                <div>Vásárlás időpontja: {{ subscription.date * 1000 | date }}</div>
+                                <div>Alkalmak száma: {{subscription.amount}}</div>
+                                <div>Érvényesség: {{ ((subscription.expiry - subscription.date) / 86400) | number : 0 }} nap</div>
+                            </li>
+                        </ul>
+                    </accordion-group>
+                </accordion>
+            </li>
+            <li class="list-group-item">
+                <accordion>
+                    <accordion-group is-open="vm.attendeesStatsIsOpen">
+                        <accordion-heading>
+                            <label>Órák látogatottsága</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.attendeesStatsIsOpen, 'fa-chevron-right': !vm.attendeesStatsIsOpen}"></i>
+                        </accordion-heading>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="instance in vm.stats.series">
+                                <div>{{instance.name}} - {{ instance.date.toDate() | date : 'EEEE HH:mm' }}</div>
+                                <div>Összes: {{instance.attendees.sum}}</div>
+                                <div>Átlag: {{(instance.attendees.sum / instance.count) | number}}</div>
+                                <div>Minimum: {{instance.attendees.min}}</div>
+                                <div>Maximum: {{instance.attendees.max}}</div>
+                            </li>
+                        </ul>
+                    </accordion-group>
+                </accordion>
+            </li>
+        </ul>
+    </accordion-group>
+</accordion>
+
 </div>
 </div>
