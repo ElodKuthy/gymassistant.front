@@ -55,7 +55,8 @@
             <li class="list-group-item">
                 <label>Összesítés</label>
                <div>Megtartott edzések: {{vm.stats.trainings}}</div>
-               <div>Résztvevők: {{vm.stats.allAttendees}}</div>
+               <div>Feliratkozottak: {{vm.stats.all.attendees}}</div>
+               <div>Résztvevők: {{vm.stats.all.participants}} ({{((vm.stats.all.participants / vm.stats.all.attendees) * 100) | number : 0}}%)</div>
                <div>Eladások: {{vm.stats.allSubscriptions | number}}</div>
                <div>Bevétel: {{vm.stats.sumIncome | number}}</div>
             </li>
@@ -63,11 +64,11 @@
                 <label>Átjárások</label>
                 <div ng-repeat="guests in vm.stats.guestCredits">{{guests.coach}}: {{guests.sum | number }}</div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" ng-if="vm.stats.subscriptions.length">
                 <accordion>
                     <accordion-group is-open="vm.subscriptionsStatsIsOpen">
                         <accordion-heading>
-                            <label>Eladások</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
+                            <label>Eladások ({{vm.stats.subscriptions.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
                         </accordion-heading>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="subscription in vm.stats.subscriptions">
@@ -75,12 +76,46 @@
                                 <div>Vásárlás időpontja: {{ subscription.date * 1000 | date }}</div>
                                 <div>Alkalmak száma: {{subscription.amount}}</div>
                                 <div>Érvényesség: {{ subscription.period }}</div>
+                                <div ng-if="subscription.firstTime" class="creditText">(Első, ingyenes alkalom)</div>
                             </li>
                         </ul>
                     </accordion-group>
                 </accordion>
             </li>
-            <li class="list-group-item">
+           <li class="list-group-item" ng-if="vm.stats.newClients.length">
+                <accordion>
+                    <accordion-group is-open="vm.newClientsStatsIsOpen">
+                        <accordion-heading>
+                            <label>Új tanítványok ({{vm.stats.passiveClients.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.newClientsStatsIsOpen, 'fa-chevron-right': !vm.newClientsStatsIsOpen}"></i>
+                        </accordion-heading>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="subscription in vm.stats.newClients">
+                                <div>{{subscription.name}}</div>
+                            </li>
+                        </ul>
+                    </accordion-group>
+                </accordion>
+            </li>
+            <li class="list-group-item" ng-if="vm.stats.passiveClients.length">
+                <accordion>
+                    <accordion-group is-open="vm.passiveClientsStatsIsOpen">
+                        <accordion-heading>
+                            <label>Passzívak ({{vm.stats.passiveClients.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.passiveClientsStatsIsOpen, 'fa-chevron-right': !vm.passiveClientsStatsIsOpen}"></i>
+                        </accordion-heading>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="subscription in vm.stats.passiveClients">
+                                <div>Tanítány: {{subscription.name}}</div>
+                                <div>Vásárlás időpontja: {{ subscription.date * 1000 | date }}</div>
+                                <div>Lejárat időpontja: {{ subscription.expiry * 1000 | date }}</div>
+                                <div>Alkalmak száma: {{subscription.amount}}</div>
+                                <div>Érvényesség: {{ subscription.period }}</div>
+                                <div ng-if="subscription.firstTime" class="creditText">(Első, ingyenes alkalom)</div>
+                            </li>
+                        </ul>
+                    </accordion-group>
+                </accordion>
+            </li>
+            <li class="list-group-item" ng-if="vm.stats.series.length">
                 <accordion>
                     <accordion-group is-open="vm.attendeesStatsIsOpen">
                         <accordion-heading>
@@ -89,10 +124,10 @@
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="instance in vm.stats.series">
                                 <div>{{instance.name}} - {{ instance.date.toDate() | date : 'EEEE HH:mm' }}</div>
-                                <div>Összes: {{instance.attendees.sum}}</div>
-                                <div>Átlag: {{(instance.attendees.sum / instance.count) | number}}</div>
-                                <div>Minimum: {{instance.attendees.min}}</div>
-                                <div>Maximum: {{instance.attendees.max}}</div>
+                                <div>Összes: {{instance.participants.sum}} ({{instance.attendees.sum}})</div>
+                                <div>Átlag: {{(instance.participants.sum / instance.count) | number}} ({{(instance.attendees.sum / instance.count) | number}})</div>
+                                <div>Minimum: {{instance.participants.min}} ({{instance.attendees.min}})</div>
+                                <div>Maximum: {{instance.participants.max}} ({{instance.attendees.max}})</div>
                             </li>
                         </ul>
                     </accordion-group>

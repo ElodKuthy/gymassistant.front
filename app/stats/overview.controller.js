@@ -46,6 +46,8 @@
         vm.statsIsOpen = true;
         vm.attendeesStatsIsOpen = true;
         vm.subscriptionsStatsIsOpen = true;
+        vm.passiveClientsStatsIsOpen = true;
+        vm.newClientsStatsIsOpen = true;
 
         vm.stats = stats;
 
@@ -54,7 +56,7 @@
         });
 
         vm.stats.sumIncome = vm.stats.allSubscriptions;
-        console.log(vm.stats.guestCredits);
+
         for (var instance in vm.stats.guestCredits) {
             vm.stats.sumIncome += vm.stats.guestCredits[instance].sum;
         }
