@@ -53,6 +53,12 @@
           instance.date = moment().isoWeekday(instance.day).hour(instance.hour).minute(0);
         });
 
+        vm.stats.sumIncome = vm.stats.allSubscriptions;
+        console.log(vm.stats.guestCredits);
+        for (var instance in vm.stats.guestCredits) {
+            vm.stats.sumIncome += vm.stats.guestCredits[instance].sum;
+        }
+
         vm.updateDatesValidity = function () {
             vm.dates.invalid = (vm.dates.from > vm.dates.to);
         };

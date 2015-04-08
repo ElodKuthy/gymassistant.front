@@ -53,9 +53,11 @@
         </accordion-heading>
         <ul class="list-group">
             <li class="list-group-item">
-                <label>Összesen</label>
-               <div>Megtartott edzés: {{vm.stats.trainings}}</div>
-               <div>Résztvevő: {{vm.stats.allAttendees}}</div>
+                <label>Összesítés</label>
+               <div>Megtartott edzések: {{vm.stats.trainings}}</div>
+               <div>Résztvevők: {{vm.stats.allAttendees}}</div>
+               <div>Eladások: {{vm.stats.allSubscriptions | number}}</div>
+               <div>Bevétel: {{vm.stats.sumIncome | number}}</div>
             </li>
             <li class="list-group-item">
                 <label>Átjárások</label>
