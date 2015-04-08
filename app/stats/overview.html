@@ -86,7 +86,7 @@
                 <accordion>
                     <accordion-group is-open="vm.newClientsStatsIsOpen">
                         <accordion-heading>
-                            <label>Új tanítványok ({{vm.stats.passiveClients.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.newClientsStatsIsOpen, 'fa-chevron-right': !vm.newClientsStatsIsOpen}"></i>
+                            <label>Új tanítványok ({{vm.stats.newClients.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.newClientsStatsIsOpen, 'fa-chevron-right': !vm.newClientsStatsIsOpen}"></i>
                         </accordion-heading>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="subscription in vm.stats.newClients">
