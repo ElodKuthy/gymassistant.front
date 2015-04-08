@@ -62,7 +62,7 @@
                         <ul class="nav navbar-nav navbar-right">
 
                             <li class="dropdown" ng-if="vm.isCoach">
-                                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Adminisztráció <span class="caret"></span></a>
+                                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="hidden-sm">Adminisztráció <span class="caret"></span></span><span class="visible-sm">Admin <span class="caret"></span></span> </a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a href="/uj/felhasznalo">Új felhasználó</a></li>
                                     <li><a href="/berlet/vasarlas">Bérletvásárlás</a></li>
@@ -70,9 +70,13 @@
                                 </ul>
                             </li>
 
+                            <li ng-if="vm.isCoach && !vm.isAdmin">
+                                <a href="/statisztikak/attekintes">Áttekintés</a></li>
+                            </li>
                             <li class="dropdown" ng-if="vm.isAdmin">
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statisztikák <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/statisztikak/attekintes">Áttekintés</a></li>
                                     <li><a href="/statisztikak/aktiv/berletek">Aktív bérletek</a></li>
                                 </ul>
                             </li>
@@ -99,6 +103,7 @@
                     </div>
                     <div class="col-xs-2">
                         <a href="/statisztikak" ng-if="vm.isAdmin"><i class="fa fa-2x fa-bar-chart"></i></a>
+                        <a href="/statisztikak/aktiv/berletek" ng-if="vm.isCoach && !vm.isAdmin"><i class="fa fa-2x fa-bar-chart"></i></a>
                     </div>
                     <div class="col-xs-2">
                         <a href="/profilom" ng-if="vm.isLoggedIn"><i class="fa fa-2x fa-user"></i></a>
@@ -214,6 +219,7 @@
         <script src="/stats/stats.config.js"></script>
         <script src="/stats/stats.service.js"></script>
         <script src="/stats/active_subscriptions.controller.js"></script>
+        <script src="/stats/overview.controller.js"></script>
         <!-- endbuild -->
     </body>
 </html>
