@@ -21,8 +21,8 @@
         };
 
         if (!vm.dates.from.isValid() || !vm.dates.to.isValid() || vm.dates.to.isBefore(vm.dates.from) || vm.dates.to.isSame(vm.dates.from, 'day')) {
-          vm.dates.from = moment().startOf('month').subtract({month: 1});
-          vm.dates.to = moment().endOf('month').subtract({month: 1});
+          vm.dates.from = moment().subtract({month: 1}).startOf('month');
+          vm.dates.to = moment().subtract({month: 1}).endOf('month');
         }
 
         $rootScope.title = 'Statisztikák - Áttekintés - ' + vm.dates.from.format('YYYY. MM. DD.') + ' - ' + vm.dates.to.format('YYYY. MM. DD.');
@@ -39,7 +39,9 @@
         vm.coaches = coaches;
 
         vm.coachNames = [];
-        vm.coaches.forEach(function (coach) { vm.coachNames.push(coach.name); });
+        if (vm.coaches && vm.coaches.length) {
+          vm.coaches.forEach(function (coach) { vm.coachNames.push(coach.name); });
+        }
 
         vm.statsIsOpen = true;
         vm.attendeesStatsIsOpen = true;
@@ -60,8 +62,8 @@
 
         vm.setLastMonth = function() {
 
-          vm.dates.from = moment().startOf('month').subtract({month: 1}).toDate();
-          vm.dates.to = moment().endOf('month').subtract({month: 1}).toDate();
+          vm.dates.from = moment().subtract({month: 1}).startOf('month').toDate();
+          vm.dates.to = moment().subtract({month: 1}).endOf('month').toDate();
         };
 
         vm.setCurrentMonth = function() {

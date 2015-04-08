@@ -59,20 +59,20 @@
             </li>
             <li class="list-group-item">
                 <label>Átjárások</label>
-                <div ng-repeat="guests in vm.stats.guestCredits">{{guests.coach}}: {{guests.sum}}</div>
+                <div ng-repeat="guests in vm.stats.guestCredits">{{guests.coach}}: {{guests.sum | number }}</div>
             </li>
             <li class="list-group-item">
                 <accordion>
                     <accordion-group is-open="vm.subscriptionsStatsIsOpen">
                         <accordion-heading>
-                            <label>Értékesített bérletek</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
+                            <label>Eladások</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
                         </accordion-heading>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="subscription in vm.stats.subscriptions">
                                 <div>Tanítány: {{subscription.name}}</div>
                                 <div>Vásárlás időpontja: {{ subscription.date * 1000 | date }}</div>
                                 <div>Alkalmak száma: {{subscription.amount}}</div>
-                                <div>Érvényesség: {{ ((subscription.expiry - subscription.date) / 86400) | number : 0 }} nap</div>
+                                <div>Érvényesség: {{ subscription.period }}</div>
                             </li>
                         </ul>
                     </accordion-group>
@@ -82,7 +82,7 @@
                 <accordion>
                     <accordion-group is-open="vm.attendeesStatsIsOpen">
                         <accordion-heading>
-                            <label>Órák látogatottsága</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.attendeesStatsIsOpen, 'fa-chevron-right': !vm.attendeesStatsIsOpen}"></i>
+                            <label>Látogatottság</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.attendeesStatsIsOpen, 'fa-chevron-right': !vm.attendeesStatsIsOpen}"></i>
                         </accordion-heading>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="instance in vm.stats.series">

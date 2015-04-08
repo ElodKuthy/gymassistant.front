@@ -68,6 +68,9 @@
                                 </ul>
                             </li>
 
+                            <li ng-if="vm.isCoach && !vm.isAdmin">
+                                <a href="/statisztikak/attekintes">Áttekintés</a></li>
+                            </li>
                             <li class="dropdown" ng-if="vm.isAdmin">
                                 <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statisztikák <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
@@ -98,6 +101,7 @@
                     </div>
                     <div class="col-xs-2">
                         <a href="/statisztikak" ng-if="vm.isAdmin"><i class="fa fa-2x fa-bar-chart"></i></a>
+                        <a href="/statisztikak/aktiv/berletek" ng-if="vm.isCoach && !vm.isAdmin"><i class="fa fa-2x fa-bar-chart"></i></a>
                     </div>
                     <div class="col-xs-2">
                         <a href="/profilom" ng-if="vm.isLoggedIn"><i class="fa fa-2x fa-user"></i></a>

@@ -21,13 +21,16 @@
                     return locationHelper.onlyCoach();
                 },
                 /* @ngInject */
-                coaches: function(statsService) {
-                    return statsService.getAllCoaches();
+                coaches: function(authenticationService, statsService) {
+                    return authenticationService.getUserInfo()
+                        .then(function (userInfo) {
+                            return userInfo.roles.indexOf('admin') > -1 ? statsService.getAllCoaches() : null;
+                        });
                 },
                 /* @ngInject */
                 stats: function (statsService) {
-                    var from = moment().startOf('month').subtract({month: 1}).format('YYYY-MM-DD');
-                    var to = moment().endOf('month').subtract({month: 1}).format('YYYY-MM-DD');
+                    var from = moment().subtract({month: 1}).startOf('month').format('YYYY-MM-DD');
+                    var to = moment().subtract({month: 1}).endOf('month').format('YYYY-MM-DD');
                     return statsService.getOwnOveriew(from, to);
                 }
             }
