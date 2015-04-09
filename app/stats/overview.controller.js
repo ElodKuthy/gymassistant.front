@@ -97,6 +97,7 @@
               'Név': subscription.name,
               'Vásárlás időpontja': $filter('date')(subscription.date * 1000),
               'Érvényesség': subscription.period,
+              'Összes alkalom': subscription.amount,
               'Eladási ár': subscription.firstTime ? 0 : multipliers.getSum(periods.parseUnixInterval(subscription.expiry - subscription.date), subscription.amount),
               'Első alkalom?': subscription.firstTime ? 'igen': 'nem'
             });
