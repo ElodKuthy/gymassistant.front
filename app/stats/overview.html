@@ -70,6 +70,7 @@
                         <accordion-heading>
                             <label>Eladások ({{vm.stats.subscriptions.length}} db)</label><i class="pull-right fa" ng-class="{'fa-chevron-down': vm.subscriptionsStatsIsOpen, 'fa-chevron-right': !vm.subscriptionsStatsIsOpen}"></i>
                         </accordion-heading>
+                        <a href="" ng-csv="vm.exportSubscriptions()" csv-header="['Tanítvány neve', 'Vásárlás időpontja', 'Éevényesség', 'Eladási ár', 'Első alkalom?']" filename="eladasok.csv" field-separator=";"><i class="fa fa-file-excel-o" style="margin-left: 10px; margin-bottom: 15px;"></i><span class="xs-hidden"> Exportálás</span></a>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="subscription in vm.stats.subscriptions">
                                 <div>Tanítány: {{subscription.name}}</div>
