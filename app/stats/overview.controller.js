@@ -7,7 +7,7 @@
         .controller('OverviewController', OverviewController);
 
     /* @ngInject */
-    function OverviewController($rootScope, $scope, $location, $routeParams, userInfo, coaches, stats) {
+    function OverviewController($rootScope, $scope, $location, $routeParams, $filter, userInfo, coaches, stats, periods, multipliers) {
 
         var vm = this;
 
@@ -87,6 +87,23 @@
           }
 
           $location.path('/statisztikak/attekintes/' + (vm.adminMode ? (vm.coach.name + '/') : '') + moment(vm.dates.from).format('YYYY-MM-DD') + '/' + moment(vm.dates.to).format('YYYY-MM-DD'));
+        };
+
+        vm.exportSubscriptions = function() {
+          var results = [];
+
+          vm.stats.subscriptions.forEach(function (subscription) {
+            results.push({
+              'Név': subscription.name,
+              'Vásárlás időpontja': $filter('date')(subscription.date * 1000),
+              'Érvényesség': subscription.period,
+              'Összes alkalom': subscription.amount,
+              'Eladási ár': subscription.firstTime ? 0 : multipliers.getSum(periods.parseUnixInterval(subscription.expiry - subscription.date), subscription.amount),
+              'Első alkalom?': subscription.firstTime ? 'igen': 'nem'
+            });
+          });
+
+          return results;
         };
     }
 
