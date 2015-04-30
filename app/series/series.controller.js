@@ -21,8 +21,7 @@
                 vm.series = series;
 
                 vm.series.forEach(function (instance) {
-                    instance.dateAsDate = moment({ days: instance.date.day + 1, hours: instance.date.hour }).toDate();
-                    instance.dateFormatted = $filter('date')(moment({ days: instance.date.day, hours: instance.date.hour }).toDate(), 'EEEE H:mm');
+                    instance.dateAsDate = moment().isoWeekday(instance.date.day).hours(instance.date.hour).minutes(0).toDate();
                 });
             })
             .finally(function () { loadingService.endLoading(); });
