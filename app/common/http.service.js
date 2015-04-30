@@ -12,7 +12,8 @@
 
         return {
             get: get,
-            post: post
+            post: post,
+            del: del
         };
 
         function get(url, def, auth) {
@@ -39,7 +40,7 @@
                             deferred.resolve(result.data);
                 }
             }, function (error) {
-                deferred.reject(error);
+                deferred.reject("Hibás szerver válasz");
             });
 
             return deferred.promise;
@@ -66,7 +67,34 @@
                     deferred.resolve(result.data);
                 }
             }, function (error) {
-                deferred.reject(error);
+                deferred.reject("Hibás szerver válasz");
+            });
+
+            return deferred.promise;
+        }
+
+        function del(url) {
+
+            var deferred = $q.defer();
+            var authorization = storageHelper.getAuth();
+
+            $http.delete(api + url, {
+                headers: {"Authorization": authorization}
+            }).then(function (result) {
+                if (result.data.error) {
+                    if (result.data.error == "Hibás felhasználónév vagy jelszó") {
+                        storageHelper.setAuth(null);
+                        storageHelper.setUserInfo(null, false);
+                        eventHelper.broadcast.authenticationChanged();
+                        $location.path("/");
+                    }
+
+                    deferred.reject(result.data.error);
+                } else {
+                    deferred.resolve(result.data);
+                }
+            }, function (error) {
+                deferred.reject("Hibás szerver válasz");
             });
 
             return deferred.promise;

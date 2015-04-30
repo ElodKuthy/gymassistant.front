@@ -32,6 +32,10 @@
 
             updateTrainings : function (from, to, seriesId) {
                 return httpService.get('/api/update/trainings/from/' + from + '/to/' + to + '?series=' + seriesId);
+            },
+
+            deleteSeries : function (seriesId) {
+                return httpService.del('/api/series/' + seriesId);
             }
         };
     }

@@ -10,6 +10,7 @@
                 <th>Időpont(ok)</th>
                 <th>Edző neve</th>
                 <th>Maximális létszám</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,7 @@
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.dateAsDate | date : 'EEEE H:mm'}}</a></td>
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.coach}}</a></td>
                 <td><a ng-href="{{'/edzes/' + instance._id }}">{{instance.max}}</a></td>
+                <td><button type="button" class="btn btn-primary" ng-click="vm.deleteSeries(instance._id)" ng-if="instance.status === 'normal'">Törlés</button><span ng-if="instance.status === 'cancelled'">Törölve</span></td>
             </tr>
         </tbody>
     </table>
