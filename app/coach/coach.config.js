@@ -67,7 +67,8 @@
                                     coach: current.coach,
                                     date: moment({ hours: current.date.hour }).day(current.date.day).toDate(),
                                     dateText: $filter('date')(moment({ hours: current.date.hour }).day(current.date.day).toDate(), 'EEEE H:mm'),
-                                    selected: false
+                                    selected: false,
+                                    status: current.status,
                                 });
                             });
                             return results;
