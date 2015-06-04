@@ -5,6 +5,157 @@ General
 body {
   padding-top: 75px;
   padding-bottom: 75px;
+  background: #616265;
+  color: #d9d9d9;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/* ==================================================
+Panels
+================================================== */
+
+.panel-default {
+  border: 1px solid #888;
+}
+
+.panel-default > .panel-heading {
+  color: #D9D9D9;
+  background: #3f4147;
+  border-bottom: 1px solid #888;
+}
+
+.panel-default > .panel-body,
+.panel-default > .panel-heading + .panel-collapse > .panel-body {
+  background: #616265;
+  border-top: none;
+}
+
+/* ==================================================
+Buttons
+================================================== */
+
+.btn-primary {
+  background: #0063BE;
+  color: #D9D9D9;
+  border: none;
+}
+
+/* ==================================================
+Errors
+================================================== */
+
+.text-danger {
+  color: #DE5E60;
+}
+
+/* ==================================================
+Footer
+================================================== */
+
+footer {
+  text-align: center
+}
+
+footer a {
+  color: #4a9bdb;
+  text-decoration: underline;
+}
+
+footer a:hover, footer a:active, footer a:active {
+  color: #8abee8;
+  text-decoration: underline;
+}
+
+/* ==================================================
+Lists
+================================================== */
+
+#home-small a, #admin-small a, #stats-small a {
+  color: #d9d9d9;
+  text-decoration: none;
+}
+
+.list-group-item {
+  background-color: #616265;
+  border: 1px solid #888;
+}
+
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus {
+  color: #d9d9d9;
+  background: #0063BE;
+}
+
+/* ==================================================
+Modals
+================================================== */
+
+#dialog .modal-body {
+  overflow: visible;
+}
+
+/* ==================================================
+Jumbotron
+================================================== */
+
+.jumbotron {
+  background: #3F4147;
+  color: #d9d9d9;
+}
+
+
+/* ==================================================
+Navbars
+================================================== */
+
+.navbar-brand, .navbar-nav > li > a {
+  color: #d9d9d9;
+}
+
+.navbar-brand, .navbar-nav > li > a:hover,
+.navbar-brand, .navbar-nav > li > a:focus,
+.navbar-brand, .navbar-nav > li > a:active,
+.nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+  color: #d9d9d9;
+  background: #0063BE;
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  background-color: #222;
+  border: 1px solid #222;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:active,
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  background: #0063BE;
+  color: #d9d9d9;
+}
+
+.dropdown-menu > li > a {
+  color: #d9d9d9;
+}
+
+/* ==================================================
+Striped table
+================================================== */
+
+.table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+  background-color: #3f4147;
+}
+
+td > a, td > a:active, td > a:focus {
+  color: #d9d9d9;
+  text-decoration: none;
+}
+
+td > a:hover {
+  color: #d9d9d9;
 }
 
 /* ==================================================
@@ -15,13 +166,20 @@ Top navbar
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #f8f8f8;
+  background-color: #222;
   border-style: solid;
-  border-color: #e7e7e7;
+  border-color: #0063BE;
   border-width: 0 0 4px 0;
   z-index: 1030;
   height: 50px;
   width: 100%;
+  color: #d9d9d9;
+}
+
+#top-bar #logo-slice-link {
+  padding: 0;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 #top-bar-small > div {
@@ -36,21 +194,38 @@ Schedule view
   position: fixed;
   bottom: 0;
   left: 0;
-  background-color: #f8f8f8;
-  border-color: #e7e7e7;
+  background-color: #222;
+  border-color: #0063BE;
   border-style: solid;
   border-width: 4px 0 0 0;
   z-index: 1030;
   height: 50px;
   width: 100%;
+  color: #d9d9d9;
 }
 
-.trainer {
-  text-align: right;
+#scheduleTable .selected {
+  background: #0063BE;
+}
+
+#scheduleTable .participated {
+  background: green;
+}
+
+#scheduleTable .missed {
+  background: #DE5E60;
 }
 
 #scheduleTable .trainer {
-  text-align: right;
+  border: solid 3px #d9d9d9;
+  border-radius: 10px;
+  float: right;
+  margin: 10px 0;
+  padding: 4px;
+}
+
+#scheduleTable .progress {
+  clear: both;
 }
 
 #schedule-bottom-bar-small > div {
@@ -63,9 +238,129 @@ div#schedule-bottom-bar-small-date {
   color: #428BCA;
 }
 
-#scheduleTable .panel-body {
-  height: 144px;
+#scheduleTable tbody tr {
+  height: 131px;
 }
+
+#scheduleTable .training-name {
+  height: 60px;
+}
+
+#scheduleTable .logo {
+  border: solid 3px #d9d9d9;
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+#scheduleTable .logo div {
+  width: 64px;
+  height: 64px;
+}
+
+#scheduleTable .dinamikus-jóga {
+  background: url("/yoga.png") no-repeat center;
+}
+
+#scheduleTable .kettlebell {
+  background: url("/sfg.png") no-repeat center;
+}
+
+#scheduleTable .bajnokok-reggelije,
+#scheduleTable .bajnokok-vacsorája {
+  background: url("/tacfit.png") no-repeat center;
+}
+
+#scheduleTable .clubbell {
+  background: url("/clubbell.png") no-repeat center;
+}
+
+#scheduleTable .ground-force-method {
+  background: url("/gfm.png") no-repeat center;
+}
+
+#scheduleTable .legend {
+  border: solid 3px #0063BE;
+  border-radius: 5px;
+  padding: 10px;
+  position: fixed;
+  right: 10px;
+  bottom: 45px;
+  background: #222;
+  max-width: 300px;
+}
+
+#scheduleTable .legend > div {
+  padding: 10px;
+}
+
+#scheduleTable .legend button {
+  margin-right: 10px;
+}
+
+
+#scheduleTable .color-legend {
+  border: solid 3px #d9d9d9;
+  border-radius: 3px;
+  margin: 0 10px;
+  width: 32px;
+  height: 32px;
+  float: left;
+}
+
+.krisztina {
+  background-color: #269abc;
+}
+
+.dávid {
+  background-color: #C79665;
+}
+
+.arnold {
+  background-color: #245269;
+}
+
+.zsolt {
+  background-color: #608D4E;
+}
+
+.albert {
+  background-color: #AE5E53;
+}
+
+.progress-bar {
+  min-width: 50px;
+  max-width: 100%;
+}
+
+.btn-primary {
+  border: 1px solid transparent;
+}
+
+.status {
+  float: left;
+  margin-right: 10px;
+}
+
+/* ==================================================
+Attendees
+================================================== */
+
+#attendees-list a {
+  color: #d9d9d9;
+  text-decoration: none;
+}
+
+#attendees-list .list-group-item-success {
+  background: green;
+  color: #d9d9d9;
+}
+
+#attendees-list .list-group-item-danger {
+  background: #DE5E60;
+  color: #d9d9d9;
+}
+
 /* ==================================================
 Modal
 ================================================== */
@@ -76,6 +371,11 @@ Modal
 
 .modal-body {
   margin-bottom: 20px;
+}
+
+.modal-content {
+  background: #616265;
+  color: #d9d9d9;
 }
 
 /* ==================================================
@@ -93,4 +393,23 @@ span.creditDetailsText {
 
 .credit-details-sub-panel {
   margin-top: 20px;
+}
+
+.credit-details-sub-panel a, .panel-heading a {
+  color: #d9d9d9;
+}
+
+.credit-details-sub-panel .selected {
+  color: #d9d9d9;
+  background: #0063BE;
+}
+
+.credit-details-sub-panel .participated {
+  color: #d9d9d9;
+  background: green;
+}
+
+.credit-details-sub-panel .missed {
+  color: #d9d9d9;
+  background: #DE5E60;
 }
