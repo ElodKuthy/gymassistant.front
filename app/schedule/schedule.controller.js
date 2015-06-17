@@ -28,6 +28,12 @@
         vm.showAttendees = showAttendees;
         vm.canCancelTraining = canCancelTraining;
         vm.cancelTraining = cancelTraining;
+        vm.showLegend = false;
+        vm.toggled = false;
+        vm.toggleLegend = function () {
+            vm.toggled = true;
+            vm.showLegend = !vm.showLegend;
+        };
 
         var begin = $routeParams.day ? $routeParams.day : $routeParams.begin;
         var end = $routeParams.day ? moment($routeParams.day).add({

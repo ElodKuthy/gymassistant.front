@@ -5,6 +5,7 @@
     angular
         .module('gymassistant.front', [
             'ngRoute',
+            'ngAnimate',
             'ui.bootstrap',
             'angularMoment',
             'ja.qr',
@@ -28,14 +29,16 @@
         .controller('NavbarController', NavbarController);
 
     /* @ngInject */
-    function AppConfig ($routeProvider, $locationProvider) {
-          $routeProvider.
-              when('/', {
-                  templateUrl: 'home/home.html',
-                  controller: 'HomeController'
-              }).
-          otherwise({redirectTo: '/'});
-      $locationProvider.html5Mode(true);
+    function AppConfig($routeProvider, $locationProvider) {
+        $routeProvider.
+        when('/', {
+            templateUrl: 'home/home.html',
+            controller: 'HomeController'
+        }).
+        otherwise({
+            redirectTo: '/'
+        });
+        $locationProvider.html5Mode(true);
     }
 
     /* @ngInject */
@@ -56,7 +59,7 @@
         vm.today = '/orarend/' + moment().format('YYYY-MM-DD');
 
         function update() {
-            authenticationService.getUserInfo().then(function(userInfo) {
+            authenticationService.getUserInfo().then(function (userInfo) {
                 vm.userInfo = userInfo;
                 vm.welcomeText = vm.userInfo ? 'Üdv ' + vm.userInfo.name + '!' : 'Üdv, kérlek lépj be!';
                 vm.welcomeTextLink = vm.userInfo ? '/profilom' : '/belepes';
@@ -68,4 +71,3 @@
     }
 
 })();
-
