@@ -289,7 +289,9 @@ div#schedule-bottom-bar-small-date {
 }
 
 #scheduleTable .bajnokok-reggelije,
-#scheduleTable .bajnokok-vacsorája {
+#scheduleTable .bajnokok-vacsorája,
+#scheduleTable .bajnokok-reggelije-tacfit,
+#scheduleTable .bajnokok-vacsorája-tacfit {
   background: url("/tacfit.png") no-repeat center;
 }
 
