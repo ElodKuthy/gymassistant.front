@@ -5,7 +5,6 @@
     angular
         .module('gymassistant.front', [
             'ngRoute',
-            'ngAnimate',
             'ui.bootstrap',
             'angularMoment',
             'ja.qr',
