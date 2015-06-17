@@ -1,10 +1,10 @@
 (function () {
 
-    "use strict";
+    'use strict';
 
     angular
-        .module("gymassistant.front.schedule")
-        .controller("ScheduleController", ScheduleController);
+        .module('gymassistant.front.schedule')
+        .controller('ScheduleController', ScheduleController);
 
     /* @ngInject */
     function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService, userInfo) {
@@ -28,11 +28,19 @@
         vm.showAttendees = showAttendees;
         vm.canCancelTraining = canCancelTraining;
         vm.cancelTraining = cancelTraining;
+        vm.showLegend = false;
+        vm.toggled = false;
+        vm.toggleLegend = function () {
+            vm.toggled = true;
+            vm.showLegend = !vm.showLegend;
+        };
 
         var begin = $routeParams.day ? $routeParams.day : $routeParams.begin;
-        var end = $routeParams.day ? moment($routeParams.day).add({ day: 1}).format('YYYY-MM-DD') : $routeParams.end;
+        var end = $routeParams.day ? moment($routeParams.day).add({
+            day: 1
+        }).format('YYYY-MM-DD') : $routeParams.end;
 
-        $rootScope.title = $routeParams.day ? 'Órarend - ' + $filter('date')(moment($routeParams.day).toDate(), 'longDate') : (begin && end) ? 'Órarend - ' + $filter('date')(moment(begin).toDate(), 'longDate') + ' - ' + $filter('date')(moment(end).toDate(), 'longDate') : 'Eheti órarend'; 
+        $rootScope.title = $routeParams.day ? 'Órarend - ' + $filter('date')(moment($routeParams.day).toDate(), 'longDate') : (begin && end) ? 'Órarend - ' + $filter('date')(moment(begin).toDate(), 'longDate') + ' - ' + $filter('date')(moment(end).toDate(), 'longDate') : 'Eheti órarend';
 
         fetchSchedule(begin, end);
 
@@ -43,7 +51,7 @@
             var promises = [];
             promises.push(scheduleService.getSchedule(begin, end));
             if (vm.userInfo) {
-               promises.push(scheduleService.getCurrentCredit());
+                promises.push(scheduleService.getCurrentCredit());
             }
 
             $q.all(promises).then(
@@ -57,25 +65,57 @@
 
                     var currentDate = moment(0);
                     var currentWeek = [];
-                    var currentDay = [];
+                    var currentTimes = {};
+                    var currentTime = {};
+                    vm.days = [{
+                        name: 'Hétfő',
+                        display: false
+                    }, {
+                        name: 'Kedd',
+                        display: false
+                    }, {
+                        name: 'Szerda',
+                        display: false
+                    }, {
+                        name: 'Csütörtök',
+                        display: false
+                    }, {
+                        name: 'Péntek',
+                        display: false
+                    }, {
+                        name: 'Szombat',
+                        display: false
+                    }];
 
                     vm.weeks = [];
 
                     results[0].forEach(function (data) {
 
-                        if (!currentDate.isSame(data.date, "day")) {
-                            if (!currentDate.isSame(data.date, "week")) {
-                                currentWeek = [];
-                                vm.weeks.push(currentWeek);
-                            }
-                            currentDate = moment(data.date).endOf("day");
-                            currentDay = [];
-                            currentWeek.push(currentDay);
+                        var date = moment(data.date);
+                        vm.days[date.isoWeekday() - 1].display = true;
+
+                        if (!currentDate.isSame(date, 'week')) {
+                            currentWeek = [];
+                            currentTimes = {};
+                            vm.weeks.push(currentWeek);
                         }
+
+                        currentTime = currentTimes[date.format('HH:mm')];
+
+                        if (!currentTime) {
+                            currentTime = {
+                                trainings: [{}, {}, {}, {}, {}, {}],
+                                time: date.format('HH:mm')
+                            }
+                            currentTimes[currentTime.time] = currentTime;
+                            currentWeek.push(currentTime);
+                        }
+
+                        currentDate = moment(date).endOf('day');
 
                         var instance = createInstanceFromData(data);
 
-                        currentDay.push(instance);
+                        currentTime.trainings[date.isoWeekday() - 1] = instance;
                     });
 
                     loadingService.endLoading();
@@ -87,68 +127,84 @@
         }
 
         function perviousWeek() {
-            var begin = moment(vm.dates.begin).subtract( {weeks: 1}).format("YYYY-MM-DD");
-            var end = moment(vm.dates.end).subtract( {weeks: 1}).format("YYYY-MM-DD");
+            var begin = moment(vm.dates.begin).subtract({
+                weeks: 1
+            }).format('YYYY-MM-DD');
+            var end = moment(vm.dates.end).subtract({
+                weeks: 1
+            }).format('YYYY-MM-DD');
 
-            $location.path("/orarend/" + begin + "/" + end);
+            $location.path('/orarend/' + begin + '/' + end);
         }
 
         function perviousDay() {
-            var day = moment(vm.dates.begin).subtract( {days: 1}).format("YYYY-MM-DD");
+            var day = moment(vm.dates.begin).subtract({
+                days: 1
+            }).format('YYYY-MM-DD');
 
-
-            $location.path("/orarend/" + day);
+            $location.path('/orarend/' + day);
         }
 
         function nextWeek() {
-            var begin = moment(vm.dates.begin).add( {weeks: 1}).format("YYYY-MM-DD");
-            var end = moment(vm.dates.end).add( {weeks: 1}).format("YYYY-MM-DD");
+            var begin = moment(vm.dates.begin).add({
+                weeks: 1
+            }).format('YYYY-MM-DD');
+            var end = moment(vm.dates.end).add({
+                weeks: 1
+            }).format('YYYY-MM-DD');
 
-            $location.path("/orarend/" + begin + "/" + end);
+            $location.path('/orarend/' + begin + '/' + end);
         }
 
         function nextDay() {
-            var day = moment(vm.dates.begin).add( {days: 1}).format("YYYY-MM-DD");
+            var day = moment(vm.dates.begin).add({
+                days: 1
+            }).format('YYYY-MM-DD');
 
-            $location.path("/orarend/" + day);
+            $location.path('/orarend/' + day);
         }
 
         function currentWeek() {
 
-            $location.path("/orarend/heti");
+            $location.path('/orarend/heti');
         }
 
-
-        function today () {
-            $location.path("/orarend/" + moment().format('YYYY-MM-DD'));
+        function today() {
+            $location.path('/orarend/' + moment().format('YYYY-MM-DD'));
         }
 
         function canJoin(instance) {
 
             return vm.userInfo &&
-                    !instance.isFull &&
-                    !instance.signedUp &&
-                    vm.userInfo.name != instance.coach &&
-                    vm.userInfo.roles.indexOf('admin') == -1 &&
-                    (vm.userInfo.roles.indexOf('coach') > -1 || (vm.credit && vm.credit.free > 0)) &&
-                    moment().isBefore(instance.date);
+                !instance.isFull &&
+                !instance.signedUp &&
+                vm.userInfo.name != instance.coach &&
+                vm.userInfo.roles.indexOf('admin') == -1 &&
+                (vm.userInfo.roles.indexOf('coach') > -1 || (vm.credit && vm.credit.free > 0)) &&
+                moment().isBefore(instance.date);
         }
 
         function join(instance) {
             if (canJoin(instance)) {
                 if (vm.userInfo.preferences.askIrreversibleJoining &&
                     vm.userInfo.roles.indexOf('admin') == -1 &&
-                    moment().add({ hours: 3}).isAfter(instance.date)) {
+                    moment().add({
+                        hours: 3
+                    }).isAfter(instance.date)) {
                     decisionService.modal(
-                        'Feliratkozás',
-                        'Biztos, hogy jelenkezni szertnél erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet lemondani a részvételt, ha egyszer jelentkeztél!',
-                        'Biztos',
-                        'Mégsem',
-                        { title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!', value: false })
+                            'Feliratkozás',
+                            'Biztos, hogy jelenkezni szertnél erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet lemondani a részvételt, ha egyszer jelentkeztél!',
+                            'Biztos',
+                            'Mégsem', {
+                                title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!',
+                                value: false
+                            })
                         .then(function (result) {
                             if (result.checkbox) {
                                 vm.userInfo.preferences.askIrreversibleJoining = false;
-                                authenticationService.updatePreferences(vm.userInfo.preferences).then(function (userInfo) { vm.userInfo = userInfo; });
+                                authenticationService.updatePreferences(vm.userInfo.preferences).then(function (userInfo) {
+                                    vm.userInfo = userInfo;
+                                });
                             }
                             doJoin(instance);
                         });
@@ -157,7 +213,7 @@
                 }
 
             } else if (!vm.userInfo) {
-                $location.path("/belepes");
+                $location.path('/belepes');
             }
         }
 
@@ -180,9 +236,10 @@
         function canLeave(instance) {
             return instance.signedUp &&
                 vm.userInfo.roles.indexOf('admin') == -1 &&
-                moment().add({ hours: 3}).isBefore(instance.date);
+                moment().add({
+                    hours: 3
+                }).isBefore(instance.date);
         }
-
 
         function leave(instance) {
             if (canLeave(instance)) {
@@ -200,14 +257,14 @@
                     }
                     calculateInstanceProperties(instance, false);
                 }, function (error) {
-                    errorService.modal(error, "sm");
+                    errorService.modal(error, 'sm');
                 });
             }
         }
 
         function showAttendees(instance) {
 
-            $location.path("/resztvevok/" + instance.id);
+            $location.path('/resztvevok/' + instance.id);
         }
 
         function createInstanceFromData(data) {
@@ -215,6 +272,7 @@
             var instance = {
                 id: data._id,
                 name: data.name,
+                logo: data.name.toLowerCase().replace(/ /g, '-'),
                 coach: data.coach,
                 current: data.current,
                 max: data.max,
@@ -223,7 +281,7 @@
                 signedUp: moment().endOf('hour').isBefore(data.date) && data.isAttendee,
                 participated: moment().endOf('hour').isAfter(data.date) && data.isAttendee && data.isParticipant,
                 missed: moment().endOf('hour').isAfter(data.date) && data.isAttendee && !data.isParticipant,
-                showAttendeeList: vm.userInfo ? (( vm.userInfo.roles.indexOf('admin') > -1) || (data.coach === vm.userInfo.name)) : false
+                showAttendeeList: vm.userInfo ? ((vm.userInfo.roles.indexOf('admin') > -1) || (data.coach === vm.userInfo.name)) : false
             };
 
             calculateInstanceProperties(instance, instance.signedUp);
@@ -232,18 +290,17 @@
         }
 
         function calculateInstanceProperties(instance, signedUp) {
-            instance.currentBar = (instance.current === 0 || instance.current > 3) ? instance.current : 4;
-            instance.barText = instance.current + " / " + instance.max;
+            instance.barText = instance.current + ' / ' + instance.max;
             instance.isFull = (instance.current >= instance.max);
             instance.signedUp = signedUp;
         }
 
-        function canCancelTraining (instance) {
+        function canCancelTraining(instance) {
 
             return vm.userInfo && (vm.userInfo.roles.indexOf('admin') > -1 || (vm.userInfo.name == instance.coach && moment().startOf('day').isBefore(instance.date)));
         }
 
-        function cancelTraining (instance) {
+        function cancelTraining(instance) {
 
             decisionService.modal('Óra lemondása', 'Biztos vagy benne, hogy le szeretnéd mondani ezt az órát?', 'Biztos', 'Mégsem')
                 .then(function () {
@@ -252,7 +309,9 @@
                         .then(function () {
                             loadingService.endLoading();
                             infoService.modal('Sikeres lemondás', 'Sikeresen lemondtad az edzést. Az érintett tanítványok bérletén jóváírásra került egy kredit.')
-                                .then(function () { fetchSchedule(vm.dates.begin, vm.dates.end); });
+                                .then(function () {
+                                    fetchSchedule(vm.dates.begin, vm.dates.end);
+                                });
                         }, function (err) {
                             loadingService.endLoading();
                             errorService.modal(err);

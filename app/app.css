@@ -204,23 +204,28 @@ Schedule view
   color: #d9d9d9;
 }
 
-#scheduleTable .panel-default > .panel-heading.selected {
-  color: #d9d9d9;
+#scheduleTable .selected {
   background: #0063BE;
 }
 
-#scheduleTable .panel-default > .panel-heading.participated {
-  color: #d9d9d9;
+#scheduleTable .participated {
   background: green;
 }
 
-#scheduleTable .panel-default > .panel-heading.missed {
-  color: #d9d9d9;
+#scheduleTable .missed {
   background: #DE5E60;
 }
 
 #scheduleTable .trainer {
-  text-align: right;
+  border: solid 3px #d9d9d9;
+  border-radius: 10px;
+  float: right;
+  margin: 10px 0;
+  padding: 4px;
+}
+
+#scheduleTable .progress {
+  clear: both;
 }
 
 #schedule-bottom-bar-small > div {
@@ -233,28 +238,151 @@ div#schedule-bottom-bar-small-date {
   color: #428BCA;
 }
 
-#scheduleTable .panel-body {
-  height: 144px;
+#scheduleTable table {
+  table-layout: fixed;
+  border: solid 5px;
 }
 
-.krisztina, #scheduleTable .krisztina {
+#scheduleTable tbody tr {
+  height: 131px;
+}
+
+#scheduleTable thead th,
+#scheduleTable tbody td {
+  width: 186px;
+  border: solid 3px;
+}
+
+#scheduleTable thead th {
+  border-bottom: solid 5px;
+}
+
+
+#scheduleTable thead th.first-row,
+#scheduleTable tbody td.first-row {
+  width: 53px;
+}
+
+
+#scheduleTable .training-name {
+  height: 60px;
+}
+
+#scheduleTable .logo {
+  border: solid 3px #d9d9d9;
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+#scheduleTable .logo div {
+  width: 64px;
+  height: 64px;
+}
+
+#scheduleTable .dinamikus-jóga {
+  background: url("/yoga.png") no-repeat center;
+}
+
+#scheduleTable .kettlebell {
+  background: url("/sfg.png") no-repeat center;
+}
+
+#scheduleTable .bajnokok-reggelije,
+#scheduleTable .bajnokok-vacsorája {
+  background: url("/tacfit.png") no-repeat center;
+}
+
+#scheduleTable .clubbell {
+  background: url("/clubbell.png") no-repeat center;
+}
+
+#scheduleTable .ground-force-method {
+  background: url("/gfm.png") no-repeat center;
+}
+
+#scheduleTable .legend {
+  border: solid 3px #0063BE;
+  border-radius: 5px;
+  padding: 10px;
+  position: fixed;
+  right: 10px;
+  bottom: 45px;
+  background: #222;
+  max-width: 300px;
+}
+
+#scheduleTable .legend-text {
+  white-space: nowrap;
+}
+
+#scheduleTable .animated {
+  transition: all 1s ease-in-out;
+}
+
+#scheduleTable .closed {
+  bottom: -312px;
+}
+
+#scheduleTable .legend > div {
+  padding: 10px;
+}
+
+#scheduleTable .legend button {
+  margin-right: 10px;
+}
+
+#scheduleTable .legend button.toggle {
+  position: relative;
+  float: right;
+  top: -45px;
+  border: solid 3px #0063BE;
+  color: #d9d9d9;
+  background: #222;
+  z-index: 2000;
+}
+
+#scheduleTable .color-legend {
+  border: solid 3px #d9d9d9;
+  border-radius: 3px;
+  margin: 0 10px;
+  width: 32px;
+  height: 32px;
+  float: left;
+}
+
+.krisztina {
   background-color: #269abc;
 }
 
-.dávid, #scheduleTable .dávid {
+.dávid {
   background-color: #C79665;
 }
 
-.arnold, #scheduleTable .arnold {
+.arnold {
   background-color: #245269;
 }
 
-.zsolt, #scheduleTable .zsolt {
+.zsolt {
   background-color: #608D4E;
 }
 
-.albert, #scheduleTable .albert {
+.albert {
   background-color: #AE5E53;
+}
+
+.progress-bar {
+  min-width: 50px;
+  max-width: 100%;
+}
+
+.btn-primary {
+  border: 1px solid transparent;
+}
+
+.status {
+  float: left;
+  margin-right: 10px;
 }
 
 /* ==================================================
