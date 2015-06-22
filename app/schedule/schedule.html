@@ -49,8 +49,8 @@
     </div>
 </div>
 
-<div class="container">
-    <div id="scheduleTable">
+<div id="scheduleTable">
+    <div class="container">
         <div class="row" ng-repeat="week in vm.weeks">
             <table class="table table-bordered">
                 <thead>
@@ -69,22 +69,22 @@
                                     {{instance.max}}
                                 </progressbar>
                                 <div>
-                                    <button type="button" class="btn btn-lg btn-primary"
+                                    <button type="button" class="btn btn-primary"
                                             ng-show="instance.showAttendeeList"
                                             ng-click="vm.showAttendees(instance)">
                                         <i class="fa fa-navicon"></i>
                                     </button>
-                                    <button type="button" class="btn btn-lg btn-primary pull-right"
+                                    <button type="button" class="btn btn-primary pull-right"
                                             ng-show="vm.canCancelTraining(instance)"
                                             ng-click="vm.cancelTraining(instance)">
                                         <i class="fa fa-trash-o"></i>
                                     </button>
-                                    <button type="button" class="btn btn-lg btn-danger pull-right animate-if"
+                                    <button type="button" class="btn btn-danger pull-right animate-if"
                                             ng-if="vm.canLeave(instance)"
                                             ng-click="vm.leave(instance)">
                                         <i class="fa fa-remove"></i>
                                     </button>
-                                    <button type="button" class="btn btn-lg btn-primary pull-right animate-if"
+                                    <button type="button" class="btn btn-primary pull-right animate-if"
                                             ng-if="vm.canJoin(instance)"
                                             ng-click="vm.join(instance)">
                                         <i class="fa fa-plus"></i>

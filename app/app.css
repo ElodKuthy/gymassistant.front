@@ -204,6 +204,12 @@ Schedule view
   color: #d9d9d9;
 }
 
+@media (min-width: 768px) {
+  #scheduleTable .container {
+    min-width: 1020px;
+  }
+}
+
 #scheduleTable .selected {
   background: #0063BE;
 }
@@ -219,13 +225,16 @@ Schedule view
 #scheduleTable .trainer {
   border: solid 3px #d9d9d9;
   border-radius: 10px;
+  position: relative;
+  top: -15px;
   float: right;
-  margin: 10px 0;
   padding: 4px;
+  margin-bottom: -10px;
 }
 
 #scheduleTable .progress {
   clear: both;
+  margin-bottom: 10px;
 }
 
 #schedule-bottom-bar-small > div {
@@ -240,7 +249,14 @@ div#schedule-bottom-bar-small-date {
 
 #scheduleTable table {
   table-layout: fixed;
-  border: solid 5px;
+  border: solid 5px #d9d9d9;
+}
+
+@media (max-width: 767px) {
+  #scheduleTable table {
+    max-width: 365px;
+    margin: auto;
+  }
 }
 
 #scheduleTable tbody tr {
@@ -249,18 +265,20 @@ div#schedule-bottom-bar-small-date {
 
 #scheduleTable thead th,
 #scheduleTable tbody td {
-  width: 186px;
-  border: solid 3px;
+  width: 160px;
+  border: solid 3px #d9d9d9;
 }
 
 #scheduleTable thead th {
-  border-bottom: solid 5px;
+  border-bottom: solid 5px #d9d9d9;
+  background-color: #444;
 }
 
 
 #scheduleTable thead th.first-row,
 #scheduleTable tbody td.first-row {
   width: 53px;
+  background-color: #444;
 }
 
 
@@ -276,8 +294,8 @@ div#schedule-bottom-bar-small-date {
 }
 
 #scheduleTable .logo div {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
 }
 
 #scheduleTable .dinamikus-jóga {
