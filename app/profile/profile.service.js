@@ -1,4 +1,4 @@
-(function (){
+(function () {
 
     'use strict';
 
@@ -13,11 +13,14 @@
             changeEmail: changeEmail,
             sendRegistrationEmail: sendRegistrationEmail,
             getCredits: getCredits,
-            changeName: changeName
+            changeName: changeName,
+            unsubscribe: unsubscribe
         };
 
         function changePassword(newPassword) {
-            return httpService.post('/api/change/password', { password: newPassword });
+            return httpService.post('/api/change/password', {
+                password: newPassword
+            });
         }
 
         function changeEmail(name, email) {
@@ -33,7 +36,14 @@
         }
 
         function changeName(name, newName) {
-            return httpService.post('/api/change/name', { name: name, userName: newName });
+            return httpService.post('/api/change/name', {
+                name: name,
+                userName: newName
+            });
+        }
+
+        function unsubscribe(id, preferences) {
+            return httpService.post('/api/unsubscribe/' + id, preferences);
         }
     }
 

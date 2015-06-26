@@ -3,16 +3,16 @@
     'use strict';
 
     angular
-        .module("gymassistant.front.profile")
+        .module('gymassistant.front.profile')
         .config(ProfileConfig);
 
     /* @ngInject */
     function ProfileConfig($routeProvider) {
         $routeProvider
-            .when("/profilom", {
-                templateUrl: "profile/my_profile.html",
-                controllerAs: "vm",
-                controller: "ProfileController",
+            .when('/profilom', {
+                templateUrl: 'profile/my_profile.html',
+                controllerAs: 'vm',
+                controller: 'ProfileController',
                 resolve: {
                     /* @ngInject */
                     userInfo: function (locationHelper) {
@@ -39,10 +39,10 @@
                     }
                 }
             })
-            .when("/profil/:clientName", {
-                templateUrl: "profile/client_profile.html",
-                controllerAs: "vm",
-                controller: "ProfileController",
+            .when('/profil/:clientName', {
+                templateUrl: 'profile/client_profile.html',
+                controllerAs: 'vm',
+                controller: 'ProfileController',
                 resolve: {
                     /* @ngInject */
                     userInfo: function (locationHelper) {
@@ -57,11 +57,11 @@
                         var deferred = $q.defer();
                         coachService.getUserInfo($route.current.params.clientName).then(resolve, error);
 
-                        function resolve (result) {
+                        function resolve(result) {
                             deferred.resolve(result);
                         }
 
-                        function error (err) {
+                        function error(err) {
                             locationHelper.back();
                         }
 
@@ -72,7 +72,19 @@
                         return coachService.getCredits($route.current.params.clientName);
                     }
                 }
+            })
+            .when('/leiratkozas/:id', {
+                templateUrl: 'profile/unsubscribe.html',
+                controllerAs: 'vm',
+                controller: 'UnsubscribeController',
+                resolve: {
+                    /* @ngInject */
+                    userInfo: function (authenticationService) {
+                        return authenticationService.logout();
+                    }
+                }
             });
+
     }
 
 })();

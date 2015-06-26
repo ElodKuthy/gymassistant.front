@@ -7,24 +7,33 @@
         .factory("authenticationService", AuthenticationService);
 
     /* @ngInject */
-    function AuthenticationService($q, $window, $location, httpService, eventHelper, storageHelper) {
+    function AuthenticationService($q, $window, $route, httpService, eventHelper, storageHelper) {
 
         return {
             login: login,
             logout: logout,
             getUserInfo: getUserInfo,
 
-            forgottenPassword: function(userName, email) {
+            forgottenPassword: function (userName, email) {
                 return httpService.get('/api/reset/password/user/' + userName + '/email/' + email);
             },
 
-            changePassword: function(userName, email, token, password) {
-                return httpService.post('/api/change/password', { userName: userName, email: email, token: token, password: password });
+            changePassword: function (userName, email, token, password) {
+                return httpService.post('/api/change/password', {
+                    userName: userName,
+                    email: email,
+                    token: token,
+                    password: password
+                });
             },
 
-            updatePreferences: function(preferences) {
-                return httpService.post('/api/my/preferences', { preferences: preferences })
-                    .then(function() { return refreshUserInfo(); });
+            updatePreferences: function (preferences) {
+                return httpService.post('/api/my/preferences', {
+                        preferences: preferences
+                    })
+                    .then(function () {
+                        return refreshUserInfo();
+                    });
             },
         };
 
@@ -54,7 +63,9 @@
             var deferred = $q.defer();
             var authorization = "Basic " + window.btoa(encodeURIComponent(escape(userName + ":" + password)));
 
-            httpService.get("/api/login", { error: 'Hibás felhasználónév vagy jelszó' }, authorization).then(
+            httpService.get("/api/login", {
+                error: 'Hibás felhasználónév vagy jelszó'
+            }, authorization).then(
                 function (result) {
                     if (!result.error) {
                         storageHelper.setAuth(authorization, remember);
@@ -75,11 +86,16 @@
         function logout() {
             var deferred = $q.defer();
 
-            storageHelper.setAuth(null);
-            storageHelper.setUserInfo(null);
-            eventHelper.broadcast.authenticationChanged();
-            $location.path("/");
-            deferred.resolve(null);
+            getUserInfo().then(function (userInfo) {
+                if (userInfo) {
+                    storageHelper.setAuth(null);
+                    storageHelper.setUserInfo(null);
+                    eventHelper.broadcast.authenticationChanged();
+                    $route.reload();
+                }
+
+                deferred.resolve(null);
+            });
 
             return deferred.promise;
         }
