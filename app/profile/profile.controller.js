@@ -40,13 +40,13 @@
         vm.adminMode = userInfo.roles.indexOf('admin') > -1;
 
         if (vm.adminMode) {
-            vm.changeName = function() {
+            vm.changeName = function () {
                 if (vm.name != vm.newName) {
                     profileService.changeName(vm.name, vm.newName)
                         .then(function () {
                             vm.name = vm.newName;
                             infoService.modal('Névváltoztatás', 'A tanítvány nevét sikeresen megváltoztattuk');
-                        }, function(error) {
+                        }, function (error) {
                             errorService.modal(error);
                         })
                 }
@@ -116,7 +116,7 @@
         }
 
         function viewUser() {
-            $location.path('/profil/' + vm.userToView.name);
+            $location.path('/profil/' + ((typeof vm.userToView === 'string') ? vm.userToView : vm.userToView.name));
         }
 
         function addCredit() {
@@ -125,19 +125,21 @@
 
         function registrationEmail() {
             profileService.sendRegistrationEmail(vm.name)
-                .then(function (result) { infoService.modal('Regisztrációs email újraküldése', result); })
+                .then(function (result) {
+                    infoService.modal('Regisztrációs email újraküldése', result);
+                })
                 .catch(errorService.modal);
         }
 
         function changeEmail() {
             profileService.changeEmail(vm.name, vm.email).then(changeEmailSuccess, errorService.modal);
 
-            function changeEmailSuccess (result) {
+            function changeEmailSuccess(result) {
                 infoService.modal('Email cím változtatás', result);
             }
         }
 
-        vm.updatePreferences = function() {
+        vm.updatePreferences = function () {
             loadingService.startLoading();
             return authenticationService.updatePreferences(vm.userInfo.preferences)
                 .then(loadingService.endLoading);

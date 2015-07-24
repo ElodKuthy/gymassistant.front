@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <label for="userName">Tanítvány hozzáadása</label>
                             <input type="text" id="userName" name="userName" class="form-control" placeholder="Tanítvány neve" ng-model="vm.newAttendee"
-                                   typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}">
+                                   typeahead="user as user for user in vm.usersCanBeAdded | filter: $viewValue" required is-item-of-list="{{ vm.usersCanBeAdded | filter: name }}" ga-enter="vm.add(addClientForm)" >
                         </div>
                             <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.add(addClientForm)" ng-disabled="addClientForm.$invalid || addClientForm.$pristine">
                                 <i class="fa fa-plus"></i><span class="hidden-xs"> Hozzáadás</span>
@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label for="coachName">Edző cseréje</label>
                             <input type="text" id="coachName" name="coachName" class="form-control" placeholder="Edző neve" ng-model="vm.newCoach"
-                                   typeahead="coach as coach for coach in vm.coachesCanBeSelected | filter: $viewValue" required is-item-of-list="{{ vm.coachesCanBeSelected | filter: name }}">
+                                   typeahead="coach as coach for coach in vm.coachesCanBeSelected | filter: $viewValue" required is-item-of-list="{{ vm.coachesCanBeSelected | filter: name }}" ga-enter="vm.change(changeCoachForm)" >
                         </div>
                             <button class="btn btn-primary btn-sm pull-right" type="button" ng-click="vm.change(changeCoachForm)" ng-disabled="changeCoachForm.$invalid || changeCoachForm.$pristine">
                                 <i class="fa fa-refresh"></i></i><span class="hidden-xs"> Csere</span>
