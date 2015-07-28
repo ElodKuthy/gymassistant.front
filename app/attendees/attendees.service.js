@@ -1,4 +1,4 @@
-(function (){
+(function () {
 
     "use strict";
 
@@ -13,7 +13,8 @@
             removeFromTraining: removeFromTraining,
             checkIn: checkIn,
             undoCheckIn: undoCheckIn,
-            changeCoach: changeCoach
+            changeCoach: changeCoach,
+            getLocation: getLocation
         };
 
         function addToTraining(id, userName) {
@@ -38,7 +39,14 @@
 
         function changeCoach(id, coach) {
 
-            return httpService.post('/api/training/' + id, { coach: coach });
+            return httpService.post('/api/training/' + id, {
+                coach: coach
+            });
+        }
+
+        function getLocation(id) {
+
+            return httpService.get('/api/location/' + id);
         }
     }
 
