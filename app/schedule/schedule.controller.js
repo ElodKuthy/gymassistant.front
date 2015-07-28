@@ -7,7 +7,7 @@
         .controller('ScheduleController', ScheduleController);
 
     /* @ngInject */
-    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService, userInfo) {
+    function ScheduleController($rootScope, $routeParams, $location, $q, $filter, authenticationService, scheduleService, errorService, eventHelper, loadingService, infoService, decisionService, userInfo, locations) {
 
         var vm = this;
 
@@ -34,6 +34,7 @@
             vm.toggled = true;
             vm.showLegend = !vm.showLegend;
         };
+        vm.showLocation = {};
 
         var begin = $routeParams.day ? $routeParams.day : $routeParams.begin;
         var end = $routeParams.day ? moment($routeParams.day).add({
@@ -97,18 +98,38 @@
                         if (!currentDate.isSame(date, 'week')) {
                             currentWeek = [];
                             currentTimes = {};
+                            locations.forEach(function (location) {
+                                currentWeek.push({
+                                    location: location,
+                                    rows: []
+                                });
+                                currentTimes[location.id] = {};
+                            })
                             vm.weeks.push(currentWeek);
                         }
 
-                        currentTime = currentTimes[date.format('HH:mm')];
+                        if (!data.location) {
+                            return;
+                        }
+
+                        currentTime = currentTimes[data.location][date.format('HH:mm')];
 
                         if (!currentTime) {
                             currentTime = {
                                 trainings: [{}, {}, {}, {}, {}, {}],
                                 time: date.format('HH:mm')
                             }
-                            currentTimes[currentTime.time] = currentTime;
-                            currentWeek.push(currentTime);
+                            currentTimes[data.location][currentTime.time] = currentTime;
+                            currentWeek.some(function (current) {
+                                if (current.location.id === data.location) {
+                                    current.rows.push(currentTime);
+                                    vm.showLocation[data.location] = {
+                                        name: current.location.name,
+                                        show: true
+                                    }
+                                    return true;
+                                }
+                            });
                         }
 
                         currentDate = moment(date).endOf('day');

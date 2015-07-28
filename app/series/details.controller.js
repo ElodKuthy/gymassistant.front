@@ -7,10 +7,15 @@
         .controller('DetailsController', DetailsController);
 
     /* @ngInject */
-    function DetailsController($rootScope, $scope, userInfo, training, seriesService, infoService, errorService, coaches) {
+    function DetailsController($rootScope, $scope, userInfo, training, seriesService, infoService, errorService, coaches, locations) {
 
         var vm = this;
-        vm.training = training ? training : { date : { day: 1, hour: 0 } } ;
+        vm.training = training ? training : {
+            date: {
+                day: 1,
+                hour: 0
+            }
+        };
         vm.isNewTraining = (training == null);
         vm.coaches = [];
 
@@ -24,6 +29,7 @@
             max: new Date(2020),
             invalid: false
         }
+        vm.locations = locations;
 
         $rootScope.title = training ? 'Edzés sablon - ' + vm.training.name + ' ' + vm.days[training.date.day - 1] + ' ' + vm.hours[training.date.hour] : 'Új edzés sablon';
 
@@ -46,7 +52,6 @@
         coaches.forEach(function (coach) {
             vm.coaches.push(coach.name);
         });
-
 
         vm.submit = function (form) {
 
@@ -82,7 +87,7 @@
         $scope.$watch('vm.refresh.from', vm.updateRefreshDateValidity);
         $scope.$watch('vm.refresh.to', vm.updateRefreshDateValidity);
 
-        vm.update = function(form) {
+        vm.update = function (form) {
 
             if (!form || form.$invalid) {
                 return;
@@ -92,6 +97,18 @@
                 .then(
                     function () {
                         infoService.modal('Edzésalkalmak frissítése', 'Sikeres frissítetted az edzésalkalmakat');
+                    },
+                    function (err) {
+                        errorService.modal(err);
+                    });
+        }
+
+        vm.updateThisYear = function () {
+
+            seriesService.updateTrainings(moment().startOf('year').format('YYYY-MM-DD'), moment().endOf('year').format('YYYY-MM-DD'), vm.training._id)
+                .then(
+                    function () {
+                        infoService.modal('Edzésalkalmak frissítése', 'Sikeres frissítetted az edzésalkalmakat erre az egész évre');
                     },
                     function (err) {
                         errorService.modal(err);

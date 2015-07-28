@@ -52,13 +52,15 @@
 <div id="scheduleTable">
     <div class="container">
         <div class="row" ng-repeat="week in vm.weeks">
+        <div ng-repeat="weekOfLocation in week" ng-if="weekOfLocation.rows.length && vm.showLocation[weekOfLocation.location.id].show">
+            <h3>{{ weekOfLocation.location.name }}</h3>
             <table class="table table-bordered">
                 <thead>
                     <th class="first-row"></th>
                     <th class="col-md-2" ng-repeat="day in vm.days" ng-if="day.display">{{ day.name }}</th>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="row in week | orderBy: 'time'">
+                    <tr ng-repeat="row in weekOfLocation.rows | orderBy: 'time'">
                         <td class="first-row">{{ row.time }}</td>
                         <td ng-repeat="instance in row.trainings" ng-if="vm.days[$index].display">
                             <div ng-if="instance.name">
@@ -95,6 +97,7 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
 
             <div class="legend" ng-class="{opened: vm.showLegend, closed: !vm.showLegend, animated: vm.toggled }">
                 <button type="button" class="btn btn-primary toggle" ng-click="vm.toggleLegend()">

@@ -52,6 +52,12 @@
                             </div>
                         </div>
                     </li>
+                    <li class="list-group-item">
+                        <label>Terem</label>
+                        <select class="form-control" ng-model="vm.training.location">
+                            <option ng-repeat="location in vm.locations" value="{{location.id}}" ng-selected="vm.training.location === location.id">{{location.name}}</option>
+                        </select>
+                    </li>
                 </ul>
                 <button type="button" ng-disabled="seriesForm.$invalid || seriesForm.$pristine" class="btn btn-primary pull-right" ng-click="vm.submit(seriesForm)">Mentés</button>
             </form>
@@ -71,6 +77,7 @@
                 </ul>
                 <span style="margin-top: 10px" class="text-danger" ng-show="vm.refresh.invalid">
                     <i class="fa fa-exclamation-triangle"></i> A kezdő dátum korábbi kell, hogy legyen, mint a befejezés dátuma!</span>
+                <button type="button"class="btn btn-primary" ng-click="vm.updateThisYear()">Egész évre</button>
                 <button type="button" ng-disabled="refreshForm.$invalid || vm.refresh.invalid" class="btn btn-primary pull-right" ng-click="vm.update(refreshForm)">Frissítés</button>
             </form>
         </div>
