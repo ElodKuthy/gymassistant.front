@@ -321,6 +321,14 @@ div#schedule-bottom-bar-small-date {
   background: url("/gfm.png") no-repeat center;
 }
 
+#scheduleTable .barbell {
+  background: url("/barbell.png") no-repeat center;
+}
+
+#scheduleTable .funkcionális-jóga {
+  background: url("/yoga2.png") no-repeat center;
+}
+
 #scheduleTable .legend {
   border: solid 3px #0063BE;
   border-radius: 5px;
@@ -383,9 +391,14 @@ div#schedule-bottom-bar-small-date {
   background-color: #245269;
 }
 
-.zsolt {
+.norbi {
   background-color: #608D4E;
 }
+
+.perso {
+  background-color: #AA7081;
+}
+
 
 .albert {
   background-color: #AE5E53;
