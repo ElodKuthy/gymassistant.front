@@ -34,10 +34,10 @@
                     Rang: <span ng-bind="vm.role"></span>
                 </li>
                 <li class="list-group-item" ng-if="vm.adminMode">
-                    <a style="cursor:pointer;" hef="#" ng-click="vm.registrationEmail()">Regisztrációs email kiküldése</a>
+                    <a class="link" style="cursor:pointer;" hef="#" ng-click="vm.registrationEmail()">Regisztrációs email kiküldése</a>
                 </li>
                 <li class="list-group-item" ng-if="vm.isClient">
-                    <a ng-href="{{vm.addCredit()}}">Bérletvásárlás</a>
+                    <a class="link" ng-href="{{vm.addCredit()}}">Bérletvásárlás</a>
                 </li>
                 <li class="list-group-item" ng-if="vm.isClient && vm.credits.length > 0">
                     <div class="panel panel-default">

@@ -15,7 +15,8 @@
             addNewSubscription: addNewSubscription,
             getSeries: getSeries,
             getCredits: getCredits,
-            addFirstTime: addFirstTime
+            addFirstTime: addFirstTime,
+            sendNewsletter: sendNewsletter
         };
 
         function addNewClient(name, email) {
@@ -44,6 +45,10 @@
 
         function getCredits(userName) {
             return httpService.get('/api/credits/of/user/' + userName);
+        }
+
+        function sendNewsletter(subject, content) {
+            return httpService.post('/api/send/newsletter', { subject: subject, content: content });
         }
     }
 

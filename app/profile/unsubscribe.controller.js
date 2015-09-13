@@ -14,12 +14,14 @@
         vm.id = $routeParams.id;
 
         vm.expirationNotification = true;
+        vm.newsletter = true;
 
         vm.unsubscribe = function () {
 
             loadingService.startLoading();
             return profileService.unsubscribe(vm.id, {
-                expirationNotification: !vm.expirationNotification
+                expirationNotification: !vm.expirationNotification,
+                newsletter: !vm.newsletter
             }).then(function (result) {
                 vm.showResult = result;
                 loadingService.endLoading();

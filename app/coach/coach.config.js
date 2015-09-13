@@ -75,6 +75,17 @@
                         });
                 }
             }
+        })
+        .when('/hirlevel', {
+            templateUrl: 'coach/newsletter.html',
+            controllerAs: 'vm',
+            controller: 'NewsletterController',
+            resolve: {
+                /* @ngInject */
+                userInfo: function (locationHelper) {
+                    return locationHelper.onlyAdmin();
+                }
+            }
         });
     }
 })();

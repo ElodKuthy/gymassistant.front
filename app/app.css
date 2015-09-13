@@ -10,6 +10,18 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
+a.link {
+  color: #d9d9d9;
+  text-decoration: none;
+}
+
+a.link:hover,
+a.link:active,
+a.link:active {
+  color: #8abee8;
+  text-decoration: underline;
+}
+
 /* ==================================================
 Panels
 ================================================== */
@@ -488,4 +500,21 @@ span.creditDetailsText {
 .credit-details-sub-panel .missed {
   color: #d9d9d9;
   background: #DE5E60;
+}
+
+/* ==================================================
+Newsletter
+================================================== */
+
+.newsletter {
+  max-width: 600px;
+}
+
+.newsletter textarea,
+.newsletter input {
+  margin-bottom: 20px;
+}
+
+.newsletter label {
+  margin-bottom: 10px;
 }
