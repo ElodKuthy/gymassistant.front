@@ -114,5 +114,17 @@
                         errorService.modal(err);
                     });
         }
+
+        vm.updateNextYear = function () {
+
+            seriesService.updateTrainings(moment().startOf('year').add({ year: 1 }).format('YYYY-MM-DD'), moment().endOf('year').add({ year: 1 }).format('YYYY-MM-DD'), vm.training._id)
+                .then(
+                    function () {
+                        infoService.modal('Edzésalkalmak frissítése', 'Sikeres frissítetted az edzésalkalmakat a következő évre');
+                    },
+                    function (err) {
+                        errorService.modal(err);
+                    });
+        }
     }
 })();

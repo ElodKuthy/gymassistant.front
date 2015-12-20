@@ -78,6 +78,7 @@
                 <span style="margin-top: 10px" class="text-danger" ng-show="vm.refresh.invalid">
                     <i class="fa fa-exclamation-triangle"></i> A kezdő dátum korábbi kell, hogy legyen, mint a befejezés dátuma!</span>
                 <button type="button"class="btn btn-primary" ng-click="vm.updateThisYear()">Egész évre</button>
+                <button type="button"class="btn btn-primary" ng-click="vm.updateNextYear()">Következő évre</button>
                 <button type="button" ng-disabled="refreshForm.$invalid || vm.refresh.invalid" class="btn btn-primary pull-right" ng-click="vm.update(refreshForm)">Frissítés</button>
             </form>
         </div>
