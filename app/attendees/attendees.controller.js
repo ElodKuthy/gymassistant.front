@@ -68,9 +68,11 @@
         }
 
         function canRemove(attendee) {
-            return (vm.adminMode || moment().isBefore(moment(vm.training.date).subtract({
-                hour: 3
-            }))) && !attendee.checkedIn;
+            return (vm.adminMode
+                    || (moment().isBefore(moment(vm.training.date).subtract({ hour: 3 })))
+                    && (moment(vm.training.date).isBefore('2015-12-21T00:00:00+01:00')
+                    || moment(vm.training.date).isAfter('2016-01-04T00:00:00+01:00')))
+                    && !attendee.checkedIn;
         }
 
         function missedCheckIn(attendee) {
@@ -139,13 +141,15 @@
 
             if (vm.userInfo.preferences.askIrreversibleJoining &&
                 vm.userInfo.roles.indexOf('admin') == -1 &&
-                moment().add({
+                (moment().add({
                     hours: 3
-                }).isAfter(vm.training.date)) {
+                }).isAfter(vm.training.date)
+                || (moment(vm.training.date).isAfter('2015-12-21T00:00:00+01:00')
+                && moment(vm.training.date).isBefore('2016-01-04T00:00:00+01:00')))) {
 
                 decisionService.modal(
                         'Hozzáadás',
-                        'Biztos, hogy fel szertnél írni ' + vm.newAttendee + '-t erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet visszavonni a részvételt, ha már egyszer felírtad!',
+                        'Biztos, hogy fel szertnél írni ' + vm.newAttendee + '-t erre az órára? Erről az óráról már nem lehet visszavonni a részvételt, ha már egyszer felírtad!',
                         'Biztos',
                         'Mégsem', {
                             title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!',

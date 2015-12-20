@@ -211,13 +211,15 @@
                     vm.userInfo.roles.indexOf('admin') == -1 &&
                     moment().add({
                         hours: 3
-                    }).isAfter(instance.date)) {
+                    }).isAfter(instance.date) ||
+                    (moment(instance.date).isAfter(moment('2015-12-21T00:00:00+01:00')) &&
+                    moment(instance.date).isBefore(moment('2016-01-04T00:00:00+01:00')))) {
                     decisionService.modal(
                             'Feliratkozás',
-                            'Biztos, hogy jelenkezni szertnél erre az órára? Mivel ez az óra 3 órán belül kezdődik, nem lehet lemondani a részvételt, ha egyszer jelentkeztél!',
+                            'Biztos, hogy jelenkezni szertnél erre az órára? Erről az óráról már nem lehet lejelentkezni, ha egyszer jelentkeztél rá!',
                             'Biztos',
                             'Mégsem', {
-                                title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!',
+                                title: 'Ne jelenjen meg többé ez a kérdés, mindíg egyből szeretnék jelenkezni.',
                                 value: false
                             })
                         .then(function (result) {
@@ -259,7 +261,9 @@
                 vm.userInfo.roles.indexOf('admin') == -1 &&
                 moment().add({
                     hours: 3
-                }).isBefore(instance.date);
+                }).isBefore(instance.date) &&
+                (moment(instance.date).isBefore(moment('2015-12-21T00:00:00+01:00')) ||
+                moment(instance.date).isAfter(moment('2016-01-04T00:00:00+01:00')));
         }
 
         function leave(instance) {
