@@ -219,7 +219,7 @@
                             'Biztos, hogy jelenkezni szertnél erre az órára? Erről az óráról már nem lehet lejelentkezni, ha egyszer jelentkeztél rá!',
                             'Biztos',
                             'Mégsem', {
-                                title: 'Ne jelenjen meg többé ez a kérdés, mindíg egyből szeretnék jelenkezni.',
+                                title: 'Ne jelenjen meg többé ez a kérdés, mindig egyből szeretnék jelenkezni.',
                                 value: false
                             })
                         .then(function (result) {

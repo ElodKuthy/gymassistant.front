@@ -152,7 +152,7 @@
                         'Biztos, hogy fel szertnél írni ' + vm.newAttendee + '-t erre az órára? Erről az óráról már nem lehet visszavonni a részvételt, ha már egyszer felírtad!',
                         'Biztos',
                         'Mégsem', {
-                            title: 'Ne jelenjen meg többé ez a kérdés, mindíg add hozzá a tanítványt!',
+                            title: 'Ne jelenjen meg többé ez a kérdés, mindig add hozzá a tanítványt!',
                             value: false
                         })
                     .then(function (result) {
