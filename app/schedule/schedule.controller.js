@@ -212,8 +212,8 @@
                     moment().add({
                         hours: 3
                     }).isAfter(instance.date) ||
-                    (moment(instance.date).isAfter(moment('2015-12-21T00:00:00+01:00')) &&
-                    moment(instance.date).isBefore(moment('2016-01-04T00:00:00+01:00')))) {
+                    (moment(instance.date).isAfter(moment('2016-12-31T00:00:00+01:00')) &&
+                    moment(instance.date).isBefore(moment('2017-01-01T00:00:00+01:00')))) {
                     decisionService.modal(
                             'Feliratkozás',
                             'Biztos, hogy jelenkezni szertnél erre az órára? Erről az óráról már nem lehet lejelentkezni, ha egyszer jelentkeztél rá!',
@@ -262,8 +262,8 @@
                 moment().add({
                     hours: 3
                 }).isBefore(instance.date) &&
-                (moment(instance.date).isBefore(moment('2015-12-21T00:00:00+01:00')) ||
-                moment(instance.date).isAfter(moment('2016-01-04T00:00:00+01:00')));
+                (moment(instance.date).isBefore(moment('2016-12-31T00:00:00+01:00')) ||
+                moment(instance.date).isAfter(moment('2017-01-01T00:00:00+01:00')));
         }
 
         function leave(instance) {
